@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solar-pv-forecasting"
+version = "1.0.0"
+description = "A reproducible and explainable benchmark of AI/ML models for short-term solar PV power forecasting"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "PrathamKapoor", email = "prathamkapoor027@gmail.com" }]
+keywords = [
+    "solar photovoltaic",
+    "power forecasting",
+    "time series",
+    "benchmark",
+    "reproducibility",
+    "explainability",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+]
+
+# Kept minimal on purpose: the project is installed with
+# `pip install -r requirements.txt` and this file describes the package
+# metadata rather than duplicating the full pinned environment.
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyarrow>=14",
+    "PyYAML>=6",
+    "scipy>=1.11",
+    "scikit-learn>=1.3",
+    "torch>=2.0",
+    "xgboost>=2.0",
+    "pvlib>=0.10",
+    "shap>=0.44",
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+    "statsmodels>=0.14",
+    "openpyxl>=3.1",
+    "requests>=2.31",
+    "tqdm>=4.66",
+    "joblib>=1.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4", "pytest-cov>=4.1"]
+
+[project.urls]
+Repository = "https://github.com/PrathamKapoor/solar-pv-forecasting"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra --strict-markers"
+filterwarnings = [
+    "ignore::DeprecationWarning:pvlib.*",
+    "ignore::DeprecationWarning:torch.*",
+]

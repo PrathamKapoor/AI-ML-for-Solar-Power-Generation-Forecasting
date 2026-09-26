@@ -1,0 +1,254 @@
+horizon,model,stratum_type,stratum,scope,n,mae,rmse,nrmse_capacity,r2,smape,bias,under_sampled,persistence_rmse,skill_vs_persistence_rmse
+1h,persistence,regime,Clear,daylight,5824,8230.03,10183.2,0.185148,0.498443,51.7525,1232.36,False,10183.2,0
+1h,persistence,regime,Partly cloudy,daylight,2411,7828.42,10347.1,0.188129,0.0445505,70.9828,1338.97,False,10347.1,0
+1h,persistence,regime,Cloudy,daylight,6012,3436.1,5698.26,0.103605,0.0901833,97.8807,432.081,False,5698.26,0
+1h,persistence,regime,High-variability,daylight,3432,8595.06,11064.8,0.201178,0.360872,88.2733,-4101.8,False,11064.8,0
+1h,persistence,regime,Night,daylight,0,,,,,,,True,,
+1h,persistence,season,Winter,daylight,3950,5755.68,7397.05,0.134492,0.657256,74.8946,-81.7302,False,7397.05,0
+1h,persistence,season,Spring,daylight,4634,5543.16,7957.21,0.144677,0.673327,77.9895,-44.886,False,7957.21,0
+1h,persistence,season,Summer,daylight,4859,8640.6,11701.6,0.212756,0.436426,79.1223,-47.3678,False,11701.6,0
+1h,persistence,season,Autumn,daylight,4236,6269.01,8451.57,0.153665,0.656674,76.0779,-73.9397,False,8451.57,0
+1h,persistence,time_of_day,Afternoon (14-16),daylight,2920,7618.74,10066.7,0.18303,0.310703,41.4477,4915.66,False,10066.7,0
+1h,persistence,time_of_day,Early morning (05-08),daylight,2253,3142.91,4718.29,0.0857871,-0.0986967,166.943,-3140.42,False,4718.29,0
+1h,persistence,time_of_day,Evening ramp (16-18),daylight,2866,6919.69,8644.38,0.157171,-0.95866,91.4747,6604.46,False,8644.38,0
+1h,persistence,time_of_day,Late evening (18-20),daylight,880,4148.12,5321.01,0.0967457,-24.345,165.133,4136.17,False,5321.01,0
+1h,persistence,time_of_day,Mid-morning (10-12),daylight,2920,7841.1,10657.3,0.19377,0.478886,42.6742,-4255.45,False,10657.3,0
+1h,persistence,time_of_day,Morning ramp (08-10),daylight,2920,7349.16,9490.69,0.172558,0.2622,81.657,-6520.12,False,9490.69,0
+1h,persistence,time_of_day,Solar noon (12-14),daylight,2920,6779.7,10096.1,0.183566,0.554932,32.9716,186.273,False,10096.1,0
+1h,persistence,power_level,0-10% of capacity,daylight,6161,3233.13,5133.12,0.0933294,-8.40489,127.607,1833.43,False,5133.12,0
+1h,persistence,power_level,10-25% of capacity,daylight,3746,6995.81,9226.26,0.16775,-13.8967,72.0585,2118.09,False,9226.26,0
+1h,persistence,power_level,25-50% of capacity,daylight,3690,9232.64,10880.5,0.197827,-6.49129,50.6879,11.3602,False,10880.5,0
+1h,persistence,power_level,50-75% of capacity,daylight,2845,9006.15,11119.8,0.202178,-7.04455,31.76,-3906.59,False,11119.8,0
+1h,persistence,power_level,75-100% of capacity,daylight,1233,9004.48,12957.9,0.235598,-12.8591,24.621,-7452.49,False,12957.9,0
+1h,persistence,ramping,False,daylight,14888,5645.1,7728.34,0.140515,0.687375,81.4118,243.908,False,7728.34,0
+1h,persistence,ramping,True,daylight,2791,11794.3,14517.5,0.263955,-0.401639,54.4249,-1685.96,False,14517.5,0
+1h,smart_persistence,regime,Clear,daylight,5824,5150.24,8020.22,0.145822,0.688881,34.8085,253.905,False,10183.2,0.212404
+1h,smart_persistence,regime,Partly cloudy,daylight,2411,5964.58,8946.44,0.162663,0.285718,53.4681,658.041,False,10347.1,0.135369
+1h,smart_persistence,regime,Cloudy,daylight,6012,2658.06,5008.98,0.0910723,0.296982,80.8065,272.213,False,5698.26,0.120965
+1h,smart_persistence,regime,High-variability,daylight,3432,5952.96,9672.27,0.175859,0.511617,55.2862,-440.684,False,11064.8,0.125849
+1h,smart_persistence,regime,Night,daylight,0,,,,,,,True,,
+1h,smart_persistence,season,Winter,daylight,3950,3207.17,5183.22,0.0942404,0.831712,49.7811,-110.312,False,7397.05,0.299286
+1h,smart_persistence,season,Spring,daylight,4634,3749.33,6491.87,0.118034,0.782564,58.1651,48.3103,False,7957.21,0.184153
+1h,smart_persistence,season,Summer,daylight,4859,6988.97,10715.2,0.194821,0.527439,63.1605,549.534,False,11701.6,0.0842998
+1h,smart_persistence,season,Autumn,daylight,4236,3962.29,6522.43,0.11859,0.79552,55.2687,172.585,False,8451.57,0.228258
+1h,smart_persistence,time_of_day,Afternoon (14-16),daylight,2920,4960.81,7714.78,0.140269,0.595162,32.499,873.09,False,10066.7,0.233632
+1h,smart_persistence,time_of_day,Early morning (05-08),daylight,2253,3087.25,5055.03,0.0919097,-0.261119,157.943,-1348.85,False,4718.29,-0.071369
+1h,smart_persistence,time_of_day,Evening ramp (16-18),daylight,2866,2082.92,3444.46,0.0626266,0.689019,45.7675,983.998,False,8644.38,0.601537
+1h,smart_persistence,time_of_day,Late evening (18-20),daylight,880,380.078,804.999,0.0146364,0.419909,89.8316,186.265,False,5321.01,0.848713
+1h,smart_persistence,time_of_day,Mid-morning (10-12),daylight,2920,6650.91,10354.4,0.188261,0.508094,34.8801,-49.1951,False,10657.3,0.0284279
+1h,smart_persistence,time_of_day,Morning ramp (08-10),daylight,2920,5019.49,7620.67,0.138558,0.524304,51.6136,77.8105,False,9490.69,0.197038
+1h,smart_persistence,time_of_day,Solar noon (12-14),daylight,2920,6494.37,9981.72,0.181486,0.564961,32.0763,209.355,False,10096.1,0.0113319
+1h,smart_persistence,power_level,0-10% of capacity,daylight,6161,1662.94,3630.26,0.0660048,-3.704,97.013,387.827,False,5133.12,0.292777
+1h,smart_persistence,power_level,10-25% of capacity,daylight,3746,5403.58,8252.4,0.150044,-10.9179,55.01,1979.81,False,9226.26,0.105553
+1h,smart_persistence,power_level,25-50% of capacity,daylight,3690,6449.75,8957.13,0.162857,-4.07689,32.2713,1361,False,10880.5,0.176771
+1h,smart_persistence,power_level,50-75% of capacity,daylight,2845,6200.98,9113,0.165691,-4.40296,21.1652,-1898.25,False,11119.8,0.180469
+1h,smart_persistence,power_level,75-100% of capacity,daylight,1233,7152.61,11755.4,0.213735,-10.4063,19.5028,-5027.76,False,12957.9,0.0927961
+1h,smart_persistence,ramping,False,daylight,14888,3448.08,5932.82,0.107869,0.815765,59.0437,214.59,False,7728.34,0.23233
+1h,smart_persistence,ramping,True,daylight,2791,10552.3,13590.2,0.247094,-0.228289,45.9135,-1.94173,False,14517.5,0.0638786
+1h,linear_regression,regime,Clear,daylight,5824,5398.86,7497.63,0.136321,0.728104,28.2241,2046.94,False,10183.2,0.263723
+1h,linear_regression,regime,Partly cloudy,daylight,2411,6069.98,8578.4,0.155971,0.343277,45.2525,3075.58,False,10347.1,0.170937
+1h,linear_regression,regime,Cloudy,daylight,6012,4122.97,5953.66,0.108248,0.00679937,85.2606,3248.66,False,5698.26,-0.0448202
+1h,linear_regression,regime,High-variability,daylight,3432,6006.02,8789.22,0.159804,0.596722,67.7572,-169.752,False,11064.8,0.205656
+1h,linear_regression,regime,Night,daylight,0,,,,,,,True,,
+1h,linear_regression,season,Winter,daylight,3950,3975.68,5479.05,0.099619,0.811955,48.1278,1647.07,False,7397.05,0.259294
+1h,linear_regression,season,Spring,daylight,4634,4963.61,6990.36,0.127098,0.747889,66.85,2593.14,False,7957.21,0.121506
+1h,linear_regression,season,Summer,daylight,4859,6717.88,9670.85,0.175834,0.615063,57.1892,2123.42,False,11701.6,0.173545
+1h,linear_regression,season,Autumn,daylight,4236,4752.17,6583.2,0.119695,0.791692,56.8556,2229.63,False,8451.57,0.221067
+1h,linear_regression,time_of_day,Afternoon (14-16),daylight,2920,6268.11,8416.47,0.153027,0.51817,38.8847,3908.87,False,10066.7,0.163928
+1h,linear_regression,time_of_day,Early morning (05-08),daylight,2253,2814.36,3442.27,0.0625867,0.415213,92.0366,1085.94,False,4718.29,0.270442
+1h,linear_regression,time_of_day,Evening ramp (16-18),daylight,2866,4058.49,5364.06,0.0975284,0.245812,76.7578,3258.65,False,8644.38,0.379474
+1h,linear_regression,time_of_day,Late evening (18-20),daylight,880,2458.02,3229.11,0.0587111,-8.33407,160.987,1034.44,False,5321.01,0.393139
+1h,linear_regression,time_of_day,Mid-morning (10-12),daylight,2920,6417.98,9341.53,0.169846,0.599621,34.4342,1788.02,False,10657.3,0.123464
+1h,linear_regression,time_of_day,Morning ramp (08-10),daylight,2920,4796.07,6532.86,0.118779,0.650417,46.0686,194.129,False,9490.69,0.311656
+1h,linear_regression,time_of_day,Solar noon (12-14),daylight,2920,6950.11,9764.87,0.177543,0.583658,34.5836,2872.25,False,10096.1,0.0328101
+1h,linear_regression,power_level,0-10% of capacity,daylight,6161,3525.01,5111.47,0.0929358,-8.32572,108.867,3167.67,False,5133.12,0.00421779
+1h,linear_regression,power_level,10-25% of capacity,daylight,3746,5688.13,8375.34,0.152279,-11.2756,43.7421,4350.34,False,9226.26,0.092228
+1h,linear_regression,power_level,25-50% of capacity,daylight,3690,6583.41,8639.62,0.157084,-3.72333,30.3758,2615.47,False,10880.5,0.205953
+1h,linear_regression,power_level,50-75% of capacity,daylight,2845,5814,7804.37,0.141898,-2.96264,18.5079,-668.486,False,11119.8,0.298154
+1h,linear_regression,power_level,75-100% of capacity,daylight,1233,6149.42,9447.68,0.171776,-6.36747,15.5766,-4249.91,False,12957.9,0.270893
+1h,linear_regression,ramping,False,daylight,14888,4348.81,6180.94,0.112381,0.800032,60.9028,2268.42,False,7728.34,0.200224
+1h,linear_regression,ramping,True,daylight,2791,9578.12,12183.1,0.22151,0.0128927,40.0894,1616.9,False,14517.5,0.160803
+1h,random_forest,regime,Clear,daylight,5824,4672.41,6665.75,0.121195,0.785092,21.0206,-1793.38,False,10183.2,0.345415
+1h,random_forest,regime,Partly cloudy,daylight,2411,5150.01,7227.8,0.131415,0.53379,38.3077,2583.25,False,10347.1,0.301467
+1h,random_forest,regime,Cloudy,daylight,6012,3677.51,5760.19,0.104731,0.0703017,71.7384,2977.07,False,5698.26,-0.0108671
+1h,random_forest,regime,High-variability,daylight,3432,5052.2,7781.64,0.141484,0.683884,49.8687,213.657,False,11064.8,0.296719
+1h,random_forest,regime,Night,daylight,0,,,,,,,True,,
+1h,random_forest,season,Winter,daylight,3950,3120.46,4693.64,0.0853388,0.862002,34.4825,383.972,False,7397.05,0.365472
+1h,random_forest,season,Spring,daylight,4634,4081.07,6151.25,0.111841,0.804783,54.9932,1282.44,False,7957.21,0.22696
+1h,random_forest,season,Summer,daylight,4859,6329.64,8901.36,0.161843,0.673883,46.679,1090.37,False,11701.6,0.239305
+1h,random_forest,season,Autumn,daylight,4236,4033.03,5843.93,0.106253,0.83585,47.0649,391.251,False,8451.57,0.308539
+1h,random_forest,time_of_day,Afternoon (14-16),daylight,2920,5322.8,7199.78,0.130905,0.647407,35.9702,627.804,False,10066.7,0.28479
+1h,random_forest,time_of_day,Early morning (05-08),daylight,2253,1703.47,2569.48,0.0467179,0.674163,67.9555,799.294,False,4718.29,0.455421
+1h,random_forest,time_of_day,Evening ramp (16-18),daylight,2866,2063.37,3072.2,0.0558582,0.752605,51.3715,1130.22,False,8644.38,0.644602
+1h,random_forest,time_of_day,Late evening (18-20),daylight,880,306.79,581.718,0.0105767,0.697079,95.0812,157.767,False,5321.01,0.890675
+1h,random_forest,time_of_day,Mid-morning (10-12),daylight,2920,6675.01,8967.8,0.163051,0.631016,34.5168,563.844,False,10657.3,0.158532
+1h,random_forest,time_of_day,Morning ramp (08-10),daylight,2920,4643.76,6473.68,0.117703,0.656723,42.8648,1861.02,False,9490.69,0.317892
+1h,random_forest,time_of_day,Solar noon (12-14),daylight,2920,7007.61,9089.25,0.165259,0.639277,35.0107,110.386,False,10096.1,0.0997288
+1h,random_forest,power_level,0-10% of capacity,daylight,6161,2491.36,4553.54,0.0827916,-6.40097,82.592,2304.21,False,5133.12,0.112911
+1h,random_forest,power_level,10-25% of capacity,daylight,3746,5187.03,7512.87,0.136598,-8.87755,39.6132,4409.79,False,9226.26,0.185708
+1h,random_forest,power_level,25-50% of capacity,daylight,3690,4688.17,6421.77,0.116759,-1.60957,22.0212,2055.7,False,10880.5,0.409791
+1h,random_forest,power_level,50-75% of capacity,daylight,2845,5173.41,6717.85,0.122143,-1.9361,16.8121,-4088.21,False,11119.8,0.395864
+1h,random_forest,power_level,75-100% of capacity,daylight,1233,9901.4,11773.3,0.21406,-10.4411,24.9307,-9881.42,False,12957.9,0.0914155
+1h,random_forest,ramping,False,daylight,14888,3747.9,5695.75,0.103559,0.830194,48.2952,1002.57,False,7728.34,0.263005
+1h,random_forest,ramping,True,daylight,2791,8340.52,10522.6,0.19132,0.263627,35.1868,-183.172,False,14517.5,0.275179
+1h,gradient_boosting,regime,Clear,daylight,5824,4408.55,6535.18,0.118821,0.793429,21.9634,-1088.99,False,10183.2,0.358237
+1h,gradient_boosting,regime,Partly cloudy,daylight,2411,5247.3,7488.09,0.136147,0.499606,40.4771,2145.8,False,10347.1,0.276311
+1h,gradient_boosting,regime,Cloudy,daylight,6012,3566.21,5560.58,0.101101,0.13362,75.6694,2600.33,False,5698.26,0.0241631
+1h,gradient_boosting,regime,High-variability,daylight,3432,5116.21,7921.38,0.144025,0.672429,58.1682,275.89,False,11064.8,0.28409
+1h,gradient_boosting,regime,Night,daylight,0,,,,,,,True,,
+1h,gradient_boosting,season,Winter,daylight,3950,3120.4,4693.43,0.085335,0.862015,39.0559,534.063,False,7397.05,0.365501
+1h,gradient_boosting,season,Spring,daylight,4634,3948.81,6100.04,0.11091,0.808019,57.6746,1232.29,False,7957.21,0.233395
+1h,gradient_boosting,season,Summer,daylight,4859,6256.65,8970.59,0.163102,0.668791,51.1501,944.675,False,11701.6,0.233388
+1h,gradient_boosting,season,Autumn,daylight,4236,3847.99,5639.26,0.102532,0.847146,49.5726,708.48,False,8451.57,0.332755
+1h,gradient_boosting,time_of_day,Afternoon (14-16),daylight,2920,4978.46,7089.48,0.1289,0.658129,33.8208,641.688,False,10066.7,0.295748
+1h,gradient_boosting,time_of_day,Early morning (05-08),daylight,2253,2027.39,2889.86,0.052543,0.587843,77.3054,804.335,False,4718.29,0.387519
+1h,gradient_boosting,time_of_day,Evening ramp (16-18),daylight,2866,2113.44,3081.98,0.056036,0.751028,57.5309,697.124,False,8644.38,0.64347
+1h,gradient_boosting,time_of_day,Late evening (18-20),daylight,880,850.838,1305.02,0.0237277,-0.524546,135.231,434.921,False,5321.01,0.754742
+1h,gradient_boosting,time_of_day,Mid-morning (10-12),daylight,2920,6355.65,8914.75,0.162086,0.635369,33.457,922.695,False,10657.3,0.16351
+1h,gradient_boosting,time_of_day,Morning ramp (08-10),daylight,2920,4693.77,6472.46,0.117681,0.656851,44.8359,1841.23,False,9490.69,0.31802
+1h,gradient_boosting,time_of_day,Solar noon (12-14),daylight,2920,6558.42,8999.25,0.163623,0.646386,32.4091,436.312,False,10096.1,0.108643
+1h,gradient_boosting,power_level,0-10% of capacity,daylight,6161,2549.13,4401,0.0800182,-5.91343,92.8118,2247.3,False,5133.12,0.142627
+1h,gradient_boosting,power_level,10-25% of capacity,daylight,3746,4873.8,7296.66,0.132667,-8.31722,38.8948,3598.72,False,9226.26,0.209142
+1h,gradient_boosting,power_level,25-50% of capacity,daylight,3690,5143.92,7025.31,0.127733,-2.12313,24.4401,1680.95,False,10880.5,0.354321
+1h,gradient_boosting,power_level,50-75% of capacity,daylight,2845,4885.2,6850.71,0.124558,-2.05338,16.123,-2750.93,False,11119.8,0.383917
+1h,gradient_boosting,power_level,75-100% of capacity,daylight,1233,8454.69,11023.8,0.200433,-9.03076,21.3873,-8298.8,False,12957.9,0.149255
+1h,gradient_boosting,ramping,False,daylight,14888,3588.45,5506.49,0.100118,0.841291,52.3144,1026.47,False,7728.34,0.287494
+1h,gradient_boosting,ramping,True,daylight,2791,8563.49,10935.2,0.198821,0.204756,36.2616,46.3039,False,14517.5,0.246762
+1h,xgboost,regime,Clear,daylight,5824,4855.72,6983.63,0.126975,0.764106,22.8575,-1948.29,False,10183.2,0.314198
+1h,xgboost,regime,Partly cloudy,daylight,2411,5202.34,7426.74,0.135032,0.507773,38.6775,2150.59,False,10347.1,0.282241
+1h,xgboost,regime,Cloudy,daylight,6012,3448.91,5590.36,0.101643,0.124314,71.8285,2499.81,False,5698.26,0.0189359
+1h,xgboost,regime,High-variability,daylight,3432,5271.43,8025.99,0.145927,0.66372,58.4354,356.798,False,11064.8,0.274635
+1h,xgboost,regime,Night,daylight,0,,,,,,,True,,
+1h,xgboost,season,Winter,daylight,3950,3147.6,4849.04,0.0881643,0.852713,37.1375,304.713,False,7397.05,0.344464
+1h,xgboost,season,Spring,daylight,4634,4010.35,6233.72,0.11334,0.799513,55.5078,1034.28,False,7957.21,0.216596
+1h,xgboost,season,Summer,daylight,4859,6466.4,9146.3,0.166296,0.655688,50.9218,720.176,False,11701.6,0.218372
+1h,xgboost,season,Autumn,daylight,4236,4063.21,5882.09,0.106947,0.833699,48.9639,140.665,False,8451.57,0.304024
+1h,xgboost,time_of_day,Afternoon (14-16),daylight,2920,5369.99,7351.6,0.133665,0.632381,35.4806,-92.9085,False,10066.7,0.269709
+1h,xgboost,time_of_day,Early morning (05-08),daylight,2253,1704.81,2524.98,0.0459088,0.685352,71.3145,601.254,False,4718.29,0.464853
+1h,xgboost,time_of_day,Evening ramp (16-18),daylight,2866,2134.77,3125.55,0.0568282,0.743938,55.4345,434.999,False,8644.38,0.638429
+1h,xgboost,time_of_day,Late evening (18-20),daylight,880,703.346,1019.23,0.0185315,0.0700651,130.049,311.477,False,5321.01,0.808451
+1h,xgboost,time_of_day,Mid-morning (10-12),daylight,2920,6605.74,9096.48,0.165391,0.620351,33.5753,671.652,False,10657.3,0.146458
+1h,xgboost,time_of_day,Morning ramp (08-10),daylight,2920,4723.39,6653.9,0.12098,0.637343,42.1514,1803.75,False,9490.69,0.298903
+1h,xgboost,time_of_day,Solar noon (12-14),daylight,2920,6955.27,9326.65,0.169576,0.620188,34.2608,88.8168,False,10096.1,0.0762146
+1h,xgboost,power_level,0-10% of capacity,daylight,6161,2309.38,4258.84,0.0774335,-5.47402,87.2688,2005.66,False,5133.12,0.170321
+1h,xgboost,power_level,10-25% of capacity,daylight,3746,5026.56,7481.68,0.136031,-8.79571,39.336,3760.57,False,9226.26,0.189089
+1h,xgboost,power_level,25-50% of capacity,daylight,3690,5224.05,6985.8,0.127015,-2.08811,24.9902,1479.04,False,10880.5,0.357952
+1h,xgboost,power_level,50-75% of capacity,daylight,2845,5473.34,7264.34,0.132079,-2.43323,18.1437,-3681.84,False,11119.8,0.346719
+1h,xgboost,power_level,75-100% of capacity,daylight,1233,9472.84,11855.5,0.215554,-10.6013,24.1475,-9142.06,False,12957.9,0.0850745
+1h,xgboost,ramping,False,daylight,14888,3737.39,5751.85,0.104579,0.826833,50.8722,743.427,False,7728.34,0.255746
+1h,xgboost,ramping,True,daylight,2791,8601.49,10930.2,0.198731,0.205474,36.3209,-349.862,False,14517.5,0.247103
+1h,lstm,regime,Clear,daylight,5824,7768.51,10246.8,0.186306,0.492151,38.3978,-5363.83,False,10183.2,-0.00625331
+1h,lstm,regime,Partly cloudy,daylight,2411,6364.27,8482.98,0.154236,0.357806,50.5941,1787.98,False,10347.1,0.18016
+1h,lstm,regime,Cloudy,daylight,6012,5873.64,8436.48,0.15339,-0.994303,95.6929,4493.85,False,5698.26,-0.480535
+1h,lstm,regime,High-variability,daylight,3432,6806.28,9415.7,0.171195,0.537184,70.5651,-2175.91,False,11064.8,0.149038
+1h,lstm,regime,Night,daylight,0,,,,,,,True,,
+1h,lstm,season,Winter,daylight,3950,5749.53,7626.1,0.138656,0.635701,56.2574,1617.3,False,7397.05,-0.030965
+1h,lstm,season,Spring,daylight,4634,6491.78,8941.3,0.162569,0.587529,75.5203,348.198,False,7957.21,-0.123672
+1h,lstm,season,Summer,daylight,4859,8269.29,11211.8,0.203851,0.48262,65.4895,-3030.04,False,11701.6,0.0418598
+1h,lstm,season,Autumn,daylight,4236,6205.27,8501.76,0.154578,0.652584,64.378,-155.278,False,8451.57,-0.00593945
+1h,lstm,time_of_day,Afternoon (14-16),daylight,2920,8574.35,10859.1,0.197438,0.197914,53.8626,-274.419,False,10066.7,-0.0787165
+1h,lstm,time_of_day,Early morning (05-08),daylight,2253,2096.26,3204.34,0.0582606,0.493261,88.7023,-339.374,False,4718.29,0.32087
+1h,lstm,time_of_day,Evening ramp (16-18),daylight,2866,4392.73,6234.03,0.113346,-0.0186605,79.9788,1456.98,False,8644.38,0.278834
+1h,lstm,time_of_day,Late evening (18-20),daylight,880,1769.01,2784.93,0.050635,-5.94276,142.772,1546.57,False,5321.01,0.476617
+1h,lstm,time_of_day,Mid-morning (10-12),daylight,2920,9341.33,11400.7,0.207285,0.403658,47.4219,-220.81,False,10657.3,-0.0697477
+1h,lstm,time_of_day,Morning ramp (08-10),daylight,2920,6278.07,8381.06,0.152383,0.424639,59.04,-1239.01,False,9490.69,0.116919
+1h,lstm,time_of_day,Solar noon (12-14),daylight,2920,10186.5,12370.8,0.224924,0.331786,48.0288,-2427.03,False,10096.1,-0.225306
+1h,lstm,power_level,0-10% of capacity,daylight,6161,4133.01,6779.56,0.123265,-15.4057,111.52,3201.41,False,5133.12,-0.320748
+1h,lstm,power_level,10-25% of capacity,daylight,3746,6991.44,8983,0.163327,-13.1215,57.3667,4853.22,False,9226.26,0.0263659
+1h,lstm,power_level,25-50% of capacity,daylight,3690,5658.2,7059.46,0.128354,-2.15357,30.5877,229.782,False,10880.5,0.351182
+1h,lstm,power_level,50-75% of capacity,daylight,2845,8827.67,10637,0.1934,-6.36118,31.3554,-8617.97,False,11119.8,0.0434165
+1h,lstm,power_level,75-100% of capacity,daylight,1233,17438.7,18517.2,0.336677,-27.3022,47.6745,-17438.7,False,12957.9,-0.429033
+1h,lstm,ramping,False,daylight,14888,6169.4,8575.57,0.15592,0.615074,70.0003,289.723,False,7728.34,-0.109627
+1h,lstm,ramping,True,daylight,2791,9820.69,12300.7,0.223649,-0.00626153,43.3291,-4189.26,False,14517.5,0.1527
+1h,gru,regime,Clear,daylight,5824,8948.1,11825.6,0.215012,0.323601,45.9037,-7211.42,False,10183.2,-0.161292
+1h,gru,regime,Partly cloudy,daylight,2411,6164.12,8264.08,0.150256,0.390522,51.3498,603.451,False,10347.1,0.201316
+1h,gru,regime,Cloudy,daylight,6012,5324.18,7572.14,0.137675,-0.606595,97.7761,3601.05,False,5698.26,-0.328851
+1h,gru,regime,High-variability,daylight,3432,6663.78,9494.17,0.172621,0.529438,68.9536,-2235.85,False,11064.8,0.141946
+1h,gru,regime,Night,daylight,0,,,,,,,True,,
+1h,gru,season,Winter,daylight,3950,5670.93,7611.95,0.138399,0.637052,59.6185,973.481,False,7397.05,-0.0290517
+1h,gru,season,Spring,daylight,4634,6580.57,9096.9,0.165398,0.573048,78.2807,-815.128,False,7957.21,-0.143227
+1h,gru,season,Summer,daylight,4859,8798.47,12108.7,0.220158,0.396532,68.5142,-4392.92,False,11701.6,-0.0347886
+1h,gru,season,Autumn,daylight,4236,6187,8532.71,0.15514,0.65005,67.1554,-1249.07,False,8451.57,-0.0096012
+1h,gru,time_of_day,Afternoon (14-16),daylight,2920,8899.91,11422.1,0.207675,0.112583,56.3064,-3103.4,False,10066.7,-0.134647
+1h,gru,time_of_day,Early morning (05-08),daylight,2253,2167.45,3130.34,0.0569153,0.516394,97.0697,-263.312,False,4718.29,0.336552
+1h,gru,time_of_day,Evening ramp (16-18),daylight,2866,4323.66,5995.46,0.109008,0.0578156,87.45,-911.593,False,8644.38,0.306433
+1h,gru,time_of_day,Late evening (18-20),daylight,880,1525.62,2177.95,0.0395991,-3.2462,139.688,1133.74,False,5321.01,0.590689
+1h,gru,time_of_day,Mid-morning (10-12),daylight,2920,9666.39,12000.8,0.218197,0.339216,49.3646,-3184.15,False,10657.3,-0.126065
+1h,gru,time_of_day,Morning ramp (08-10),daylight,2920,6287.75,8277.65,0.150503,0.43875,58.5925,1111.97,False,9490.69,0.127814
+1h,gru,time_of_day,Solar noon (12-14),daylight,2920,10501.1,13116.3,0.238477,0.248832,49.2197,-3166.93,False,10096.1,-0.299137
+1h,gru,power_level,0-10% of capacity,daylight,6161,3703.72,5928.25,0.107786,-11.5442,113.319,2556.93,False,5133.12,-0.154903
+1h,gru,power_level,10-25% of capacity,daylight,3746,6371.49,8031.89,0.146034,-10.2895,57.8088,3574.61,False,9226.26,0.129454
+1h,gru,power_level,25-50% of capacity,daylight,3690,5950.16,7533.31,0.136969,-2.59113,34.2094,-870.467,False,10880.5,0.307631
+1h,gru,power_level,50-75% of capacity,daylight,2845,10016,12057.4,0.219225,-8.45831,36.8228,-9765.67,False,11119.8,-0.0843162
+1h,gru,power_level,75-100% of capacity,daylight,1233,19938.3,21073.4,0.383153,-35.6555,56.4271,-19938.3,False,12957.9,-0.626304
+1h,gru,ramping,False,daylight,14888,6228.71,8793.08,0.159874,0.5953,72.9288,-678.027,False,7728.34,-0.137771
+1h,gru,ramping,True,daylight,2791,10434,13142.5,0.238955,-0.1487,46.5287,-5902.48,False,14517.5,0.0947152
+1h,cnn_lstm,regime,Clear,daylight,5824,4372.83,6864.88,0.124816,0.77206,24.6271,-301.996,False,10183.2,0.32586
+1h,cnn_lstm,regime,Partly cloudy,daylight,2411,5368.65,7841.91,0.14258,0.451202,41.659,1065.37,False,10347.1,0.242116
+1h,cnn_lstm,regime,Cloudy,daylight,6012,2861.92,5051.55,0.0918464,0.284979,68.7513,1186.55,False,5698.26,0.113492
+1h,cnn_lstm,regime,High-variability,daylight,3432,5251.03,8466.29,0.153933,0.625812,55.319,-265.593,False,11064.8,0.234842
+1h,cnn_lstm,regime,Night,daylight,0,,,,,,,True,,
+1h,cnn_lstm,season,Winter,daylight,3950,3005.9,4779,0.0868909,0.856937,39.1346,428.805,False,7397.05,0.353932
+1h,cnn_lstm,season,Spring,daylight,4634,3700.28,6283.02,0.114237,0.796329,53.6442,80.7407,False,7957.21,0.2104
+1h,cnn_lstm,season,Summer,daylight,4859,6087.65,9184.05,0.166983,0.652841,51.7768,595.88,False,11701.6,0.215147
+1h,cnn_lstm,season,Autumn,daylight,4236,3550.12,5731.61,0.104211,0.842099,45.3973,488.314,False,8451.57,0.321829
+1h,cnn_lstm,time_of_day,Afternoon (14-16),daylight,2920,4976.29,7519.16,0.136712,0.615432,33.7851,141.198,False,10066.7,0.253064
+1h,cnn_lstm,time_of_day,Early morning (05-08),daylight,2253,1773.17,2665.86,0.0484702,0.649262,82.4481,-429.45,False,4718.29,0.434995
+1h,cnn_lstm,time_of_day,Evening ramp (16-18),daylight,2866,2208.22,3433.79,0.0624326,0.690942,56.1359,400.587,False,8644.38,0.602772
+1h,cnn_lstm,time_of_day,Late evening (18-20),daylight,880,564.512,1064.83,0.0193605,-0.0149915,115.932,226.066,False,5321.01,0.799883
+1h,cnn_lstm,time_of_day,Mid-morning (10-12),daylight,2920,6074.35,9091.64,0.165303,0.620755,32.2251,710.933,False,10657.3,0.146912
+1h,cnn_lstm,time_of_day,Morning ramp (08-10),daylight,2920,4233.32,6513.48,0.118427,0.652488,39.1212,907.154,False,9490.69,0.313698
+1h,cnn_lstm,time_of_day,Solar noon (12-14),daylight,2920,6229.08,9085.02,0.165182,0.639613,31.3051,518.913,False,10096.1,0.100148
+1h,cnn_lstm,power_level,0-10% of capacity,daylight,6161,1871.14,3778.22,0.0686949,-4.09524,83.37,1147.6,False,5133.12,0.263953
+1h,cnn_lstm,power_level,10-25% of capacity,daylight,3746,4707.35,7295.43,0.132644,-8.31408,41.9058,2443.01,False,9226.26,0.209275
+1h,cnn_lstm,power_level,25-50% of capacity,daylight,3690,5656.94,7868.52,0.143064,-2.91783,28.0135,1073.6,False,10880.5,0.276823
+1h,cnn_lstm,power_level,50-75% of capacity,daylight,2845,5349.02,7833.56,0.142428,-2.99234,18.057,-2087.03,False,11119.8,0.295529
+1h,cnn_lstm,power_level,75-100% of capacity,daylight,1233,6771.28,10320.2,0.18764,-7.79109,17.5328,-5821.85,False,12957.9,0.203559
+1h,cnn_lstm,ramping,False,daylight,14888,3227.53,5410.05,0.0983645,0.846802,49.4064,456.745,False,7728.34,0.299973
+1h,cnn_lstm,ramping,True,daylight,2791,9167.73,11766.2,0.213931,0.0792916,39.9471,83.0494,False,14517.5,0.189519
+1h,attention_lstm,regime,Clear,daylight,5824,6937.44,9670.18,0.175821,0.547703,37.0098,-3190.04,False,10183.2,0.0503761
+1h,attention_lstm,regime,Partly cloudy,daylight,2411,6965.5,9406.91,0.171035,0.210298,53.4802,2380.94,False,10347.1,0.0908664
+1h,attention_lstm,regime,Cloudy,daylight,6012,5135.78,7887.43,0.143408,-0.74317,90.9464,3732.93,False,5698.26,-0.384181
+1h,attention_lstm,regime,High-variability,daylight,3432,6467.89,9788.68,0.177976,0.499791,68.448,-1682.79,False,11064.8,0.115328
+1h,attention_lstm,regime,Night,daylight,0,,,,,,,True,,
+1h,attention_lstm,season,Winter,daylight,3950,5498.07,7798.48,0.14179,0.619046,51.895,2690.93,False,7397.05,-0.0542679
+1h,attention_lstm,season,Spring,daylight,4634,6128.49,9098.39,0.165425,0.572909,74.7173,466.475,False,7957.21,-0.143413
+1h,attention_lstm,season,Summer,daylight,4859,7624.96,10782.3,0.196042,0.521498,67.037,-2507.49,False,11701.6,0.0785616
+1h,attention_lstm,season,Autumn,daylight,4236,5454.47,8014.7,0.145722,0.69125,58.8318,760.557,False,8451.57,0.0516904
+1h,attention_lstm,time_of_day,Afternoon (14-16),daylight,2920,8261.4,10608.6,0.192884,0.234485,51.8826,311.439,False,10066.7,-0.0538373
+1h,attention_lstm,time_of_day,Early morning (05-08),daylight,2253,1926.7,2844.55,0.0517192,0.600666,97.1566,-735.325,False,4718.29,0.397122
+1h,attention_lstm,time_of_day,Evening ramp (16-18),daylight,2866,3980.29,5714.46,0.103899,0.144062,79.2137,895.637,False,8644.38,0.338939
+1h,attention_lstm,time_of_day,Late evening (18-20),daylight,880,1122.48,1900.15,0.0345482,-2.23207,136.61,673.441,False,5321.01,0.642897
+1h,attention_lstm,time_of_day,Mid-morning (10-12),daylight,2920,8695.58,11647,0.211763,0.37761,44.7966,615.132,False,10657.3,-0.0928615
+1h,attention_lstm,time_of_day,Morning ramp (08-10),daylight,2920,5755.66,8072.17,0.146767,0.466268,49.5479,1278.27,False,9490.69,0.149465
+1h,attention_lstm,time_of_day,Solar noon (12-14),daylight,2920,9320.06,12146.9,0.220852,0.355763,45.5646,-1408.33,False,10096.1,-0.203121
+1h,attention_lstm,power_level,0-10% of capacity,daylight,6161,3229.69,5616.59,0.10212,-10.2599,106.73,2345.19,False,5133.12,-0.0941865
+1h,attention_lstm,power_level,10-25% of capacity,daylight,3746,6833.71,9304.81,0.169178,-14.1514,55.928,4519.22,False,9226.26,-0.00851376
+1h,attention_lstm,power_level,25-50% of capacity,daylight,3690,6856.37,8565.98,0.155745,-3.64315,35.2461,1522.64,False,10880.5,0.212722
+1h,attention_lstm,power_level,50-75% of capacity,daylight,2845,7886.29,10557.6,0.191956,-6.25168,28.6197,-5720.49,False,11119.8,0.050558
+1h,attention_lstm,power_level,75-100% of capacity,daylight,1233,13735,16881.9,0.306943,-22.5239,38.4174,-13617.4,False,12957.9,-0.302828
+1h,attention_lstm,ramping,False,daylight,14888,5509.56,8181.01,0.148746,0.64968,67.2039,794.344,False,7728.34,-0.0585734
+1h,attention_lstm,ramping,True,daylight,2791,10120.1,12899.2,0.23453,-0.106559,45.0155,-2865.48,False,14517.5,0.111476
+1h,transformer,regime,Clear,daylight,5824,5847.09,7962.1,0.144765,0.693374,30.1287,-433.925,False,10183.2,0.218112
+1h,transformer,regime,Partly cloudy,daylight,2411,6547.74,9136.35,0.166115,0.255071,50.3918,2442.71,False,10347.1,0.117014
+1h,transformer,regime,Cloudy,daylight,6012,3899.01,5798.06,0.105419,0.058035,84.3133,2305.65,False,5698.26,-0.0175141
+1h,transformer,regime,High-variability,daylight,3432,7229.62,9611.22,0.174749,0.517764,75.1114,-1328.91,False,11064.8,0.131367
+1h,transformer,regime,Night,daylight,0,,,,,,,True,,
+1h,transformer,season,Winter,daylight,3950,4080.59,5560.34,0.101097,0.806333,49.2644,-94.1742,False,7397.05,0.248304
+1h,transformer,season,Spring,daylight,4634,4887.12,6969.73,0.126722,0.749375,66.9522,393.007,False,7957.21,0.124099
+1h,transformer,season,Summer,daylight,4859,8131.62,10794.4,0.196262,0.520424,64.1851,1917.7,False,11701.6,0.077528
+1h,transformer,season,Autumn,daylight,4236,4678.05,6449.67,0.117267,0.800057,57.8168,447.508,False,8451.57,0.236867
+1h,transformer,time_of_day,Afternoon (14-16),daylight,2920,5808.99,8282.04,0.150583,0.533438,40.3977,1219,False,10066.7,0.177281
+1h,transformer,time_of_day,Early morning (05-08),daylight,2253,2435.33,2947.52,0.0535912,0.571233,87.5853,1006.5,False,4718.29,0.3753
+1h,transformer,time_of_day,Evening ramp (16-18),daylight,2866,5319.78,7317.28,0.133042,-0.403432,90.2544,3568.46,False,8644.38,0.153521
+1h,transformer,time_of_day,Late evening (18-20),daylight,880,6513.87,8705.58,0.158283,-66.8422,173.185,5172.25,False,5321.01,-0.636075
+1h,transformer,time_of_day,Mid-morning (10-12),daylight,2920,6758.48,9279.25,0.168714,0.604942,35.7975,-1183.13,False,10657.3,0.129308
+1h,transformer,time_of_day,Morning ramp (08-10),daylight,2920,4824.57,6527.52,0.118682,0.650989,43.8639,-966.413,False,9490.69,0.312219
+1h,transformer,time_of_day,Solar noon (12-14),daylight,2920,7137.92,9682.57,0.176047,0.590646,35.159,-570.653,False,10096.1,0.0409618
+1h,transformer,power_level,0-10% of capacity,daylight,6161,4007.95,6053.48,0.110063,-12.0798,110.891,3186.41,False,5133.12,-0.179298
+1h,transformer,power_level,10-25% of capacity,daylight,3746,5475.77,8097.11,0.14722,-10.4736,45.601,3422.44,False,9226.26,0.122384
+1h,transformer,power_level,25-50% of capacity,daylight,3690,6327.16,8266.93,0.150308,-3.32462,31.5995,824.494,False,10880.5,0.240206
+1h,transformer,power_level,50-75% of capacity,daylight,2845,6540.25,8470.64,0.154012,-3.66813,22.1246,-4333.4,False,11119.8,0.238236
+1h,transformer,power_level,75-100% of capacity,daylight,1233,8821.68,11427.9,0.207779,-9.77949,22.6683,-8472.44,False,12957.9,0.118076
+1h,transformer,ramping,False,daylight,14888,4777.35,6733.31,0.122424,0.762694,63.4609,852.079,False,7728.34,0.128751
+1h,transformer,ramping,True,daylight,2791,9662.39,12188.4,0.221607,0.0120297,41.8604,-8.17466,False,14517.5,0.160436

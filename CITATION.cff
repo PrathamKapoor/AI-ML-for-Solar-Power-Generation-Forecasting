@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+title: "AI/ML-Based Solar Photovoltaic Power Forecasting: A Reproducible and Explainable Benchmark Across Forecast Horizons and Weather Conditions"
+message: >-
+  If you use this software, the experiment configuration or the results in this
+  repository, please cite it as below.
+type: software
+authors:
+  - family-names: Kapoor
+    given-names: Pratham
+    email: prathamkapoor027@gmail.com
+repository-code: "https://github.com/PrathamKapoor/solar-pv-forecasting"
+license: MIT
+version: 1.0.0
+date-released: "2026-09-26"
+keywords:
+  - solar photovoltaic
+  - power forecasting
+  - time series forecasting
+  - machine learning
+  - deep learning
+  - explainable AI
+  - reproducible research
+abstract: >-
+  A controlled, leakage-audited benchmark of classical machine learning,
+  recurrent, hybrid and attention-based models for short-term solar photovoltaic
+  power forecasting, evaluated across four forecast horizons, four weather
+  regimes, four seasons, feature-group ablations, statistical significance tests,
+  permutation and SHAP explainability, conformal prediction intervals and
+  computational cost.
+preferred-citation:
+  type: software
+  title: "AI/ML-Based Solar Photovoltaic Power Forecasting: A Reproducible and Explainable Benchmark Across Forecast Horizons and Weather Conditions"
+  authors:
+    - family-names: Kapoor
+      given-names: Pratham
+  year: 2026
+  version: 1.0.0
+  license: MIT

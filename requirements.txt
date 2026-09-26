@@ -1,0 +1,40 @@
+# Runtime and analysis dependencies for the solar PV forecasting benchmark.
+#
+# Versions are pinned to the environment the reported results were produced in
+# (Python 3.13.14, Windows 11, CPU only). The lower bounds are what the code
+# actually requires; the exact pins are recorded with every experiment in
+# results/metrics/*.json, so a reader can see what produced a given number.
+#
+# Install with:  python -m pip install -r requirements.txt
+# For a full environment:  mamba env create -f environment.yml
+
+# --- core ------------------------------------------------------------------
+numpy==2.5.2
+pandas==2.3.3
+pyarrow==25.0.1
+PyYAML==6.0.2
+scipy==1.17.1
+joblib==1.5.3
+tqdm==4.70.0
+requests==2.33.1
+
+# --- modelling -------------------------------------------------------------
+scikit-learn==1.9.0
+torch==2.13.0
+xgboost==3.4.1
+
+# --- solar geometry and clear-sky reference --------------------------------
+pvlib==0.15.2
+
+# --- analysis, statistics and explainability -------------------------------
+shap==0.52.0
+matplotlib==3.10.3
+seaborn==0.13.2
+statsmodels==0.14.6
+
+# --- literature workbook ----------------------------------------------------
+openpyxl==3.1.5
+
+# --- tests -----------------------------------------------------------------
+pytest==9.1.1
+pytest-cov==7.1.0

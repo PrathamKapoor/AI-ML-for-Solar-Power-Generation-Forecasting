@@ -1,0 +1,206 @@
+{
+  "spec": {
+    "experiment_id": "C_horizons__persistence__6h",
+    "model": "persistence",
+    "horizon": "6h",
+    "horizon_steps": 24,
+    "features": "full",
+    "seed": 42,
+    "ablation": null,
+    "concurrent_weather": false,
+    "label": "C_horizons / persistence / 6h / full",
+    "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead."
+  },
+  "metrics_daylight": {
+    "mae": 17282.05117040953,
+    "rmse": 22382.556798056805,
+    "mse": 500978848.8182389,
+    "smape": 159.36366868115593,
+    "r2": -1.4215528856098811,
+    "bias": -7271.343373391218,
+    "peak_error": 55003.0,
+    "n": 17661.0,
+    "nrmse_capacity": 0.40695557814648736,
+    "nrmse_mean": 1.4369126362185536,
+    "skill_vs_persistence_rmse": 0.0,
+    "skill_vs_persistence_mae": 0.0,
+    "persistence_rmse": 22382.556798056805,
+    "persistence_mae": 17282.05117040953,
+    "skill_vs_smart_persistence_rmse": -0.23745230609017276,
+    "skill_vs_smart_persistence_mae": -0.3973565360045914,
+    "smart_persistence_rmse": 18087.61169048708,
+    "smart_persistence_mae": 12367.67476668728
+  },
+  "metrics_all_steps": {
+    "mae": 12395.967715117104,
+    "rmse": 18836.77099996782,
+    "mse": 354823941.7052286,
+    "smape": 129.78694671989115,
+    "r2": -1.148742963425902,
+    "bias": -5.7122215313563345,
+    "peak_error": 55154.668,
+    "n": 34969.0,
+    "nrmse_capacity": 0.34248674545396035,
+    "nrmse_mean": 2.3942298198155805,
+    "skill_vs_persistence_rmse": 0.0,
+    "skill_vs_persistence_mae": 0.0,
+    "persistence_rmse": 18836.77099996782,
+    "persistence_mae": 12395.967715117104,
+    "skill_vs_smart_persistence_rmse": -0.4653649136499265,
+    "skill_vs_smart_persistence_mae": -0.9813268189096556,
+    "smart_persistence_rmse": 12854.662224066255,
+    "smart_persistence_mae": 6256.397277223922
+  },
+  "metadata": {
+    "model_family": "baseline",
+    "model_kind": "rule",
+    "model_description": "Repeat the most recent observed power.",
+    "feature_spec": "full",
+    "n_features": 33,
+    "feature_columns": [
+      "ghi",
+      "temperature",
+      "relative_humidity",
+      "wind_speed",
+      "solar_elevation",
+      "sin_solar_elevation",
+      "hour_sin",
+      "hour_cos",
+      "doy_sin",
+      "doy_cos",
+      "pv_power_w_lag_0",
+      "pv_power_w_lag_1",
+      "pv_power_w_lag_2",
+      "pv_power_w_lag_4",
+      "pv_power_w_lag_8",
+      "pv_power_w_lag_12",
+      "pv_power_w_lag_24",
+      "pv_power_w_lag_48",
+      "pv_power_w_lag_96",
+      "pv_rolling_mean_4",
+      "pv_rolling_std_4",
+      "pv_rolling_mean_12",
+      "pv_rolling_std_12",
+      "pv_rolling_mean_24",
+      "pv_rolling_std_24",
+      "ghi_rollmean_4",
+      "ghi_rollmean_24",
+      "temperature_rollmean_4",
+      "temperature_rollmean_24",
+      "ghi_delta_1",
+      "ghi_slope_1",
+      "ghi_delta_4",
+      "ghi_slope_4"
+    ],
+    "lookback_steps": 24,
+    "horizon": "6h",
+    "horizon_steps": 24,
+    "seed": 42,
+    "split_sizes": {
+      "train": 43705,
+      "val": 11641,
+      "test": 34969
+    },
+    "split_date_ranges": {
+      "train": [
+        "2021-06-02 05:45:00",
+        "2022-08-31 11:45:00"
+      ],
+      "val": [
+        "2022-09-01 05:45:00",
+        "2022-12-31 11:45:00"
+      ],
+      "test": [
+        "2023-01-01 05:45:00",
+        "2023-12-31 11:45:00"
+      ]
+    },
+    "target_split_dates": {
+      "train": [
+        "2021-06-02 11:45:00",
+        "2022-08-31 17:45:00"
+      ],
+      "val": [
+        "2022-09-01 11:45:00",
+        "2022-12-31 17:45:00"
+      ],
+      "test": [
+        "2023-01-01 11:45:00",
+        "2023-12-31 17:45:00"
+      ]
+    },
+    "concurrent_weather": false,
+    "information_set": "weather observed at or before the forecast origin (strict historical setting)",
+    "training": {
+      "requires_training": false
+    },
+    "cost": {
+      "train_seconds": 0.0,
+      "inference_ms_per_window": 0.0,
+      "n_parameters": 0
+    },
+    "environment": {
+      "timestamp_utc": "2026-09-26T16:19:50+00:00",
+      "seed": 42,
+      "git_revision": "d469139",
+      "platform": {
+        "python": "3.13.14",
+        "implementation": "CPython",
+        "system": "Windows",
+        "release": "11",
+        "machine": "AMD64",
+        "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD"
+      },
+      "torch": {
+        "version": "2.13.0+cpu",
+        "cuda_available": false,
+        "device_count": 0,
+        "device_name": "cpu",
+        "num_threads": 8
+      },
+      "packages": {
+        "numpy": "2.5.2",
+        "pandas": "2.3.3",
+        "scipy": "1.17.1",
+        "scikit-learn": "not installed",
+        "torch": "2.13.0+cpu",
+        "xgboost": "3.4.1",
+        "shap": "0.52.0",
+        "matplotlib": "3.10.3",
+        "seaborn": "0.13.2",
+        "pvlib": "0.15.2",
+        "statsmodels": "not installed",
+        "openpyxl": "3.1.5",
+        "pyyaml": "not installed",
+        "requests": "2.33.1",
+        "tqdm": "4.70.0",
+        "joblib": "1.5.3"
+      }
+    },
+    "dataset": {
+      "name": "hong_kong_rooftop_pv_60_stations",
+      "primary_station": "LSK North",
+      "rated_w": 55000.0
+    },
+    "experiment_label": "C_horizons / persistence / 6h / full",
+    "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead.",
+    "ablation": null,
+    "regime_distribution_test": {
+      "scope": "daylight",
+      "n": 17661,
+      "counts": {
+        "Cloudy": 6006,
+        "Clear": 5824,
+        "High-variability": 3432,
+        "Partly cloudy": 2399
+      },
+      "shares": {
+        "Cloudy": 0.340071,
+        "Clear": 0.329766,
+        "High-variability": 0.194326,
+        "Partly cloudy": 0.135836
+      }
+    },
+    "wall_seconds_including_setup": 9.868999199999962
+  }
+}

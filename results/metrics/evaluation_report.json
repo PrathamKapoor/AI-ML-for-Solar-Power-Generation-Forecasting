@@ -1,0 +1,110 @@
+{
+  "registry": {
+    "status": "ok",
+    "n_rows": 32,
+    "groups": [
+      "A_baselines",
+      "B_ml_vs_dl",
+      "C_horizons",
+      "E_feature_ablation"
+    ]
+  },
+  "rated_capacity_w": 55000.0,
+  "tables": {
+    "status": "ok",
+    "written": [
+      "computational_cost",
+      "feature_ablation",
+      "horizon_comparison",
+      "metric_documentation",
+      "model_ablation",
+      "overall_model_comparison"
+    ]
+  },
+  "stratified": {
+    "status": "ok",
+    "written": [
+      "weather_regime_comparison",
+      "seasonal_comparison",
+      "error_analysis"
+    ],
+    "n_models": 11,
+    "models": [
+      "attention_lstm",
+      "cnn_lstm",
+      "gradient_boosting",
+      "gru",
+      "linear_regression",
+      "lstm",
+      "persistence",
+      "random_forest",
+      "smart_persistence",
+      "transformer",
+      "xgboost"
+    ]
+  },
+  "statistics": {
+    "status": "ok",
+    "n_models_compared": 10,
+    "n_paired_comparisons": 17679,
+    "bootstrap_resamples": 2000,
+    "block_length": 96,
+    "confidence": 0.95,
+    "losses": [
+      "mae",
+      "rmse"
+    ],
+    "assumptions": {
+      "serial_correlation": "Forecast errors at 15-minute resolution are serially correlated because consecutive steps share the same cloud field. Every interval here is a moving-block bootstrap, and every test carries a small-sample correction; a naive i.i.d. treatment would overstate the evidence.",
+      "block_length": "The default block length is 96 steps (24 h at 15-minute resolution), one full diurnal cycle, so each resampled block keeps a coherent daily shape.",
+      "dm_loss": "Diebold-Mariano is applied to the squared-error and absolute-error loss differentials. A significant result on one loss and not the other is reported as such rather than resolved in favour of the significant one.",
+      "multiple_comparisons": "The benchmark compares eleven models, so the family of pairwise tests is large. Holm-Bonferroni adjusted p-values are reported alongside raw p-values, and no single pairwise comparison is described as decisive on its own.",
+      "no_model_selection_on_test": "The test split is scored once per declared configuration. No hyperparameter, model or feature set was chosen using these numbers, so the tests are confirmatory rather than exploratory; but they are not out-of-sample with respect to the model-selection process as a whole, and are interpreted as such."
+    }
+  },
+  "uncertainty": {
+    "status": "ok",
+    "models": [
+      "xgboost",
+      "lstm",
+      "transformer"
+    ],
+    "skipped": [],
+    "alphas": [
+      0.1,
+      0.2
+    ],
+    "note": "Split conformal intervals calibrated on the first 31 days of the test period and evaluated on the remainder. The coverage guarantee is approximate because the calibration block is not exchangeable with the evaluation block under seasonal drift."
+  },
+  "explainability": {
+    "status": "not_run",
+    "reason": "requires refitting the models; re-run with --explainability"
+  },
+  "notes": [
+    "training curves: no run has recorded an epoch history yet; the field is persisted by current runs, so this figure appears after the neural experiments are re-run"
+  ],
+  "figures": {
+    "status": "ok",
+    "written": [
+      "fig01_actual_vs_predicted.png",
+      "fig02_forecast_error_over_time.png",
+      "fig04_mae_comparison.png",
+      "fig05_rmse_comparison.png",
+      "fig06_r2_comparison.png",
+      "fig07_horizon_comparison.png",
+      "fig08_weather_regime_comparison.png",
+      "fig09_seasonal_comparison.png",
+      "fig11_residual_distribution.png",
+      "fig12_predicted_vs_actual_scatter.png",
+      "fig13_persistence_skill.png",
+      "fig15_error_distribution_by_model.png",
+      "fig16_intraday_error_profile.png",
+      "fig17_cost_accuracy.png",
+      "fig18_conformal_intervals.png",
+      "fig19_dataset_overview.png",
+      "fig20_feature_ablation.png"
+    ],
+    "failed": {}
+  },
+  "elapsed_seconds": 41.39
+}

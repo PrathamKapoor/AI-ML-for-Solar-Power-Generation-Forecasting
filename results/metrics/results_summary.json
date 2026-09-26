@@ -1,0 +1,56 @@
+{
+  "n_experiments": 32,
+  "groups": [
+    "A_baselines",
+    "B_ml_vs_dl",
+    "C_horizons",
+    "E_feature_ablation"
+  ],
+  "models": [
+    "attention_lstm",
+    "cnn_lstm",
+    "gradient_boosting",
+    "gru",
+    "linear_regression",
+    "lstm",
+    "persistence",
+    "random_forest",
+    "smart_persistence",
+    "transformer",
+    "xgboost"
+  ],
+  "horizons": [
+    "15min",
+    "1h",
+    "24h",
+    "6h"
+  ],
+  "feature_specs": [
+    "full"
+  ],
+  "best_nrmse_run": {
+    "experiment_id": "C_horizons__gradient_boosting__15min",
+    "model": "gradient_boosting",
+    "horizon": "15min",
+    "feature_spec": "full",
+    "nrmse_capacity": 0.08758305298385624
+  },
+  "best_rmse_run": {
+    "experiment_id": "C_horizons__gradient_boosting__15min",
+    "model": "gradient_boosting",
+    "horizon": "15min",
+    "feature_spec": "full",
+    "rmse": 4817.067914112094
+  },
+  "models_beating_persistence_at_1h": [
+    "attention_lstm",
+    "cnn_lstm",
+    "gradient_boosting",
+    "linear_regression",
+    "random_forest",
+    "smart_persistence",
+    "transformer",
+    "xgboost"
+  ],
+  "note": "Skill is reported against the persistence reference on identical timestamps. A negative skill means the model is worse than holding the most recent observation forward, which is a meaningful and reportable outcome, not a failure of the experiment."
+}

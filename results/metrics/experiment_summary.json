@@ -1,0 +1,39 @@
+{
+  "n_experiments": 32,
+  "groups": [
+    "A_baselines",
+    "B_ml_vs_dl",
+    "C_horizons",
+    "E_feature_ablation"
+  ],
+  "models": [
+    "attention_lstm",
+    "cnn_lstm",
+    "gradient_boosting",
+    "gru",
+    "linear_regression",
+    "lstm",
+    "persistence",
+    "random_forest",
+    "smart_persistence",
+    "transformer",
+    "xgboost"
+  ],
+  "horizons": [
+    "15min",
+    "1h",
+    "24h",
+    "6h"
+  ],
+  "feature_specs": [
+    "full"
+  ],
+  "n_errors_recorded": 0,
+  "best_rmse_run": {
+    "experiment_id": "C_horizons__gradient_boosting__15min",
+    "model": "gradient_boosting",
+    "horizon": "15min",
+    "feature_spec": "full",
+    "rmse": 4817.067914112094
+  }
+}

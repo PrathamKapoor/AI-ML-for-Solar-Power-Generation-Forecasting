@@ -1,0 +1,220 @@
+{
+  "spec": {
+    "experiment_id": "A_baselines__linear_regression__1h",
+    "model": "linear_regression",
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "features": "full",
+    "seed": 42,
+    "ablation": null,
+    "concurrent_weather": false,
+    "label": "A_baselines / linear_regression / 1h / full",
+    "notes": "Persistence and smart persistence references against a linear fit."
+  },
+  "metrics_daylight": {
+    "mae": 5174.369380497698,
+    "rmse": 7456.88030636432,
+    "mse": 55605063.90344404,
+    "smape": 57.61696776985329,
+    "r2": 0.7310476304851212,
+    "bias": 2165.562179722847,
+    "peak_error": 49273.22239753775,
+    "n": 17679.0,
+    "nrmse_capacity": 0.13557964193389674,
+    "nrmse_mean": 0.4787692085368148,
+    "skill_vs_persistence_rmse": 0.18430055916611954,
+    "skill_vs_persistence_mae": 0.21788636600436329,
+    "persistence_rmse": 9141.700892599894,
+    "persistence_mae": 6615.879273275225,
+    "skill_vs_smart_persistence_rmse": 0.062357222378900734,
+    "skill_vs_smart_persistence_mae": -0.03795281275279061,
+    "smart_persistence_rmse": 7952.794480306486,
+    "smart_persistence_mae": 4985.168224338227
+  },
+  "metrics_all_steps": {
+    "mae": 3550.2798047510837,
+    "rmse": 5545.235707018521,
+    "mse": 30749639.046393193,
+    "smape": 128.01810299182176,
+    "r2": 0.8136788468717921,
+    "bias": 728.9789226164253,
+    "peak_error": 49273.22239753775,
+    "n": 35009.0,
+    "nrmse_capacity": 0.10082246740033673,
+    "nrmse_mean": 0.7049881906255987,
+    "skill_vs_persistence_rmse": 0.1470855760740234,
+    "skill_vs_persistence_mae": -0.05266670489507397,
+    "persistence_rmse": 6501.514749268427,
+    "persistence_mae": 3372.6532702532495,
+    "skill_vs_smart_persistence_rmse": 0.01894822062473589,
+    "skill_vs_smart_persistence_mae": -0.4046178074407951,
+    "smart_persistence_rmse": 5652.3374439519785,
+    "smart_persistence_mae": 2527.577100292977
+  },
+  "metadata": {
+    "model_family": "classical_ml",
+    "model_kind": "sklearn",
+    "model_description": "Ordinary least squares on the flattened lookback.",
+    "feature_spec": "full",
+    "n_features": 33,
+    "feature_columns": [
+      "ghi",
+      "temperature",
+      "relative_humidity",
+      "wind_speed",
+      "solar_elevation",
+      "sin_solar_elevation",
+      "hour_sin",
+      "hour_cos",
+      "doy_sin",
+      "doy_cos",
+      "pv_power_w_lag_0",
+      "pv_power_w_lag_1",
+      "pv_power_w_lag_2",
+      "pv_power_w_lag_4",
+      "pv_power_w_lag_8",
+      "pv_power_w_lag_12",
+      "pv_power_w_lag_24",
+      "pv_power_w_lag_48",
+      "pv_power_w_lag_96",
+      "pv_rolling_mean_4",
+      "pv_rolling_std_4",
+      "pv_rolling_mean_12",
+      "pv_rolling_std_12",
+      "pv_rolling_mean_24",
+      "pv_rolling_std_24",
+      "ghi_rollmean_4",
+      "ghi_rollmean_24",
+      "temperature_rollmean_4",
+      "temperature_rollmean_24",
+      "ghi_delta_1",
+      "ghi_slope_1",
+      "ghi_delta_4",
+      "ghi_slope_4"
+    ],
+    "lookback_steps": 24,
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "seed": 42,
+    "split_sizes": {
+      "train": 43745,
+      "val": 11681,
+      "test": 35009
+    },
+    "split_date_ranges": {
+      "train": [
+        "2021-06-02 05:45:00",
+        "2022-08-31 21:45:00"
+      ],
+      "val": [
+        "2022-09-01 05:45:00",
+        "2022-12-31 21:45:00"
+      ],
+      "test": [
+        "2023-01-01 05:45:00",
+        "2023-12-31 21:45:00"
+      ]
+    },
+    "target_split_dates": {
+      "train": [
+        "2021-06-02 06:45:00",
+        "2022-08-31 22:45:00"
+      ],
+      "val": [
+        "2022-09-01 06:45:00",
+        "2022-12-31 22:45:00"
+      ],
+      "test": [
+        "2023-01-01 06:45:00",
+        "2023-12-31 22:45:00"
+      ]
+    },
+    "concurrent_weather": false,
+    "information_set": "weather observed at or before the forecast origin (strict historical setting)",
+    "training": {
+      "requires_training": true,
+      "train_seconds": 2.1434852999955183,
+      "tuning": {
+        "tuned": false,
+        "reason": "no grid configured for this model"
+      },
+      "describe": {
+        "family": "classical_ml",
+        "name": "linear_regression",
+        "estimator": "LinearRegression",
+        "requires_training": true,
+        "substitution_note": null,
+        "best_params": null,
+        "random_state": 42
+      }
+    },
+    "cost": {
+      "train_seconds": 2.1434852999955183,
+      "inference_ms_per_window": 0.0012342026337313556,
+      "n_parameters": 793
+    },
+    "environment": {
+      "timestamp_utc": "2026-09-26T16:18:47+00:00",
+      "seed": 42,
+      "git_revision": "d469139",
+      "platform": {
+        "python": "3.13.14",
+        "implementation": "CPython",
+        "system": "Windows",
+        "release": "11",
+        "machine": "AMD64",
+        "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD"
+      },
+      "torch": {
+        "version": "2.13.0+cpu",
+        "cuda_available": false,
+        "device_count": 0,
+        "device_name": "cpu",
+        "num_threads": 8
+      },
+      "packages": {
+        "numpy": "2.5.2",
+        "pandas": "2.3.3",
+        "scipy": "1.17.1",
+        "scikit-learn": "not installed",
+        "torch": "2.13.0+cpu",
+        "xgboost": "3.4.1",
+        "shap": "0.52.0",
+        "matplotlib": "3.10.3",
+        "seaborn": "0.13.2",
+        "pvlib": "0.15.2",
+        "statsmodels": "not installed",
+        "openpyxl": "3.1.5",
+        "pyyaml": "not installed",
+        "requests": "2.33.1",
+        "tqdm": "4.70.0",
+        "joblib": "1.5.3"
+      }
+    },
+    "dataset": {
+      "name": "hong_kong_rooftop_pv_60_stations",
+      "primary_station": "LSK North",
+      "rated_w": 55000.0
+    },
+    "experiment_label": "A_baselines / linear_regression / 1h / full",
+    "notes": "Persistence and smart persistence references against a linear fit.",
+    "ablation": null,
+    "regime_distribution_test": {
+      "scope": "daylight",
+      "n": 17679,
+      "counts": {
+        "Cloudy": 6012,
+        "Clear": 5824,
+        "High-variability": 3432,
+        "Partly cloudy": 2411
+      },
+      "shares": {
+        "Cloudy": 0.340064,
+        "Clear": 0.32943,
+        "High-variability": 0.194129,
+        "Partly cloudy": 0.136376
+      }
+    },
+    "wall_seconds_including_setup": 9.822768600002746
+  }
+}

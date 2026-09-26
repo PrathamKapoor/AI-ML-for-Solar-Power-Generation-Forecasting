@@ -1,0 +1,7 @@
+{
+  "serial_correlation": "Forecast errors at 15-minute resolution are serially correlated because consecutive steps share the same cloud field. Every interval here is a moving-block bootstrap, and every test carries a small-sample correction; a naive i.i.d. treatment would overstate the evidence.",
+  "block_length": "The default block length is 96 steps (24 h at 15-minute resolution), one full diurnal cycle, so each resampled block keeps a coherent daily shape.",
+  "dm_loss": "Diebold-Mariano is applied to the squared-error and absolute-error loss differentials. A significant result on one loss and not the other is reported as such rather than resolved in favour of the significant one.",
+  "multiple_comparisons": "The benchmark compares eleven models, so the family of pairwise tests is large. Holm-Bonferroni adjusted p-values are reported alongside raw p-values, and no single pairwise comparison is described as decisive on its own.",
+  "no_model_selection_on_test": "The test split is scored once per declared configuration. No hyperparameter, model or feature set was chosen using these numbers, so the tests are confirmatory rather than exploratory; but they are not out-of-sample with respect to the model-selection process as a whole, and are interpreted as such."
+}

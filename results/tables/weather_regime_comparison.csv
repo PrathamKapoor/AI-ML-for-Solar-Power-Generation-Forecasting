@@ -1,0 +1,56 @@
+horizon,model,stratum_type,stratum,scope,n,mae,rmse,nrmse_capacity,r2,smape,bias,under_sampled,persistence_rmse,skill_vs_persistence_rmse
+1h,persistence,regime,Clear,daylight,5824,8230.03,10183.2,0.185148,0.498443,51.7525,1232.36,False,10183.2,0
+1h,persistence,regime,Partly cloudy,daylight,2411,7828.42,10347.1,0.188129,0.0445505,70.9828,1338.97,False,10347.1,0
+1h,persistence,regime,Cloudy,daylight,6012,3436.1,5698.26,0.103605,0.0901833,97.8807,432.081,False,5698.26,0
+1h,persistence,regime,High-variability,daylight,3432,8595.06,11064.8,0.201178,0.360872,88.2733,-4101.8,False,11064.8,0
+1h,persistence,regime,Night,daylight,0,,,,,,,True,,
+1h,smart_persistence,regime,Clear,daylight,5824,5150.24,8020.22,0.145822,0.688881,34.8085,253.905,False,10183.2,0.212404
+1h,smart_persistence,regime,Partly cloudy,daylight,2411,5964.58,8946.44,0.162663,0.285718,53.4681,658.041,False,10347.1,0.135369
+1h,smart_persistence,regime,Cloudy,daylight,6012,2658.06,5008.98,0.0910723,0.296982,80.8065,272.213,False,5698.26,0.120965
+1h,smart_persistence,regime,High-variability,daylight,3432,5952.96,9672.27,0.175859,0.511617,55.2862,-440.684,False,11064.8,0.125849
+1h,smart_persistence,regime,Night,daylight,0,,,,,,,True,,
+1h,linear_regression,regime,Clear,daylight,5824,5398.86,7497.63,0.136321,0.728104,28.2241,2046.94,False,10183.2,0.263723
+1h,linear_regression,regime,Partly cloudy,daylight,2411,6069.98,8578.4,0.155971,0.343277,45.2525,3075.58,False,10347.1,0.170937
+1h,linear_regression,regime,Cloudy,daylight,6012,4122.97,5953.66,0.108248,0.00679937,85.2606,3248.66,False,5698.26,-0.0448202
+1h,linear_regression,regime,High-variability,daylight,3432,6006.02,8789.22,0.159804,0.596722,67.7572,-169.752,False,11064.8,0.205656
+1h,linear_regression,regime,Night,daylight,0,,,,,,,True,,
+1h,random_forest,regime,Clear,daylight,5824,4672.41,6665.75,0.121195,0.785092,21.0206,-1793.38,False,10183.2,0.345415
+1h,random_forest,regime,Partly cloudy,daylight,2411,5150.01,7227.8,0.131415,0.53379,38.3077,2583.25,False,10347.1,0.301467
+1h,random_forest,regime,Cloudy,daylight,6012,3677.51,5760.19,0.104731,0.0703017,71.7384,2977.07,False,5698.26,-0.0108671
+1h,random_forest,regime,High-variability,daylight,3432,5052.2,7781.64,0.141484,0.683884,49.8687,213.657,False,11064.8,0.296719
+1h,random_forest,regime,Night,daylight,0,,,,,,,True,,
+1h,gradient_boosting,regime,Clear,daylight,5824,4408.55,6535.18,0.118821,0.793429,21.9634,-1088.99,False,10183.2,0.358237
+1h,gradient_boosting,regime,Partly cloudy,daylight,2411,5247.3,7488.09,0.136147,0.499606,40.4771,2145.8,False,10347.1,0.276311
+1h,gradient_boosting,regime,Cloudy,daylight,6012,3566.21,5560.58,0.101101,0.13362,75.6694,2600.33,False,5698.26,0.0241631
+1h,gradient_boosting,regime,High-variability,daylight,3432,5116.21,7921.38,0.144025,0.672429,58.1682,275.89,False,11064.8,0.28409
+1h,gradient_boosting,regime,Night,daylight,0,,,,,,,True,,
+1h,xgboost,regime,Clear,daylight,5824,4855.72,6983.63,0.126975,0.764106,22.8575,-1948.29,False,10183.2,0.314198
+1h,xgboost,regime,Partly cloudy,daylight,2411,5202.34,7426.74,0.135032,0.507773,38.6775,2150.59,False,10347.1,0.282241
+1h,xgboost,regime,Cloudy,daylight,6012,3448.91,5590.36,0.101643,0.124314,71.8285,2499.81,False,5698.26,0.0189359
+1h,xgboost,regime,High-variability,daylight,3432,5271.43,8025.99,0.145927,0.66372,58.4354,356.798,False,11064.8,0.274635
+1h,xgboost,regime,Night,daylight,0,,,,,,,True,,
+1h,lstm,regime,Clear,daylight,5824,7768.51,10246.8,0.186306,0.492151,38.3978,-5363.83,False,10183.2,-0.00625331
+1h,lstm,regime,Partly cloudy,daylight,2411,6364.27,8482.98,0.154236,0.357806,50.5941,1787.98,False,10347.1,0.18016
+1h,lstm,regime,Cloudy,daylight,6012,5873.64,8436.48,0.15339,-0.994303,95.6929,4493.85,False,5698.26,-0.480535
+1h,lstm,regime,High-variability,daylight,3432,6806.28,9415.7,0.171195,0.537184,70.5651,-2175.91,False,11064.8,0.149038
+1h,lstm,regime,Night,daylight,0,,,,,,,True,,
+1h,gru,regime,Clear,daylight,5824,8948.1,11825.6,0.215012,0.323601,45.9037,-7211.42,False,10183.2,-0.161292
+1h,gru,regime,Partly cloudy,daylight,2411,6164.12,8264.08,0.150256,0.390522,51.3498,603.451,False,10347.1,0.201316
+1h,gru,regime,Cloudy,daylight,6012,5324.18,7572.14,0.137675,-0.606595,97.7761,3601.05,False,5698.26,-0.328851
+1h,gru,regime,High-variability,daylight,3432,6663.78,9494.17,0.172621,0.529438,68.9536,-2235.85,False,11064.8,0.141946
+1h,gru,regime,Night,daylight,0,,,,,,,True,,
+1h,cnn_lstm,regime,Clear,daylight,5824,4372.83,6864.88,0.124816,0.77206,24.6271,-301.996,False,10183.2,0.32586
+1h,cnn_lstm,regime,Partly cloudy,daylight,2411,5368.65,7841.91,0.14258,0.451202,41.659,1065.37,False,10347.1,0.242116
+1h,cnn_lstm,regime,Cloudy,daylight,6012,2861.92,5051.55,0.0918464,0.284979,68.7513,1186.55,False,5698.26,0.113492
+1h,cnn_lstm,regime,High-variability,daylight,3432,5251.03,8466.29,0.153933,0.625812,55.319,-265.593,False,11064.8,0.234842
+1h,cnn_lstm,regime,Night,daylight,0,,,,,,,True,,
+1h,attention_lstm,regime,Clear,daylight,5824,6937.44,9670.18,0.175821,0.547703,37.0098,-3190.04,False,10183.2,0.0503761
+1h,attention_lstm,regime,Partly cloudy,daylight,2411,6965.5,9406.91,0.171035,0.210298,53.4802,2380.94,False,10347.1,0.0908664
+1h,attention_lstm,regime,Cloudy,daylight,6012,5135.78,7887.43,0.143408,-0.74317,90.9464,3732.93,False,5698.26,-0.384181
+1h,attention_lstm,regime,High-variability,daylight,3432,6467.89,9788.68,0.177976,0.499791,68.448,-1682.79,False,11064.8,0.115328
+1h,attention_lstm,regime,Night,daylight,0,,,,,,,True,,
+1h,transformer,regime,Clear,daylight,5824,5847.09,7962.1,0.144765,0.693374,30.1287,-433.925,False,10183.2,0.218112
+1h,transformer,regime,Partly cloudy,daylight,2411,6547.74,9136.35,0.166115,0.255071,50.3918,2442.71,False,10347.1,0.117014
+1h,transformer,regime,Cloudy,daylight,6012,3899.01,5798.06,0.105419,0.058035,84.3133,2305.65,False,5698.26,-0.0175141
+1h,transformer,regime,High-variability,daylight,3432,7229.62,9611.22,0.174749,0.517764,75.1114,-1328.91,False,11064.8,0.131367
+1h,transformer,regime,Night,daylight,0,,,,,,,True,,

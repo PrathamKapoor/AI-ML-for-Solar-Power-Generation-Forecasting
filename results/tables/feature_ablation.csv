@@ -1,0 +1,2 @@
+experiment_id,model,feature_spec,n_features,rmse,mae,nrmse_capacity,r2,smape,rmse_vs_full_pct,mae_vs_full_pct,nrmse_capacity_vs_full_pct,skill_vs_persistence_rmse,seed,train_seconds
+E_feature_ablation__xgboost__1h,xgboost,full,33,6835.32,4505.29,0.124279,0.774016,48.575,0,0,0,0.252292,42,176.146
