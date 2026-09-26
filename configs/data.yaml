@@ -235,6 +235,54 @@ features:
   # Windows used for the trailing weather means
   weather_rolling_windows: [4, 24]
 
+  # Additive input regimes (Experiment N).
+  # -----------------------------------------------------------------------
+  # The ablation groups above answer "what is each group worth once everything
+  # else is present" (leave-one-out). These regimes answer the complementary
+  # and more operational question: "what can a model do if it is given *only*
+  # this information?" Both directions matter, because a group can look
+  # important in a leave-one-out table and still be redundant when the rest of
+  # the input is present.
+  #
+  # Expressed as removal lists so that they share one mechanism with the
+  # ablation groups and are resolved by the same code path. The retained columns
+  # for each regime are:
+  #
+  #   pv_only        lagged power and trailing power statistics
+  #   weather_only   irradiance, temperature, humidity, wind, their trailing
+  #                  means and the irradiance differences
+  #   pv_weather     both of the above, no geometry and no calendar
+  #   pv_weather_solar  both, plus solar elevation, but no calendar
+  #   full           everything (identical to the headline configuration)
+  feature_regimes:
+    pv_only:
+      remove: [ghi, temperature, relative_humidity, wind_speed,
+               solar_elevation, sin_solar_elevation,
+               hour_sin, hour_cos, doy_sin, doy_cos,
+               ghi_rollmean_4, ghi_rollmean_24, temperature_rollmean_4,
+               temperature_rollmean_24,
+               ghi_delta_1, ghi_slope_1, ghi_delta_4, ghi_slope_4]
+      label: "Historical PV only (lags and trailing power statistics)"
+    weather_only:
+      remove: [solar_elevation, sin_solar_elevation,
+               hour_sin, hour_cos, doy_sin, doy_cos,
+               pv_power_w_lag_0, pv_power_w_lag_1, pv_power_w_lag_2, pv_power_w_lag_4,
+               pv_power_w_lag_8, pv_power_w_lag_12, pv_power_w_lag_24,
+               pv_power_w_lag_48, pv_power_w_lag_96,
+               pv_rolling_mean_4, pv_rolling_std_4, pv_rolling_mean_12,
+               pv_rolling_std_12, pv_rolling_mean_24, pv_rolling_std_24]
+      label: "Weather only (irradiance, temperature, humidity, wind)"
+    pv_weather:
+      remove: [solar_elevation, sin_solar_elevation,
+               hour_sin, hour_cos, doy_sin, doy_cos]
+      label: "PV history and weather, no solar geometry or calendar"
+    pv_weather_solar:
+      remove: [hour_sin, hour_cos, doy_sin, doy_cos]
+      label: "PV history, weather and solar geometry, no calendar"
+    full:
+      remove: []
+      label: "Full engineered feature set"
+
   # Ablation groups used by Experiment E (feature ablation). Each group is
   # removed on its own; "all" removes everything except the minimum viable set.
   ablation_groups:

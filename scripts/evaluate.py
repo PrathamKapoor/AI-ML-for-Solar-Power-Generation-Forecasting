@@ -62,6 +62,16 @@ def predictions_dir(config: Config) -> Path:
     return config.project_root_for("results") / "predictions"
 
 
+def read_table(path: Path) -> pd.DataFrame | None:
+    """Read a results table, returning None when it does not exist yet."""
+    if not path.exists():
+        return None
+    try:
+        return pd.read_csv(path)
+    except Exception:  # pragma: no cover - unreadable artefact
+        return None
+
+
 def rated_power(config: Config) -> float | None:
     """Rated capacity of the case-study station, read from the pipeline report."""
     report = metrics_dir(config) / "pipeline_report.json"
@@ -137,6 +147,9 @@ def stage_tables(config: Config, registry: pd.DataFrame, report: dict[str, Any]
     ablation = reporting.feature_ablation(registry)
     if not ablation.empty:
         tables["feature_ablation"] = ablation
+    regimes_table = reporting.feature_regime_comparison(registry)
+    if not regimes_table.empty:
+        tables["feature_regimes"] = regimes_table
     model_ablation = reporting.model_ablation(registry, config)
     if not model_ablation.empty:
         tables["model_ablation"] = model_ablation
@@ -381,8 +394,49 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
             made.append(Path(path).name)
         except Exception as exc:
             skipped.append(f"{model} figure: {type(exc).__name__}: {exc}")
+        shap_frame = entry.pop("_shap_frame", None)
+        if shap_frame is not None and not shap_frame.empty:
+            try:
+                import shap as _shap
+                import matplotlib.pyplot as plt
+                figure = plt.figure()
+                _shap.summary_plot(shap_frame, max_display=15, show=False)
+                plt.tight_layout()
+                made.append(Path(fig_mod.save(figure, f"fig10_shap_beeswarm_{model}",
+                                              directory)).name)
+                plt.close(figure)
+            except Exception as exc:
+                report.setdefault("notes", []).append(
+                    f"SHAP beeswarm for {model} failed: {type(exc).__name__}: {exc}")
+
+        dependence = entry.get("dependence")
+        if dependence is not None and not dependence.empty:
+            write_table(dependence, tables_dir(config) / f"dependence_{model}.csv")
+            for feature in [c for c in dependence.columns if c.startswith("shap_")]:
+                try:
+                    made.append(Path(fig_mod.plot_dependence(
+                        dependence.rename(columns={feature: "shap"}), feature[5:],
+                        value="shap", name=f"fig26_dependence_{model}_{feature[5:]}",
+                        directory=directory)).name)
+                except Exception as exc:
+                    report.setdefault("notes", []).append(
+                        f"dependence plot {model}/{feature} failed: {exc}")
+
+        regime_importance = entry.get("regime_importance")
+        if regime_importance is not None and not regime_importance.empty:
+            write_table(regime_importance,
+                        tables_dir(config) / f"importance_regime_{model}.csv")
+            try:
+                made.append(Path(fig_mod.plot_regime_importance(
+                    regime_importance, name=f"fig27_regime_importance_{model}",
+                    directory=directory)).name)
+            except Exception as exc:
+                report.setdefault("notes", []).append(
+                    f"regime importance plot for {model} failed: {exc}")
+
         results[model] = {k: v for k, v in entry.items() if k != "importance"}
         results[model]["figure"] = f"fig10_importance_{model}.png"
+        print(f"  explainability: {model} done")
 
     if results:
         combined = analysis_mod.importance_frame(results)
@@ -535,6 +589,36 @@ def stage_figures(config: Config, tables: dict[str, pd.DataFrame],
     cost = tables.get("computational_cost", pd.DataFrame())
     if not cost.empty:
         attempt("cost", fig_mod.plot_cost_accuracy, cost, directory=directory)
+        attempt("cost_memory", fig_mod.plot_memory_and_size, cost, directory=directory)
+
+    # --- multi-seed spread ------------------------------------------------- #
+    seed_table = read_table(tables_dir(config) / "multi_seed_results.csv")
+    if seed_table is not None and not seed_table.empty:
+        attempt("multiseed_rmse", fig_mod.plot_multiseed, seed_table, "rmse",
+                directory=directory)
+        attempt("multiseed_mae", fig_mod.plot_multiseed, seed_table, "mae",
+                name="fig21b_multiseed_mae", directory=directory)
+
+    # --- cross-site transfer ------------------------------------------------ #
+    cross_site = read_table(tables_dir(config) / "cross_site_comparison.csv")
+    if cross_site is not None and not cross_site.empty:
+        attempt("cross_site", fig_mod.plot_cross_site, cross_site, directory=directory)
+
+    # --- additive input regimes --------------------------------------------- #
+    regime_table = tables.get("feature_regimes", pd.DataFrame())
+    if not regime_table.empty:
+        attempt("feature_regimes", fig_mod.plot_feature_regimes, regime_table,
+                directory=directory)
+
+    # --- temporal dependence ------------------------------------------------ #
+    acf = read_table(tables_dir(config) / "error_autocorrelation.csv")
+    if acf is not None and not acf.empty:
+        attempt("autocorrelation", fig_mod.plot_error_autocorrelation, acf,
+                directory=directory)
+    blocks = read_table(tables_dir(config) / "block_length_sensitivity.csv")
+    if blocks is not None and not blocks.empty:
+        attempt("block_length", fig_mod.plot_block_length_sensitivity, blocks,
+                directory=directory)
 
     history = load_histories(config)
     if history:

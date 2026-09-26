@@ -177,6 +177,31 @@ def feature_ablation(registry: pd.DataFrame) -> pd.DataFrame:
     return frame[[c for c in columns if c in frame.columns]].reset_index(drop=True)
 
 
+def feature_regime_comparison(registry: pd.DataFrame,
+                              group: str = "N_feature_regimes") -> pd.DataFrame:
+    """Additive input regimes: what each kind of information is worth alone.
+
+    Complements :func:`feature_ablation`, which is leave-one-out. Here each row
+    is a model given only one kind of input, so the comparison answers "can a
+    model forecast from irradiance alone?" rather than "what does this group add
+    to everything else?".
+    """
+    if registry.empty:
+        return registry
+    frame = registry[registry["experiment_group"] == group].copy()
+    if frame.empty:
+        return frame
+    frame = frame.drop_duplicates(subset=["model", "feature_spec"], keep="first")
+    frame = _ordered(frame, "model", MODEL_ORDER)
+    order = ["pv_only", "weather_only", "pv_weather", "pv_weather_solar", "full"]
+    ranked = {name: i for i, name in enumerate(order)}
+    frame = frame.sort_values("feature_spec", key=lambda s: s.map(lambda v: ranked.get(v, 99)))
+    columns = ["experiment_id", "model", "feature_spec", "n_features", "mae", "rmse",
+               "nrmse_capacity", "r2", "smape", "skill_vs_persistence_rmse", "seed",
+               "train_seconds"]
+    return frame[[c for c in columns if c in frame.columns]].reset_index(drop=True)
+
+
 def model_ablation(registry: pd.DataFrame, config: Config | None = None
                    ) -> pd.DataFrame:
     """Composite architectures against their backbones, from the headline runs.

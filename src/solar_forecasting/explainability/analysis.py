@@ -31,7 +31,9 @@ import torch
 
 from ..config import Config
 from ..evaluation import metrics as metrics_mod
-from ..explainability.importance import (collapse_over_lookback, permutation_importance_sequence,
+from ..explainability.importance import (collapse_over_lookback, dependence_frame,
+                                         permutation_importance_by_regime,
+                                         permutation_importance_sequence,
                                          shap_importance)
 from ..models import registry as model_registry
 from ..models.classical import flatten_windows
@@ -100,6 +102,62 @@ def _fit(config: Config, model_name: str, state: dict[str, Any], prepared: dict[
     raise KeyError(f"explainability is not defined for model kind {info['kind']!r}")
 
 
+def _shap_values(estimator, X: np.ndarray, seed: int = 42, n_samples: int = 600
+                 ) -> pd.DataFrame | None:
+    """Raw SHAP values at the origin timestep, for beeswarm and dependence plots.
+
+    The mean-|SHAP| table collapses over the whole window, which is the right
+    summary for "which variable matters" but the wrong input for a beeswarm
+    plot, where the *distribution* is the point. The origin step is used, because
+    that is the value present at decision time.
+    """
+    try:
+        import shap
+    except Exception:  # pragma: no cover - optional dependency
+        return None
+    rng = np.random.default_rng(seed)
+    n = min(int(n_samples), len(X))
+    index = rng.choice(len(X), size=n, replace=False) if n < len(X) else np.arange(len(X))
+    tensor = X[index]
+    origin = tensor[:, -1, :]
+    flat = flatten_windows(tensor)
+    try:
+        explainer = shap.TreeExplainer(estimator, feature_perturbation="tree_path_dependent")
+        values = explainer.shap_values(flat)
+    except Exception:  # pragma: no cover - estimator-specific failure
+        return None
+    if isinstance(values, list):
+        values = values[-1]
+    values = np.asarray(values, dtype=float)
+    if values.ndim == 3:
+        values = values[:, :, 0]
+    columns = list(estimator.feature_names_in_) if hasattr(estimator, "feature_names_in_") \
+        else None
+    width = values.shape[1]
+    step = width // origin.shape[1]
+    origin_values = values[:, -origin.shape[1] * step:]
+    # Keep the final `n_features` columns, which correspond to the origin step.
+    n_features = origin.shape[1]
+    origin_values = origin_values[:, -n_features:]
+    names = (columns[-n_features:] if columns and len(columns) >= n_features
+             else [f"f{i}" for i in range(n_features)])
+    return pd.DataFrame(origin_values, columns=names)
+
+
+def _shap_dependence(X: np.ndarray, shap_values: pd.DataFrame | None,
+                     selected: list[str], top_features: Sequence[str]
+                     ) -> pd.DataFrame | None:
+    """SHAP attribution against the value of the top features at the origin."""
+    if shap_values is None or not top_features:
+        return None
+    origin = X[:, -1, :]
+    frame = pd.DataFrame(origin, columns=selected)
+    for feature in top_features:
+        if feature in shap_values.columns and feature in frame.columns:
+            frame[f"shap_{feature}"] = shap_values[feature].to_numpy()
+    return frame
+
+
 def explain_model(config: Config, model_name: str, state: dict[str, Any],
                   n_permutation_repeats: int = 10, n_shap_samples: int = 2000,
                   n_evaluation_samples: int = 4000, seed: int = 42) -> dict[str, Any]:
@@ -144,6 +202,14 @@ def explain_model(config: Config, model_name: str, state: dict[str, Any],
         if built_in is not None:
             out["built_in_importance"] = collapse_over_lookback(
                 built_in, selected, lookback).rename("importance").to_frame()
+        out["shap_values"] = _shap_values(fitted, X, seed=seed, n_samples=600)
+        out["dependence"] = _shap_dependence(X, out["shap_values"], selected,
+                                             top_features=out["top_features"][:3])
+        built = out.get("shap_values")
+        if built is not None:
+            out["_shap_frame"] = pd.concat(
+                [built[[c for c in selected if c in built.columns]].reset_index(drop=True),
+                 pd.DataFrame({"predicted": predicted, "actual": y_true})], axis=1)
     else:
         device = str((config.get("training", {}) or {}).get("device", "cpu"))
         scaled, _ = predict_neural(fitted, sequence.subset(evaluation_index),
@@ -168,6 +234,14 @@ def explain_model(config: Config, model_name: str, state: dict[str, Any],
         out["method"] = ("grouped permutation importance over the lookback window "
                          "(increase in daylight MAE); attention weights are not "
                          "treated as explanations")
+        out["regime_importance"] = permutation_importance_by_regime(
+            predict_fn, X, y_true, selected, lookback, np.asarray(sequence.regime)[
+                evaluation_index], n_repeats=max(3, int(n_permutation_repeats) // 2),
+            seed=seed)
+        out["dependence"] = dependence_frame(
+            predict_fn, X, y_true, selected, lookback,
+            out["top_features"][:3], n_samples=min(3000, int(evaluation_index.size)),
+            seed=seed)
 
     importance = out["importance"].copy()
     total = float(importance["relative_importance"].sum()) or 1.0

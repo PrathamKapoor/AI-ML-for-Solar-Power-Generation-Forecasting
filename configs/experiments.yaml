@@ -184,6 +184,25 @@ experiments:
     horizons: ["1h", "6h"]
 
   # ---------------------------------------------------------------------------
+  # Experiment N - Additive feature regimes
+  # ---------------------------------------------------------------------------
+  # Question: what can a model achieve when it is given *only* one kind of
+  # information? The leave-one-out ablation of Experiment E answers the
+  # complementary question (what is a group worth once everything else is
+  # present); this one answers what each regime is worth on its own, which is
+  # the question an operator with limited instrumentation actually faces.
+  #
+  # Regimes are defined in configs/data.yaml under features.feature_regimes.
+  # Run for one tree model, one tuned tree model, one recurrent model, one
+  # hybrid model and one attention model, so that both ways of consuming the
+  # input (flattened window versus ordered sequence) are covered.
+  N_feature_regimes:
+    description: "Additive input regimes: PV only, weather only, both, both plus geometry, full."
+    models: [gradient_boosting, xgboost, lstm, cnn_lstm, attention_lstm]
+    horizons: ["1h"]
+    feature_specs: [pv_only, weather_only, pv_weather, pv_weather_solar, full]
+
+  # ---------------------------------------------------------------------------
   # Experiment M - Multi-seed replication
   # ---------------------------------------------------------------------------
   # Question: how much of a neural model's score is architecture and how much is

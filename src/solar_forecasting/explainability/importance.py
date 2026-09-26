@@ -133,6 +133,88 @@ def permutation_importance_sequence(predict_fn: Callable[[np.ndarray], np.ndarra
     return frame.sort_values("mean_mae_increase_w", ascending=False).reset_index(drop=True)
 
 
+def permutation_importance_by_regime(predict_fn: Callable[[np.ndarray], np.ndarray],
+                                     X: np.ndarray, y_true: np.ndarray,
+                                     feature_columns: Sequence[str], lookback: int,
+                                     regimes: np.ndarray, n_repeats: int = 5,
+                                     seed: int = 42, min_samples: int = 500
+                                     ) -> pd.DataFrame:
+    """Grouped permutation importance computed separately inside each regime.
+
+    A variable can matter for clear-sky tracking and be irrelevant under broken
+    cloud, and a single global ranking hides that. Each regime is perturbed and
+    scored on its own rows only, so a variable whose apparent importance comes
+    from one regime cannot be credited with another's performance.
+
+    Regimes with fewer than ``min_samples`` windows are skipped rather than
+    summarised, because a permutation measured on a handful of windows is noise.
+    """
+    regimes = np.asarray(regimes, dtype=object)
+    rows: list[dict[str, Any]] = []
+    unique_regimes = [r for r in ("Clear", "Partly cloudy", "Cloudy", "High-variability")
+                      if r in set(regimes)]
+    for regime in unique_regimes:
+        index = np.flatnonzero(regimes == regime)
+        if index.size < int(min_samples):
+            continue
+        subset_X = X[index]
+        subset_y = np.asarray(y_true, dtype=float)[index]
+        baseline = float(np.abs(np.asarray(predict_fn(subset_X), dtype=float)
+                                - subset_y).mean())
+        for feature in range(len(feature_columns)):
+            deltas = []
+            for repeat in range(int(n_repeats)):
+                rng = np.random.default_rng(seed + 1000 * repeat + 97 * feature
+                                            + int(index[0]))
+                permuted = subset_X.copy()
+                permuted[:, :, feature] = subset_X[rng.permutation(index.size), :, feature]
+                score = float(np.abs(np.asarray(predict_fn(permuted), dtype=float)
+                                     - subset_y).mean())
+                deltas.append(score - baseline)
+            rows.append({
+                "regime": str(regime),
+                "feature": feature_columns[feature],
+                "baseline_mae_w": baseline,
+                "mean_mae_increase_w": float(np.mean(deltas)),
+                "std_mae_increase_w": float(np.std(deltas, ddof=1))
+                if len(deltas) > 1 else 0.0,
+                "n_windows": int(index.size),
+                "n_repeats": int(n_repeats),
+            })
+    frame = pd.DataFrame(rows)
+    if frame.empty:
+        return frame
+    return frame.sort_values(["regime", "mean_mae_increase_w"],
+                             ascending=[True, False]).reset_index(drop=True)
+
+
+def dependence_frame(predict_fn: Callable[[np.ndarray], np.ndarray],
+                      X: np.ndarray, y_true: np.ndarray, feature_columns: Sequence[str],
+                      lookback: int, features: Sequence[str],
+                      n_samples: int = 2000, seed: int = 42) -> pd.DataFrame:
+    """Per-sample attribution rows for a chosen set of input variables.
+
+    Returns one row per sample with the value of each requested variable at the
+    forecast origin and the model's signed error, which is what the dependence
+    plots are drawn from. Only the origin step is used, because that is the value
+    a forecaster actually holds at decision time.
+    """
+    rng = np.random.default_rng(seed)
+    n = min(int(n_samples), len(X))
+    index = rng.choice(len(X), size=n, replace=False) if n < len(X) else np.arange(len(X))
+    predicted = np.asarray(predict_fn(X[index]), dtype=float)
+    actual = np.asarray(y_true, dtype=float)[index]
+    origin = X[index][:, -1, :]
+    frame = pd.DataFrame({"actual": actual, "predicted": predicted,
+                          "error": predicted - actual,
+                          "abs_error": np.abs(predicted - actual)})
+    for feature in features:
+        if feature not in feature_columns:
+            continue
+        frame[feature] = origin[:, list(feature_columns).index(feature)]
+    return frame
+
+
 def import_feature_family(name: str) -> str:
     """Map a feature name to the input group used by the ablation study.
 

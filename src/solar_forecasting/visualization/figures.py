@@ -689,7 +689,241 @@ def plot_dataset_overview(featured: pd.DataFrame, rated_w: float | None,
 
 
 # ---------------------------------------------------------------------------
-# 20. Ablation
+# 21. Multi-seed spread
+# ---------------------------------------------------------------------------
+def plot_multiseed(seed_table: pd.DataFrame, metric: str = "rmse",
+                   name: str = "fig21_multiseed_spread",
+                   directory: Path | None = None) -> Path:
+    """Across-seed spread for each neural model, mean with a 95% interval.
+
+    The single-seed number is a draw from this distribution, so the interval is
+    what a comparison should be read against.
+    """
+    frame = seed_table.dropna(subset=[f"{metric}_mean"]).copy()
+    if frame.empty:
+        raise ValueError("multi-seed table has no plottable rows")
+    frame = frame.sort_values(f"{metric}_mean")
+    positions = np.arange(len(frame))
+    means = frame[f"{metric}_mean"].to_numpy(dtype=float)
+    low = frame[f"{metric}_ci_low"].to_numpy(dtype=float)
+    high = frame[f"{metric}_ci_high"].to_numpy(dtype=float)
+    spread = frame[f"{metric}_max"].to_numpy(dtype=float) - \
+        frame[f"{metric}_min"].to_numpy(dtype=float)
+
+    fig, ax = plt.subplots(figsize=(7.0, 0.5 * len(frame) + 1.6))
+    ax.barh(positions, means, color=[color(m) for m in frame["model"]])
+    ax.errorbar(means, positions, xerr=[np.clip(means - low, 0, None),
+                                        np.clip(high - means, 0, None)],
+                fmt="none", ecolor="#222222", capsize=3, lw=1.1)
+    for position, (mean, width) in enumerate(zip(means, spread)):
+        ax.plot([mean - width / 2, mean + width / 2], [position, position],
+                color="#cc4444", lw=1.4, solid_capstyle="butt")
+    ax.set_yticks(positions, [pretty(m) for m in frame["model"]])
+    ax.set_xlabel(f"{metric.upper()} across seeds "
+                  f"(bar: mean, black: 95% t-interval, red: min-max)")
+    ax.set_title("Seed-to-seed variability of the neural models")
+    return save(fig, name, directory)
+
+
+# ---------------------------------------------------------------------------
+# 22. Cross-site transfer
+# ---------------------------------------------------------------------------
+def plot_cross_site(cross_table: pd.DataFrame, metric: str = "nrmse_capacity",
+                    name: str = "fig22_cross_site_transfer",
+                    directory: Path | None = None) -> Path:
+    """Within-site against cross-site performance, per held-out site.
+
+    The within-site bar is the ceiling a model reaches when it may fit the site
+    it is evaluated on; the cross-site bar is what it delivers when it may not.
+    The gap between them is the cost of transfer, which is the quantity this
+    experiment exists to measure.
+    """
+    frame = cross_table.dropna(subset=[metric]).copy()
+    if frame.empty:
+        raise ValueError("cross-site table has no plottable rows")
+    sites = sorted(set(frame["test_site"]))
+    models = list(dict.fromkeys(frame["model"]))
+    protocols = [p for p in ("within_site", "cross_site", "leave_one_site_out")
+                 if p in set(frame["protocol"])]
+
+    fig, axes = plt.subplots(1, len(models), figsize=(4.0 * len(models), 3.4),
+                             sharey=True)
+    axes = np.atleast_1d(axes)
+    width = 0.8 / max(len(sites), 1)
+    for ax, model in zip(axes, models):
+        subset = frame[frame["model"] == model]
+        positions = np.arange(len(sites))
+        for i, protocol in enumerate(protocols):
+            values = []
+            for site in sites:
+                row = subset[(subset["protocol"] == protocol) & (subset["test_site"] == site)]
+                values.append(float(row[metric].iloc[0]) if len(row) else np.nan)
+            ax.bar(positions + (i - (len(protocols) - 1) / 2) * width, values,
+                   width=width, label=protocol.replace("_", " "),
+                   color=["#4c72b0", "#dd8452", "#55a868"][i % 3])
+        ax.set_xticks(positions, sites, rotation=30, ha="right")
+        ax.set_title(pretty(model))
+        ax.set_xlabel("Evaluation site")
+    axes[0].set_ylabel("nRMSE (fraction of rated capacity)")
+    axes[-1].legend(fontsize=7)
+    fig.suptitle("Cross-site generalisation: fitting on other sites costs accuracy",
+                 y=1.03)
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+# ---------------------------------------------------------------------------
+# 23. Additive feature regimes
+# ---------------------------------------------------------------------------
+def plot_feature_regimes(regime_table: pd.DataFrame, metric: str = "nrmse_capacity",
+                         name: str = "fig23_feature_regimes",
+                         directory: Path | None = None) -> Path:
+    """What each information regime achieves on its own, per model."""
+    frame = regime_table.dropna(subset=[metric]).copy()
+    if frame.empty:
+        raise ValueError("feature-regime table has no plottable rows")
+    order = ["pv_only", "weather_only", "pv_weather", "pv_weather_solar", "full"]
+    regimes = [r for r in order if r in set(frame["feature_regime"])] + \
+              [r for r in frame["feature_regime"].unique() if r not in order]
+    models = list(dict.fromkeys(frame["model"]))
+
+    fig, ax = plt.subplots(figsize=(7.6, 0.42 * len(models) + 1.8))
+    width = 0.8 / max(len(regimes), 1)
+    positions = np.arange(len(models))
+    for i, regime in enumerate(regimes):
+        values = []
+        for model in models:
+            row = frame[(frame["model"] == model) & (frame["feature_regime"] == regime)]
+            values.append(float(row[metric].iloc[0]) if len(row) else np.nan)
+        ax.bar(positions + (i - (len(regimes) - 1) / 2) * width, values, width=width,
+               label=regime.replace("_", " "), color=plt.cm.viridis(i / max(len(regimes) - 1, 1)))
+    ax.set_xticks(positions, [pretty(m) for m in models], rotation=20, ha="right")
+    ax.set_ylabel("nRMSE (fraction of rated capacity)")
+    ax.set_title("Additive input regimes: what each kind of information is worth alone")
+    ax.legend(ncol=2, fontsize=7.5)
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+# ---------------------------------------------------------------------------
+# 24. Error autocorrelation
+# ---------------------------------------------------------------------------
+def plot_error_autocorrelation(profile: pd.DataFrame, name: str = "fig24_error_autocorrelation",
+                              directory: Path | None = None) -> Path:
+    """Autocorrelation of the forecast errors, the reason every interval is blocked."""
+    frame = profile.dropna(subset=["autocorrelation"])
+    if frame.empty:
+        raise ValueError("autocorrelation profile is empty")
+    fig, ax = plt.subplots(figsize=(6.8, 3.2))
+    ax.plot(frame["lag"], frame["autocorrelation"], color="#1f77b4", lw=1.4,
+            label="forecast error")
+    ax.axhline(0.0, color="#000000", lw=0.7)
+    ax.fill_between(frame["lag"], -0.05, 0.05, color="#cccccc", alpha=0.6,
+                    label="approximate 95% band")
+    ax.set_xlabel("Lag (15-minute steps)")
+    ax.set_ylabel("Autocorrelation")
+    ax.set_title("Forecast errors are strongly autocorrelated, so intervals must use blocks")
+    ax.legend()
+    return save(fig, name, directory)
+
+
+def plot_block_length_sensitivity(table: pd.DataFrame,
+                                  name: str = "fig25_block_length_sensitivity",
+                                  directory: Path | None = None) -> Path:
+    """Bootstrap interval width against block length, with the chosen block marked."""
+    frame = table.dropna(subset=["ci_width"]).sort_values("block_length_steps")
+    if frame.empty:
+        raise ValueError("block-length table is empty")
+    fig, ax = plt.subplots(figsize=(6.4, 3.2))
+    ax.plot(frame["block_hours"], frame["ci_width"], marker="o", color="#d62728", lw=1.4)
+    ax.set_xscale("log")
+    ax.set_xlabel("Block length (hours, log scale)")
+    ax.set_ylabel("Width of the 95% interval for the mean loss difference")
+    ax.set_title("Bootstrap interval width against block length\n"
+                 "(width rises until the block spans the dependence range, then plateaus)")
+    return save(fig, name, directory)
+
+
+# ---------------------------------------------------------------------------
+# 26. Feature dependence and regime-specific importance
+# ---------------------------------------------------------------------------
+def plot_dependence(dependence: pd.DataFrame, feature: str, value: str = "shap",
+                    name: str | None = None, directory: Path | None = None) -> Path:
+    """Attribution against one input variable, the way SHAP is meant to be read."""
+    frame = dependence.dropna(subset=[value, feature])
+    if frame.empty:
+        raise ValueError(f"no dependence rows for {feature!r}")
+    fig, ax = plt.subplots(figsize=(5.2, 3.2))
+    density = axis_scatter(ax, frame[feature].to_numpy(dtype=float),
+                           frame[value].to_numpy(dtype=float), feature, value)
+    ax.axhline(0.0, color="#000000", lw=0.7)
+    ax.set_title(f"Attribution against {feature}")
+    return save(fig, f"{name or 'fig26_dependence_' + feature}", directory)
+
+
+def axis_scatter(ax, x: np.ndarray, y: np.ndarray, xlabel: str, ylabel: str) -> str:
+    """Overplotted scatter, returning the colour-map name used."""
+    with np.errstate(divide="ignore", invalid="ignore"):
+        density = 1.0 / (1.0 + np.abs(y) / (np.nanstd(y) + 1e-9))
+    ax.scatter(x, y, c=np.clip(density, 0, 1), cmap="viridis", s=6, alpha=0.7,
+               linewidths=0)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    return "viridis"
+
+
+def plot_regime_importance(importance: pd.DataFrame, top_n: int = 8,
+                           name: str = "fig27_regime_importance",
+                           directory: Path | None = None) -> Path:
+    """The same variables, ranked separately inside each weather regime."""
+    if importance.empty or "regime" not in importance.columns:
+        raise ValueError("regime importance table is empty or has no regime column")
+    value_column = ("mean_mae_increase_w" if "mean_mae_increase_w" in importance.columns
+                    else "importance")
+    regimes = list(dict.fromkeys(importance["regime"]))
+    fig, axes = plt.subplots(1, len(regimes), figsize=(3.2 * len(regimes),
+                                                       0.34 * top_n + 1.4), sharey=True)
+    axes = np.atleast_1d(axes)
+    for ax, regime in zip(axes, regimes):
+        frame = (importance[importance["regime"] == regime]
+                 .dropna(subset=[value_column]).nlargest(top_n, value_column).iloc[::-1])
+        ax.barh(np.arange(len(frame)), frame[value_column], color="#dd8452")
+        ax.set_yticks(np.arange(len(frame)), frame["feature"], fontsize=7)
+        ax.set_title(str(regime))
+        ax.set_xlabel("MAE increase when permuted (W)")
+    fig.suptitle("Permutation importance computed separately inside each regime", y=1.02)
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_memory_and_size(cost: pd.DataFrame, name: str = "fig28_cost_memory",
+                         directory: Path | None = None) -> Path:
+    """Training time, inference latency and model size on one panel."""
+    frame = cost.dropna(subset=["train_seconds"]).copy()
+    if frame.empty:
+        raise ValueError("cost table is empty")
+    frame = frame.sort_values("train_seconds")
+    positions = np.arange(len(frame))
+    fig, axes = plt.subplots(1, 3, figsize=(11.0, 0.4 * len(frame) + 1.6))
+    panels = [("train_seconds", "Training time (s, log)", True),
+              ("inference_ms_per_window", "Inference (ms per window)", True),
+              ("n_parameters", "Trainable parameters", True)]
+    for ax, (column, label, log) in zip(axes, panels):
+        if column not in frame.columns:
+            ax.set_visible(False)
+            continue
+        values = pd.to_numeric(frame[column], errors="coerce").fillna(0.0)
+        values = values.where(values > 0, 1e-3)
+        ax.barh(positions, values, color=[color(m) for m in frame["model"]])
+        if log:
+            ax.set_xscale("log")
+        ax.set_xlabel(label)
+    axes[0].set_yticks(positions, [pretty(m) for m in frame["model"]])
+    fig.suptitle("Computational cost on the pinned single-thread CPU protocol", y=1.02)
+    fig.tight_layout()
+    return save(fig, name, directory)
+# ---------------------------------------------------------------------------
+# 20. Ablation (leave-one-out)
 # ---------------------------------------------------------------------------
 def plot_ablation(ablation: pd.DataFrame, metric: str = "nrmse_capacity",
                   reference_spec: str = "full",

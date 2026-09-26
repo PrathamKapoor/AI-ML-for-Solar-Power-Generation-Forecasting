@@ -86,15 +86,33 @@ def horizon_lookup(config: Config) -> dict[str, dict[str, Any]]:
 
 def select_features(columns: list[str], features_spec: str,
                     config: Config) -> list[str]:
-    """Resolve a feature specification to a concrete column list."""
+    """Resolve a feature specification to a concrete column list.
+
+    Two namespaces are searched, both expressed as removal lists over the
+    configured columns:
+
+    ``features.ablation_groups``
+        leave-one-out groups: remove this group, keep everything else
+    ``features.feature_regimes``
+        additive regimes: keep this information, remove the rest
+
+    Both are resolved through :func:`apply_feature_ablation`, so an unknown
+    specification fails loudly rather than silently falling back to the full
+    input set.
+    """
     if features_spec == "full":
         return list(columns)
-    groups = config.section("features").get("ablation_groups", {})
-    if features_spec not in groups:
-        raise KeyError(
-            f"unknown feature specification {features_spec!r}. "
-            f"Available: 'full' or {sorted(groups)}")
-    return apply_feature_ablation(columns, list(columns), groups[features_spec]["remove"])
+    feature_config = config.section("features")
+    for namespace in ("ablation_groups", "feature_regimes"):
+        groups = feature_config.get(namespace) or {}
+        if features_spec in groups:
+            return apply_feature_ablation(columns, list(columns),
+                                         groups[features_spec]["remove"])
+    known = sorted((feature_config.get("ablation_groups") or {}).keys()
+                   + (feature_config.get("feature_regimes") or {}).keys())
+    raise KeyError(
+        f"unknown feature specification {features_spec!r}. "
+        f"Available: 'full' or {known}")
 
 
 def build_horizon_frames(featured: pd.DataFrame, horizon_steps: int,
