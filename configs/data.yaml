@@ -1,0 +1,372 @@
+# =============================================================================
+# Dataset configuration
+# =============================================================================
+# Selected dataset
+# ---------------
+# Lin, Z., Zhou, Q., Wang, Z., Wang, C., Bookhart, D. B., & Leung-Shea, M.
+# (2024). A high-resolution three-year dataset supporting rooftop photovoltaics
+# (PV) generation analytics. Dryad. https://doi.org/10.5061/dryad.m37pvmd99
+#
+# Distributed on Zenodo as record 10909062 under CC0 1.0.
+# Licence: CC0 1.0 Universal (public domain dedication) - no registration,
+# no API key, no click-through, redistributable.
+#
+# Selection rationale is documented in docs/dataset.md. In short, this dataset is
+# the only openly licensed, measured PV dataset located during the search that
+# simultaneously provides (a) sub-hourly PV power, (b) co-located meteorological
+# observations, (c) multi-year temporal coverage for seasonal analysis, and
+# (d) a multi-station panel for cross-site generalisation tests.
+
+dataset:
+  name: hong_kong_rooftop_pv_60_stations
+  record_doi: "10.5061/dryad.m37pvmd99"
+  zenodo_record_id: 10909062
+  archive_url: "https://zenodo.org/api/records/10909062/files/dataset.zip/content"
+  metadata_url: "https://zenodo.org/api/records/10909062"
+  licence: "CC0-1.0"
+  attribution: >-
+    Lin, Z., Zhou, Q., Wang, Z., Wang, C., Bookhart, D. B., & Leung-Shea, M.
+    (2024). A high-resolution three-year dataset supporting rooftop
+    photovoltaics (PV) generation analytics. Dryad.
+
+  # Archive layout
+  archive_root: "Dataset"
+  pv_prefix: "Dataset/Time series dataset/PV generation dataset"
+  met_prefix: "Dataset/Time series dataset/Meteorological dataset"
+  metadata_file: "Dataset/Metadata/PV generation system metadata.ttl"
+
+  # Primary case-study station.
+  # LSK North is chosen because it has the longest continuous 15-minute record
+  # (2021-06-01 to 2023-12-31, 90624 steps, zero missing timestamps), the lowest
+  # missing-value rate of the large stations (0.023%), and a rated capacity
+  # (55.0 kW) that matches its measured maximum (55.29 kW) - an independent
+  # consistency check on the target series.
+  primary_station: "LSK North"
+
+  # Cross-site generalisation panel (Experiment J).
+  # These stations are NEVER used for model fitting. They are selected to span
+  # the capacity range present in the dataset, and each has continuous 15-minute
+  # coverage over the same calendar window as the primary station so that the
+  # transfer test is not confounded by differing observation periods.
+  holdout_stations:
+    - "SQ1"            # 27.6 kW, Staff Quarter Tower 1
+    - "SQ2"
+    - "SQ3"
+    - "SQ4"
+    - "UG Hall6"
+    - "UG Hall7"
+
+  # Hourly-resolution stations that also have full coverage, retained for a
+  # secondary resolution check.
+  secondary_stations:
+    - "LSK South"      # 25.0 kW
+    - "Indoor Sports Centre"   # 33.3 kW
+
+  # Target variable
+  target_column: "pv_power_w"
+  target_unit: "W"
+  power_column_in_file: "power(W)"
+
+  # Native resolutions present in the archive
+  native_pv_resolutions:
+    inverter_level_sec: 300      # 5-minute AC power, 44 files
+    site_level_optimizer_sec: 900  # 15-minute AC power, 37 files
+    site_level_plain_sec: 3600  # hourly, 22 files
+  native_met_resolution_sec: 60    # 1-minute meteorology
+
+  # Working resolution for the case study.
+  # 15 minutes is chosen because it is the finest resolution that offers
+  # continuous multi-year coverage, and it natively supports every target
+  # horizon in the experiment grid (15 min, 1 h, 6 h, 24 h) as an exact
+  # integer number of steps. No interpolation is required for any horizon.
+  working_resolution: "15min"
+  working_resolution_sec: 900
+
+  # Variables extracted from the meteorological archive
+  meteorological_variables:
+    ghi: "Irradiance/Irradiance_{year}.csv"
+    temperature: "Temperature/Temperature_{year}.csv"
+    relative_humidity: "Relative Humidity/Relative Humidity_{year}.csv"
+    sea_level_pressure: "Sea Level Pressure/Sea Level Pressure_{year}.csv"
+    visibility: "Visibility/Visibility_{year}.csv"
+    wind_speed: "Wind/Wind_{year}.csv"
+    rainfall: "Rainfall/Rainfall_{year}.csv"
+
+  # Columns within each meteorological file (position 1 is the value column;
+  # the Wind file has a second column, wind direction, which is also used).
+  meteorological_value_columns:
+    ghi: 1
+    temperature: 1
+    relative_humidity: 1
+    sea_level_pressure: 1
+    visibility: 1
+    wind_speed: 1
+    wind_direction: 2
+    rainfall: 1
+
+  # Note: the Rainfall series starts in 2022 (no 2021 file in the archive), so
+  # rainfall is treated as an optional feature and the pipeline records how many
+  # rows lack it. Rainfall is excluded from the default feature set because its
+  # 1.5-year gap would make the 2021 training period unrepresentative; it is
+  # retained for the missing-value analysis and the ablation study.
+
+# =============================================================================
+# Raw-data validation thresholds
+# =============================================================================
+validation:
+  # Timestamps must be strictly increasing after normalisation
+  require_monotonic_timestamps: true
+  # Maximum acceptable fraction of missing timestamps in the raw PV series
+  max_missing_timestamp_fraction: 0.01
+  # Maximum acceptable fraction of NaN values in the raw PV target
+  max_missing_value_fraction: 0.01
+  # Minimum number of daylight samples required for a usable station
+  min_daylight_samples: 1000
+  # Physical plausibility envelope for global horizontal irradiance (W/m2).
+  # The upper bound is the solar constant (1361 W/m2) scaled by a generous
+  # horizon-gain allowance; anything above is instrument noise or a fault.
+  ghi_plausible_min: 0.0
+  ghi_plausible_max: 1200.0
+  # Clear-sky detection uses solar elevation from pvlib, independent of the
+  # irradiance sensor, so that sensor faults cannot influence regime labelling.
+  clear_sky_kt_threshold: 0.55
+  # Night-time handling. Horizontal irradiance is zero by definition when the
+  # sun is at or below the horizon, so every positive night-time reading is an
+  # instrument zero-offset. The source pyranometer shows a night-time median of
+  # about 5 W/m2 and a 95th percentile near 31 W/m2 over three years, which would
+  # otherwise be read as real dim light and would propagate into the clearness
+  # index and therefore into the weather-regime labels.
+  zero_irradiance_below_horizon: true
+  night_solar_elevation_max: 0.0
+  # Residual threshold used only when the above is disabled: readings below this
+  # at night are treated as offset rather than signal.
+  ghi_night_offset_threshold: 5.0
+  # Rolling median window (in 15-minute steps) used to flag irradiance spikes
+  ghi_spike_window: 15
+  ghi_spike_ratio: 1.8
+  # Physical envelope for AC power output
+  power_min_w: 0.0
+
+# =============================================================================
+# Chronological split
+# =============================================================================
+# Strictly time-ordered. Boundaries are given as explicit dates so the split is
+# human-readable in the paper and cannot drift when the code changes.
+#
+#   train      2021-06-01 .. 2022-08-31   (15 months, 55%)
+#   validation 2022-09-01 .. 2022-12-31  (4 months, 15%)
+#   test       2023-01-01 .. 2023-12-31  (12 months, 30%)
+#
+# The test period is a full calendar year, so it contains every season exactly
+# once and seasonal generalisation is measurable without confounding the season
+# mix with the split. Validation covers a different season (autumn/winter) than
+# the training period's tail, which discourages tuning to a single season.
+split:
+  strategy: chronological
+  train_start: "2021-06-01"
+  train_end: "2022-08-31 23:45:00"
+  val_start: "2022-09-01"
+  val_end: "2022-12-31 23:45:00"
+  test_start: "2023-01-01"
+  test_end: "2023-12-31 23:45:00"
+  # Number of steps to drop between splits so that a validation or test target
+  # never falls inside the lookback window of the preceding split.
+  embargo_steps: 0
+  # Fractions are recorded for reporting only; the dates above are authoritative.
+  reported_fractions:
+    train: 0.55
+    validation: 0.15
+    test: 0.30
+
+# =============================================================================
+# Feature engineering
+# =============================================================================
+features:
+  # Lookback window in 15-minute steps. 96 steps = 24 hours, which spans a full
+  # diurnal cycle. This is the longest history that is still cheap to train and
+  # matches the heuristic in the literature that history length should be at
+  # least as long as the forecast horizon.
+  lookback_steps: 96
+  # Persistence lag = the shortest horizon, so the same lookback serves all
+  # horizons without changing the input window.
+  persistence_lag_steps: 1
+  # Explicit PV lag features (in 15-minute steps)
+  pv_lags: [1, 2, 3, 4, 8, 12, 24, 48, 96, 192, 288]
+  # Rolling statistics of the target, computed causally (trailing window only)
+  pv_rolling_windows: [4, 12, 48, 96]
+  pv_rolling_stats: ["mean", "std", "max"]
+  # Solar geometry features
+  solar_position: true
+  # Cyclical calendar features
+  cyclical_time: true
+  # Weather variables used as model inputs (post-processing names)
+  weather_inputs:
+    - ghi
+    - temperature
+    - relative_humidity
+    - sea_level_pressure
+    - wind_speed
+    - wind_direction
+    - visibility
+  # Roll the 1-minute meteorology up to the working resolution by mean.
+  # The end-of-interval timestamp convention is applied so that a 15-minute bin
+  # labelled 12:00 covers 11:45-12:00 and therefore contains no information
+  # later than its own label.
+  meteorology_aggregation: mean
+  # Target scaling
+  target_scaling: standard
+  feature_scaling: standard
+
+  # Ablation groups used by Experiment E (feature ablation). Each group is
+  # removed on its own; "all" removes everything except the minimum viable set.
+  ablation_groups:
+    no_weather:
+      remove: [ghi, temperature, relative_humidity, sea_level_pressure,
+               wind_speed, wind_direction, visibility]
+      label: "Weather variables removed"
+    no_solar_geometry:
+      remove: [solar_elevation, solar_azimuth, sin_solar_elevation, cos_solar_elevation]
+      label: "Solar-geometry features removed"
+    no_pv_history:
+      remove: [pv_power_w_lag_1, pv_power_w_lag_96, pv_rolling_mean_4, pv_rolling_mean_96,
+               pv_power_w_lag_192, pv_power_w_lag_288, clear_sky_index]
+      label: "PV history / clear-sky features removed"
+    no_calendar:
+      remove: [hour_sin, hour_cos, doy_sin, doy_cos]
+      label: "Calendar features removed"
+    minimal:
+      remove: [ghi, temperature, relative_humidity, sea_level_pressure, wind_speed,
+               wind_direction, visibility, solar_elevation, solar_azimuth,
+               sin_solar_elevation, cos_solar_elevation, hour_sin, hour_cos,
+               doy_sin, doy_cos, pv_power_w_lag_2, pv_power_w_lag_3, pv_power_w_lag_4,
+               pv_power_w_lag_8, pv_power_w_lag_12, pv_power_w_lag_24, pv_power_w_lag_48,
+               pv_rolling_std_4, pv_rolling_std_12, pv_rolling_std_48, pv_rolling_std_96,
+               pv_rolling_max_4, pv_rolling_max_12, pv_rolling_max_48, pv_rolling_max_96]
+      label: "Minimal input (lag-1 target + GHI only)"
+
+# =============================================================================
+# Forecast horizons
+# =============================================================================
+# Every horizon is an exact integer multiple of the 15-minute working
+# resolution, so no interpolation or resampling is needed for any of them.
+horizons:
+  - name: "15min"
+    steps: 1
+    hours: 0.25
+  - name: "1h"
+    steps: 4
+    hours: 1.0
+  - name: "6h"
+    steps: 24
+    hours: 6.0
+  - name: "24h"
+    steps: 96
+    hours: 24.0
+default_horizon: "1h"
+
+# =============================================================================
+# Clear-sky reference
+# =============================================================================
+# The clearness index kt = GHI / GHI_clear needs a clear-sky envelope. Two
+# guards make it usable on this dataset:
+#
+# 1. Linke turbidity is fixed at 4.0, a standard mid-range value for coastal
+#    humid-subtropical Hong Kong. The choice matters: at turbidity 3.0 the
+#    reference is too clean and the raw kt reaches 1.23 at its 90th percentile,
+#    which is unphysical, whereas at 4.0 the raw kt has a 99th percentile of
+#    about 1.03, i.e. the model is well calibrated for this site.
+# 2. A single scale factor is estimated on the TRAINING SPLIT ONLY, so that the
+#    99th percentile of the raw kt maps to 1.0. The measured irradiance values
+#    are never rescaled; only the dimensionless index used for regime labelling
+#    is. The estimated factor is reported in the pipeline report as a
+#    data-quality diagnostic, and a value near 1.0 confirms the clear-sky
+#    reference needs no correction.
+#
+# kt is undefined when GHI_clear < min_clear_reference_wm2 (near the horizon the
+# modelled reference approaches zero while the instrument still reports small
+# positive values, so the ratio becomes meaningless).
+clear_sky:
+  linke_turbidity: 4.0
+  min_clear_reference_wm2: 50.0
+  scale_quantile: 0.99
+  max_index: 1.2
+
+# =============================================================================
+# Weather regimes
+# =============================================================================
+# Regime labels are derived from the *calibrated* clearness index and the
+# trailing variability of GHI. Both are computed from information that exists at
+# forecast time, so the labels are available when a forecast is made.
+#
+#   kt        = clip(GHI_obs / (alpha * GHI_clear), 0, 1.2),  alpha fitted on train
+#   sigma_cv  = std / mean of daylight GHI over a trailing 4-hour window
+#   night     : solar elevation <= 0
+#   variable  : sigma_cv > 0.60          (precedence: overrides the kt bands)
+#   clear     : kt >= 0.72
+#   partly    : 0.45 <= kt < 0.72
+#   cloudy    : kt < 0.45
+#
+# Threshold provenance, measured on the TRAINING split only (so the evaluation
+# period plays no part in defining the classes):
+#   kt >= 0.72    selects the clearest 34% of usable daylight steps
+#   kt >= 0.45    splits the remainder near its 31st percentile
+#   sigma_cv > 0.60  is the 80th percentile of the training distribution
+# Variability takes precedence over clearness because a step can be bright on
+# average yet operationally useless; short-term ramping is what determines
+# whether a forecast is actionable.
+#
+# Regime assignment uses the irradiance observed during the *target* interval.
+# It is a labelling device for error analysis, never a model input, and is
+# applied only after prediction.
+regimes:
+  clear:
+    kt_min: 0.72
+    variability_max: 0.60
+    label: "Clear"
+  partly_cloudy:
+    kt_min: 0.45
+    kt_max: 0.72
+    variability_max: 0.60
+    label: "Partly cloudy"
+  cloudy:
+    kt_min: 0.0
+    kt_max: 0.45
+    label: "Cloudy"
+  variable:
+    variability_min: 0.60
+    label: "High-variability"
+  night:
+    solar_elevation_max: 0.0
+    label: "Night"
+  # Trailing window (in 15-minute steps) over which GHI variability is measured.
+  # 16 steps = 4 hours. A 24-hour window would necessarily include roughly twelve
+  # hours of zeros, making the coefficient of variation close to 1 at every step
+  # and therefore useless as a discriminator. Only daylight samples inside the
+  # window contribute.
+  variability_window_steps: 16
+  # GHI values below this (W/m2) are excluded from the variability statistic so
+  # that near-zero dawn and dusk readings do not inflate the coefficient of
+  # variation.
+  variability_min_ghi_wm2: 20.0
+
+# =============================================================================
+# Evaluation
+# =============================================================================
+evaluation:
+  # nRMSE normaliser. 'capacity' divides by the station's rated power, which
+  # makes errors comparable across sites of different size; 'mean' divides by
+  # the mean of the observed test target.
+  nrmse_normaliser: capacity
+  # Metrics computed for every experiment
+  metrics: [mae, rmse, nrmse, r2, smape, skill_vs_persistence]
+  # Daylight-only evaluation is the headline setting; night is reported separately
+  headline_scope: daylight
+  # Number of bootstrap resamples for confidence intervals
+  bootstrap_resamples: 2000
+  bootstrap_block_length: 96
+  bootstrap_confidence: 0.95
+  # Diebold-Mariano test configuration
+  dm_test:
+    loss_function: mae
+    horizon: 1
+    small_sample_correction: harvey_leybourne_newbold
