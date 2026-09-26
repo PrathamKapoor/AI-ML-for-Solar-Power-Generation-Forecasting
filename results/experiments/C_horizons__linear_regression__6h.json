@@ -133,7 +133,7 @@
     "information_set": "weather observed at or before the forecast origin (strict historical setting)",
     "training": {
       "requires_training": true,
-      "train_seconds": 6.090764799999306,
+      "train_seconds": 8.466754299995955,
       "tuning": {
         "tuned": false,
         "reason": "no grid configured for this model"
@@ -149,14 +149,14 @@
       }
     },
     "cost": {
-      "train_seconds": 6.090764799999306,
-      "inference_ms_per_window": 0.0023515771112397493,
+      "train_seconds": 8.466754299995955,
+      "inference_ms_per_window": 0.0010410706632237915,
       "n_parameters": 793
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T16:20:09+00:00",
+      "timestamp_utc": "2026-09-26T19:32:53+00:00",
       "seed": 42,
-      "git_revision": "d469139",
+      "git_revision": "79bc6cf",
       "platform": {
         "python": "3.13.14",
         "implementation": "CPython",
@@ -215,6 +215,8 @@
         "Partly cloudy": 0.135836
       }
     },
-    "wall_seconds_including_setup": 8.904577199995401
-  }
+    "wall_seconds_including_setup": 11.036587899987353
+  },
+  "training_history": [],
+  "feature_importance": null
 }

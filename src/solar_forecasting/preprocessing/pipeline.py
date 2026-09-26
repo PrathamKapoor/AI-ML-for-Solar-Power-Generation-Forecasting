@@ -98,18 +98,35 @@ def build_target(frame: pd.DataFrame, target_column: str, horizon_steps: int,
 
 
 def run_pipeline(config: Config, quiet: bool = False,
-                 persist: bool = True) -> dict[str, Any]:
-    """Execute the full pipeline and return the report plus the prepared frames."""
+                 persist: bool = True, station: str | None = None,
+                 artifact_slug: str | None = None) -> dict[str, Any]:
+    """Execute the full pipeline and return the report plus the prepared frames.
+
+    Parameters
+    ----------
+    station
+        Station to process. Defaults to ``dataset.primary_station``. The
+        cross-site experiment passes each site in turn, which is why the
+        station is a parameter rather than a constant read from the
+        configuration: the processing is identical for every site, and any
+        difference between them is a property of the data.
+    artifact_slug
+        Suffix for the persisted artefacts, so that processing a second station
+        cannot overwrite the primary station's files. Defaults to
+        ``_<slugified station>`` when ``station`` is given.
+    """
     report: dict[str, Any] = {
         "pipeline_version": "1.0.0",
         "config_fingerprint": config.fingerprint(),
-        "config_sources": [str(p.name) for p in config.sources],
+        "config_sources": [p.name for p in config.sources],
         "stages": {},
     }
     validation = schema_mod.ValidationReport()
 
     dataset = config.section("dataset")
-    primary = dataset["primary_station"]
+    primary = station or dataset["primary_station"]
+    slug = artifact_slug or (None if station is None else _slugify(primary))
+    report["station"] = primary
     frequency = dataset["working_resolution"]
     steps_per_day = int(pd.Timedelta("1D") / pd.Timedelta(frequency))
     # A humid subtropical site: Linke turbidity of 4.0 is a standard mid-range
@@ -366,12 +383,12 @@ def run_pipeline(config: Config, quiet: bool = False,
     report["stages"]["17_dataset"] = dataset_summary
 
     if persist:
-        _log(17, "experiment-ready output", "writing parquet artefacts", quiet)
-        persist_artifacts(config, featured, split, columns, report)
+        _log(17, "experiment-ready output", f"writing parquet artefacts ({primary})", quiet)
+        persist_artifacts(config, featured, split, columns, report, slug=slug)
 
     report["validation"] = validation.to_dict()
     report["target"] = dataset_summary
-    write_json(report, results_dir("metrics") / "pipeline_report.json")
+    write_json(report, results_dir("metrics") / f"pipeline_report{slug or ''}.json")
 
     if not quiet:
         print(f"\n  rows: train={len(split.train)} val={len(split.val)} test={len(split.test)}")
@@ -414,17 +431,44 @@ def build_dataset_summary(featured: pd.DataFrame, split: split_mod.SplitResult,
     }
 
 
+def _slugify(name: str) -> str:
+    """A filename-safe form of a station name.
+
+    Station names contain spaces and parentheses ("S H Ho Sports Hall",
+    "UG Hall2 RF"), so they are reduced to lowercase alphanumerics joined by
+    underscores before being used in a path.
+    """
+    cleaned = "".join(ch if ch.isalnum() else "_" for ch in name.lower())
+    while "__" in cleaned:
+        cleaned = cleaned.replace("__", "_")
+    return cleaned.strip("_")
+
+
 def persist_artifacts(config: Config, featured: pd.DataFrame,
                       split: split_mod.SplitResult, columns: list[str],
-                      report: dict[str, Any]) -> None:
-    """Write the experiment-ready artefacts and the dataset-statistics table."""
+                      report: dict[str, Any], slug: str | None = None) -> None:
+    """Write the experiment-ready artefacts and the dataset-statistics table.
+
+    ``slug`` namespaces the files for a non-primary station, so processing a
+    second site cannot overwrite the primary site's split files.
+    """
     processed = data_dir("processed")
-    featured.to_parquet(processed / "featured_primary_station.parquet", index=False)
+    suffix = f"_{slug}" if slug else ""
+    if slug:
+        featured.to_parquet(processed / f"featured{suffix}.parquet", index=False)
+    else:
+        featured.to_parquet(processed / "featured_primary_station.parquet", index=False)
     for name, part in (("train", split.train), ("val", split.val), ("test", split.test)):
-        part.to_parquet(processed / f"split_{name}.parquet", index=False)
-    write_json({"feature_columns": columns,
-                "lookback_steps": int(config.section("features")["lookback_steps"])},
-               processed / "feature_columns.json")
+        part.to_parquet(processed / f"split_{name}{suffix}.parquet", index=False)
+    if not slug:
+        write_json({"feature_columns": columns,
+                    "lookback_steps": int(config.section("features")["lookback_steps"])},
+                   processed / "feature_columns.json")
+    else:
+        write_json({"feature_columns": columns,
+                    "lookback_steps": int(config.section("features")["lookback_steps"]),
+                    "station": report.get("station")},
+                   processed / f"feature_columns{suffix}.json")
 
     summary = report["stages"]["17_dataset"]
     rows = []
@@ -437,7 +481,8 @@ def persist_artifacts(config: Config, featured: pd.DataFrame,
         for key, value in profile.items():
             rows.append({"scope": f"outliers::{profile.get('variable')}",
                          "statistic": key, "value": value})
-    write_table(pd.DataFrame(rows), results_dir("tables") / "dataset_statistics.csv")
+    write_table(pd.DataFrame(rows), results_dir("tables") /
+                f"dataset_statistics{suffix or ''}.csv")
 
 
 def main(config: Config | None = None, quiet: bool = False) -> dict[str, Any]:

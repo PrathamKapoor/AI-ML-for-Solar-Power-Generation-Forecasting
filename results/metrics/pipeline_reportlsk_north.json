@@ -1,0 +1,1442 @@
+{
+  "pipeline_version": "1.0.0",
+  "config_fingerprint": "7bace29b6f2d9dc0",
+  "config_sources": [
+    "data.yaml",
+    "experiments.yaml",
+    "models.yaml"
+  ],
+  "stages": {
+    "02_raw_validation": {
+      "archive_root": "C:\\Projects\\AI-ML_Applications_in_Renewable_Energy_Systems\\data\\interim",
+      "metadata_present": true
+    },
+    "04_timestamps": {
+      "station": "LSK North",
+      "n_rows": 90624,
+      "format_detected": "YYYY/M/D H:MM (meteorology) and YYYY-MM-DD HH:MM:SS (PV)",
+      "timezone": "naive local standard time (UTC+08:00, no daylight saving in Hong Kong)",
+      "first": "2021-06-01 00:00:00",
+      "last": "2023-12-31 23:45:00"
+    },
+    "05_duplicates": {
+      "n_duplicate_timestamps": 0,
+      "policy": "duplicates averaged within the same timestamp; the first label is kept"
+    },
+    "03_schema": {
+      "n_errors": 0,
+      "n_warnings": 0,
+      "n_info": 2,
+      "issues": [
+        {
+          "severity": "info",
+          "stage": "schema/pv/LSK North",
+          "check": "missing_target",
+          "message": "0.0232% of target values are NaN",
+          "detail": {
+            "n_missing": 21,
+            "n_rows": 90624
+          }
+        },
+        {
+          "severity": "info",
+          "stage": "schema/pv/LSK North",
+          "check": "zero_fraction",
+          "message": "50.10% of readings are exactly zero (expected: night-time)",
+          "detail": {
+            "fraction": 0.5010372528248588
+          }
+        }
+      ]
+    },
+    "02b_capacity": {
+      "station": "LSK North",
+      "brick_name": "LSK_North",
+      "location": "Lee_Shau_Kee_Business_Building",
+      "latitude": 22.33,
+      "longitude": 114.18,
+      "altitude_m": 142.0,
+      "rated_kw": 55.0,
+      "rated_w": 55000.0,
+      "connection_date": "2021-04-30T00:00:00",
+      "metadata_found": true
+    },
+    "09_daylight": {
+      "daylight_fraction_of_steps": 0.505075918079096,
+      "mean_daylight_steps_per_day": 48.48728813559322,
+      "solar_elevation_min_deg": -89.90945755754028,
+      "solar_elevation_max_deg": 89.67681817507504,
+      "mean_elevation_daylight_deg": 37.96522341635197,
+      "first_sunrise_hour": 6.093220338983051,
+      "last_sunset_hour": 17.930084745762713
+    },
+    "08_outliers": {
+      "irradiance": {
+        "n_input": 1567792,
+        "n_input_missing": 0,
+        "n_outside_physical_envelope": 10850,
+        "fraction_outside_physical_envelope": 0.006920560890730403,
+        "physical_envelope": [
+          0.0,
+          1200.0
+        ],
+        "n_local_spikes": 4355,
+        "n_clipped_by_final_envelope": 8302,
+        "n_raised_by_final_envelope": 0,
+        "n_night_offset_zeroed": 728671,
+        "spike_window_steps": 15,
+        "spike_ratio_threshold": 1.8,
+        "night_offset_threshold_wm2": 5.0,
+        "zero_irradiance_below_horizon": true,
+        "night_solar_elevation_max_deg": 0.0,
+        "original_max": 3608.6,
+        "cleaned_max": 1200.0,
+        "original_mean": 150.5697162343091,
+        "cleaned_mean": 144.23757943813337,
+        "night_bias_before_wm2": 9.88977084866358,
+        "night_bias_after_wm2": 0.0
+      }
+    },
+    "10_weather": {
+      "native_resolution": "1 minute",
+      "working_resolution": "15min",
+      "aggregation": "mean",
+      "bin_convention": "label = bin end timestamp; closed='right'",
+      "variables": [
+        "ghi",
+        "temperature",
+        "relative_humidity",
+        "sea_level_pressure",
+        "wind_speed",
+        "visibility",
+        "rainfall"
+      ],
+      "n_rows": 105121,
+      "n_missing_after_rollup": 39223
+    },
+    "10b_merge": {
+      "n_rows_after_merge": 90624,
+      "n_pv_rows_without_weather": 597,
+      "fraction_pv_rows_without_weather": 0.0065876588983050845,
+      "policy": "weather gaps are filled in stage 7 by split-aware interpolation"
+    },
+    "06_07_missing": {
+      "missingness_before": {
+        "total_cells": 724992,
+        "total_missing": 24744,
+        "overall_missing_fraction": 0.034130031779661014,
+        "columns": {
+          "pv_power_w": {
+            "n_missing": 21,
+            "missing_fraction": 0.00023172669491525424,
+            "n_gaps": 19,
+            "longest_gap": 2,
+            "mean_gap_length": 1.105263157894737,
+            "gap_length_histogram": {
+              "1": 17,
+              "2": 2
+            }
+          },
+          "ghi": {
+            "n_missing": 597,
+            "missing_fraction": 0.0065876588983050845,
+            "n_gaps": 3,
+            "longest_gap": 394,
+            "mean_gap_length": 199.0,
+            "gap_length_histogram": {
+              "25": 1,
+              "178": 1,
+              "394": 1
+            }
+          },
+          "temperature": {
+            "n_missing": 597,
+            "missing_fraction": 0.0065876588983050845,
+            "n_gaps": 3,
+            "longest_gap": 394,
+            "mean_gap_length": 199.0,
+            "gap_length_histogram": {
+              "25": 1,
+              "178": 1,
+              "394": 1
+            }
+          },
+          "relative_humidity": {
+            "n_missing": 597,
+            "missing_fraction": 0.0065876588983050845,
+            "n_gaps": 3,
+            "longest_gap": 394,
+            "mean_gap_length": 199.0,
+            "gap_length_histogram": {
+              "25": 1,
+              "178": 1,
+              "394": 1
+            }
+          },
+          "sea_level_pressure": {
+            "n_missing": 597,
+            "missing_fraction": 0.0065876588983050845,
+            "n_gaps": 3,
+            "longest_gap": 394,
+            "mean_gap_length": 199.0,
+            "gap_length_histogram": {
+              "25": 1,
+              "178": 1,
+              "394": 1
+            }
+          },
+          "wind_speed": {
+            "n_missing": 597,
+            "missing_fraction": 0.0065876588983050845,
+            "n_gaps": 3,
+            "longest_gap": 394,
+            "mean_gap_length": 199.0,
+            "gap_length_histogram": {
+              "25": 1,
+              "178": 1,
+              "394": 1
+            }
+          },
+          "visibility": {
+            "n_missing": 597,
+            "missing_fraction": 0.0065876588983050845,
+            "n_gaps": 3,
+            "longest_gap": 394,
+            "mean_gap_length": 199.0,
+            "gap_length_histogram": {
+              "25": 1,
+              "178": 1,
+              "394": 1
+            }
+          },
+          "rainfall": {
+            "n_missing": 21141,
+            "missing_fraction": 0.23328257415254236,
+            "n_gaps": 4,
+            "longest_gap": 20544,
+            "mean_gap_length": 5285.25,
+            "gap_length_histogram": {
+              "25": 1,
+              "178": 1,
+              "394": 1,
+              "20544": 1
+            }
+          }
+        }
+      },
+      "missingness_after": {
+        "total_cells": 724992,
+        "total_missing": 0,
+        "overall_missing_fraction": 0.0,
+        "columns": {
+          "pv_power_w": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          },
+          "ghi": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          },
+          "temperature": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          },
+          "relative_humidity": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          },
+          "sea_level_pressure": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          },
+          "wind_speed": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          },
+          "visibility": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          },
+          "rainfall": {
+            "n_missing": 0,
+            "missing_fraction": 0.0,
+            "n_gaps": 0,
+            "longest_gap": 0,
+            "mean_gap_length": 0.0,
+            "gap_length_histogram": {}
+          }
+        }
+      },
+      "imputation_policy": {
+        "target": "time interpolation, limit=4 steps, forward-only at and after the train/validation boundary",
+        "weather": "time interpolation then bounded forward fill, limit=8 steps",
+        "split_aware": true
+      }
+    },
+    "09b_clearsky_calibration": {
+      "scale": 1.0018562135936488,
+      "quantile": 0.99,
+      "n_usable": 20170,
+      "raw_kt_quantiles": {
+        "p50": 0.43471711575151295,
+        "p90": 0.8351643547446497,
+        "p99": 1.0018562135936488,
+        "max": 1.6753723717649185
+      },
+      "fraction_raw_kt_above_1p2": 0.0020823004462072383,
+      "calibrated": true,
+      "interpretation": "The 99th percentile of the raw clearness index is 1.002. A value close to 1.0 means the clear-sky reference is already consistent with the irradiance instrument, so the applied scale factor is 1.002 and no meaningful correction is implied. A value far from 1.0 would indicate either an unsuitable clear-sky turbidity or a multiplicative instrument scale error."
+    },
+    "08b_target": {
+      "n_negative_clipped": 0,
+      "fraction_negative": 0.0,
+      "observed_max_w": 55294.668,
+      "rated_w": 55000.0,
+      "max_to_rated_ratio": 1.0053576,
+      "policy": "negative values clipped to zero; no other target modification"
+    },
+    "12b_warmup": {
+      "lookback_steps": 24,
+      "max_history_steps_required": 96,
+      "n_rows_dropped_for_warmup": 96,
+      "policy": "rows without a complete lookback window are dropped rather than partially padded, which would bias early rows"
+    },
+    "09c_regimes": {
+      "distribution_daylight": {
+        "scope": "daylight",
+        "n": 45718,
+        "counts": {
+          "Cloudy": 18393,
+          "Clear": 12168,
+          "High-variability": 8681,
+          "Partly cloudy": 6476
+        },
+        "shares": {
+          "Cloudy": 0.402314,
+          "Clear": 0.266153,
+          "High-variability": 0.189881,
+          "Partly cloudy": 0.141651
+        }
+      },
+      "distribution_all_steps": {
+        "scope": "all_steps",
+        "n": 90528,
+        "counts": {
+          "Night": 44810,
+          "Cloudy": 18393,
+          "Clear": 12168,
+          "High-variability": 8681,
+          "Partly cloudy": 6476
+        },
+        "shares": {
+          "Night": 0.494985,
+          "Cloudy": 0.203175,
+          "Clear": 0.134411,
+          "High-variability": 0.095893,
+          "Partly cloudy": 0.071536
+        }
+      },
+      "rules": {
+        "definition": {
+          "kt": "clip(GHI_obs / (alpha * GHI_clear(turbidity=4.00)), 0, 1.20)",
+          "alpha_clear_sky_scale": 1.001856,
+          "alpha_fit_on": "training split only",
+          "sigma_cv": "coefficient of variation of GHI over a trailing window of 16 steps, undefined when the trailing mean is below 20.0 W/m2"
+        },
+        "precedence": [
+          "solar_elevation <= 0.0 deg -> Night",
+          "sigma_cv > 0.60 -> High-variability (overrides the kt bands)",
+          "kt >= 0.72 and sigma_cv <= 0.60 -> Clear",
+          "0.45 <= kt < 0.72 and sigma_cv <= 0.60 -> Partly cloudy",
+          "kt < 0.45 -> Cloudy"
+        ],
+        "note": "Regime labels are assigned from the realised forecast-time irradiance record after prediction, for error stratification only. They are never supplied to any model."
+      }
+    },
+    "14_split": {
+      "strategy": "chronological",
+      "boundaries": {
+        "train_start": "2021-06-01 00:00:00",
+        "train_end": "2022-08-31 23:45:00",
+        "val_start": "2022-09-01 00:00:00",
+        "val_end": "2022-12-31 23:45:00",
+        "test_start": "2023-01-01 00:00:00",
+        "test_end": "2023-12-31 23:45:00"
+      },
+      "n_rows_total": 90528,
+      "n_dropped_outside_window": 0,
+      "sizes": {
+        "train": 43776,
+        "val": 11712,
+        "test": 35040
+      },
+      "fractions": {
+        "train": 0.4836,
+        "val": 0.1294,
+        "test": 0.3871
+      },
+      "date_ranges": {
+        "train": [
+          "2021-06-02 00:00:00",
+          "2022-08-31 23:45:00"
+        ],
+        "val": [
+          "2022-09-01 00:00:00",
+          "2022-12-31 23:45:00"
+        ],
+        "test": [
+          "2023-01-01 00:00:00",
+          "2023-12-31 23:45:00"
+        ]
+      },
+      "disjoint": true,
+      "max_train_time": "2022-08-31 23:45:00",
+      "min_val_time": "2022-09-01 00:00:00",
+      "max_val_time": "2022-12-31 23:45:00",
+      "min_test_time": "2023-01-01 00:00:00",
+      "train_val_gap": "0 days 00:15:00"
+    },
+    "15_scaling": {
+      "n_features": 33,
+      "feature_groups": {
+        "weather": [
+          "ghi",
+          "temperature",
+          "relative_humidity",
+          "wind_speed"
+        ],
+        "weather_derived": [
+          "ghi_rollmean_4",
+          "ghi_rollmean_24",
+          "temperature_rollmean_4",
+          "temperature_rollmean_24",
+          "ghi_delta_1",
+          "ghi_slope_1",
+          "ghi_delta_4",
+          "ghi_slope_4"
+        ],
+        "target_lags": [
+          "pv_power_w_lag_0",
+          "pv_power_w_lag_1",
+          "pv_power_w_lag_2",
+          "pv_power_w_lag_4",
+          "pv_power_w_lag_8",
+          "pv_power_w_lag_12",
+          "pv_power_w_lag_24",
+          "pv_power_w_lag_48",
+          "pv_power_w_lag_96"
+        ],
+        "target_rolling": [
+          "pv_rolling_mean_4",
+          "pv_rolling_std_4",
+          "pv_rolling_mean_12",
+          "pv_rolling_std_12",
+          "pv_rolling_mean_24",
+          "pv_rolling_std_24"
+        ],
+        "solar_geometry": [
+          "solar_elevation",
+          "sin_solar_elevation"
+        ],
+        "calendar": [
+          "hour_sin",
+          "hour_cos",
+          "doy_sin",
+          "doy_cos"
+        ],
+        "other": [
+          "solar_elevation",
+          "sin_solar_elevation",
+          "hour_sin",
+          "hour_cos",
+          "doy_sin",
+          "doy_cos"
+        ]
+      },
+      "target_mean_w": 8639.542735468145,
+      "target_scale_w": 13816.03954215011,
+      "fitted_on": {
+        "n_train_rows": 43776,
+        "train_start": "2021-06-02 00:00:00",
+        "train_end": "2022-08-31 23:45:00",
+        "configured_train_end": "2022-08-31 23:45:00",
+        "n_features": 33,
+        "note": "fitted on training rows only; applied unchanged to validation and test"
+      },
+      "leakage_guard": "scaler statistics computed from training rows only"
+    },
+    "16_sequences": {
+      "lookback_steps": 24,
+      "lookback_hours": 6.0,
+      "n_features": 33,
+      "window_definition": "row t supplies features; the target is observed power at t + h, for h in [{'name': '15min', 'steps': 1, 'hours': 0.25}, {'name': '1h', 'steps': 4, 'hours': 1.0}, {'name': '6h', 'steps': 24, 'hours': 6.0}, {'name': '24h', 'steps': 96, 'hours': 24.0}]",
+      "stride": 1
+    },
+    "17_dataset": {
+      "station": {
+        "station": "LSK North",
+        "brick_name": "LSK_North",
+        "location": "Lee_Shau_Kee_Business_Building",
+        "latitude": 22.33,
+        "longitude": 114.18,
+        "altitude_m": 142.0,
+        "rated_kw": 55.0,
+        "rated_w": 55000.0,
+        "connection_date": "2021-04-30T00:00:00",
+        "metadata_found": true
+      },
+      "rated_w": 55000.0,
+      "frequency": "15min",
+      "n_rows_total": 90528,
+      "n_rows_daylight": 45718,
+      "fraction_daylight": 0.5050150229763167,
+      "date_range": [
+        "2021-06-02 00:00:00",
+        "2023-12-31 23:45:00"
+      ],
+      "columns_present": [
+        "Time",
+        "pv_power_w",
+        "ghi",
+        "temperature",
+        "relative_humidity",
+        "wind_speed",
+        "solar_elevation",
+        "solar_azimuth",
+        "sin_solar_elevation",
+        "cos_solar_elevation",
+        "solar_zenith",
+        "daylight",
+        "is_daylight",
+        "ghi_clear",
+        "clear_sky_index_raw",
+        "clear_sky_index",
+        "hour",
+        "minute",
+        "dayofyear",
+        "year",
+        "month",
+        "day",
+        "dayofweek",
+        "is_weekend",
+        "hours_since_midnight",
+        "hour_sin",
+        "hour_cos",
+        "doy_sin",
+        "doy_cos",
+        "pv_power_w_lag_0",
+        "pv_power_w_lag_1",
+        "pv_power_w_lag_2",
+        "pv_power_w_lag_4",
+        "pv_power_w_lag_8",
+        "pv_power_w_lag_12",
+        "pv_power_w_lag_24",
+        "pv_power_w_lag_48",
+        "pv_power_w_lag_96",
+        "pv_rolling_mean_4",
+        "pv_rolling_std_4",
+        "pv_rolling_mean_12",
+        "pv_rolling_std_12",
+        "pv_rolling_mean_24",
+        "pv_rolling_std_24",
+        "ghi_rollmean_4",
+        "ghi_rollmean_24",
+        "temperature_rollmean_4",
+        "temperature_rollmean_24",
+        "ghi_delta_1",
+        "ghi_slope_1",
+        "ghi_delta_4",
+        "ghi_slope_4",
+        "season",
+        "sigma_cv",
+        "regime"
+      ],
+      "target_all": {
+        "n": 90528,
+        "mean": 8305.427161862268,
+        "std": 13399.292482809866,
+        "min": 0.0,
+        "p01": 0.0,
+        "p05": 0.0,
+        "p25": 0.0,
+        "median": 0.0,
+        "p75": 12075.00025,
+        "p95": 39911.817999999934,
+        "p99": 49840.89235999998,
+        "max": 55294.668,
+        "n_zero": 45375,
+        "fraction_zero": 0.5012261399787911,
+        "n_negative": 0
+      },
+      "target_daylight": {
+        "n": 45718,
+        "mean": 16444.763108091945,
+        "std": 14888.817762874243,
+        "min": 0.0,
+        "p01": 0.0,
+        "p05": 113.90000039999994,
+        "p25": 3394.3333,
+        "median": 11849.8335,
+        "p75": 27619.166,
+        "p95": 45106.682400000005,
+        "p99": 51944.53912000001,
+        "max": 55294.668,
+        "n_zero": 1026,
+        "fraction_zero": 0.022441926593464282,
+        "n_negative": 0
+      },
+      "target_train_daylight": {
+        "n": 22477,
+        "mean": 16825.310278114168,
+        "std": 15298.774951409063,
+        "min": 0.0,
+        "p01": 0.0,
+        "p05": 99.666664,
+        "p25": 3538.3333,
+        "median": 12068.667,
+        "p75": 28080.0,
+        "p95": 46950.60080000001,
+        "p99": 52835.97232000001,
+        "max": 55294.668,
+        "n_zero": 536,
+        "fraction_zero": 0.02384659874538417,
+        "n_negative": 0
+      },
+      "ghi": {
+        "n": 90528,
+        "mean": 154.02575809133901,
+        "std": 253.88376694609266,
+        "min": 0.0,
+        "p01": 0.0,
+        "p05": 0.0,
+        "p25": 0.0,
+        "median": 5.702576666666666,
+        "p75": 209.8263333333333,
+        "p95": 717.1071999999998,
+        "p99": 1077.931733333333,
+        "max": 1200.0,
+        "n_zero": 43609,
+        "fraction_zero": 0.481718363379286,
+        "n_negative": 0
+      },
+      "temperature": {
+        "n": 90528,
+        "mean": 23.443666224338834,
+        "std": 5.626229690236795,
+        "min": 5.8202799999999995,
+        "p01": 9.7498062,
+        "p05": 13.646846666666667,
+        "p25": 19.283983333333335,
+        "median": 24.339166666666667,
+        "p75": 27.444116666666666,
+        "p95": 31.82719333333333,
+        "p99": 34.27829933333333,
+        "max": 39.60966666666666,
+        "n_zero": 0,
+        "fraction_zero": 0.0,
+        "n_negative": 0
+      },
+      "relative_humidity": {
+        "n": 90528,
+        "mean": 79.24845810591403,
+        "std": 16.332062534021606,
+        "min": 0.3118106666666666,
+        "p01": 30.967458666666666,
+        "p05": 46.560343333333336,
+        "p25": 70.27713333333332,
+        "median": 82.63680000000001,
+        "p75": 91.68893333333334,
+        "p95": 99.81133000000001,
+        "p99": 99.898,
+        "max": 99.9738,
+        "n_zero": 0,
+        "fraction_zero": 0.0,
+        "n_negative": 0
+      },
+      "wind_speed": {
+        "n": 90528,
+        "mean": 2.6282187923870617,
+        "std": 1.6561856660739525,
+        "min": 0.346958,
+        "p01": 0.5547020666666667,
+        "p05": 0.7816589333333335,
+        "p25": 1.4921658333333334,
+        "median": 2.29418,
+        "p75": 3.310408333333333,
+        "p95": 5.635100666666665,
+        "p99": 8.919987199999996,
+        "max": 52.18320000000001,
+        "n_zero": 0,
+        "fraction_zero": 0.0,
+        "n_negative": 0
+      },
+      "clear_sky_index_daylight": {
+        "n": 45718,
+        "mean": 0.5105968096660859,
+        "std": 0.3745737699028513,
+        "min": 0.0,
+        "p01": 0.0,
+        "p05": 0.0,
+        "p25": 0.17616103181462137,
+        "median": 0.47085060602235446,
+        "p75": 0.8039625221651486,
+        "p95": 1.2,
+        "p99": 1.2,
+        "max": 1.2,
+        "n_zero": 4865,
+        "fraction_zero": 0.10641322892514983,
+        "n_negative": 0
+      },
+      "outlier_profiles": [
+        {
+          "variable": "pv_power_w",
+          "n": 90528,
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 0.0,
+          "q3": 12075.00025,
+          "max": 55294.668,
+          "iqr": 12075.00025,
+          "tukey_upper_fence": 30187.500625,
+          "tukey_lower_fence": -18112.500375,
+          "n_above_upper_fence": 9900,
+          "n_below_lower_fence": 0,
+          "skewness": 1.6411390812383053,
+          "kurtosis": 1.5777530221266516
+        },
+        {
+          "variable": "ghi",
+          "n": 90528,
+          "min": 0.0,
+          "q1": 0.0,
+          "median": 5.702576666666666,
+          "q3": 209.8263333333333,
+          "max": 1200.0,
+          "iqr": 209.8263333333333,
+          "tukey_upper_fence": 524.5658333333333,
+          "tukey_lower_fence": -314.73949999999996,
+          "n_above_upper_fence": 10433,
+          "n_below_lower_fence": 0,
+          "skewness": 1.8861032160934381,
+          "kurtosis": 2.987571512605044
+        },
+        {
+          "variable": "temperature",
+          "n": 90528,
+          "min": 5.8202799999999995,
+          "q1": 19.283983333333335,
+          "median": 24.339166666666667,
+          "q3": 27.444116666666666,
+          "max": 39.60966666666666,
+          "iqr": 8.16013333333333,
+          "tukey_upper_fence": 39.68431666666666,
+          "tukey_lower_fence": 7.043783333333339,
+          "n_above_upper_fence": 0,
+          "n_below_lower_fence": 154,
+          "skewness": -0.3842543778743115,
+          "kurtosis": -0.3746244929715874
+        },
+        {
+          "variable": "relative_humidity",
+          "n": 90528,
+          "min": 0.3118106666666666,
+          "q1": 70.27713333333332,
+          "median": 82.63680000000001,
+          "q3": 91.68893333333334,
+          "max": 99.9738,
+          "iqr": 21.411800000000014,
+          "tukey_upper_fence": 123.80663333333337,
+          "tukey_lower_fence": 38.159433333333304,
+          "n_above_upper_fence": 0,
+          "n_below_lower_fence": 2003,
+          "skewness": -1.0548033353688029,
+          "kurtosis": 1.078796942270143
+        },
+        {
+          "variable": "wind_speed",
+          "n": 90528,
+          "min": 0.346958,
+          "q1": 1.4921658333333334,
+          "median": 2.29418,
+          "q3": 3.310408333333333,
+          "max": 52.18320000000001,
+          "iqr": 1.8182424999999998,
+          "tukey_upper_fence": 6.037772083333333,
+          "tukey_lower_fence": -1.235197916666666,
+          "n_above_upper_fence": 3589,
+          "n_below_lower_fence": 0,
+          "skewness": 2.3378512888634897,
+          "kurtosis": 18.00764525317044
+        }
+      ],
+      "split_sizes": {
+        "train": 43776,
+        "val": 11712,
+        "test": 35040
+      }
+    }
+  },
+  "station": "LSK North",
+  "irradiance_cleaning": {
+    "n_input": 1567792,
+    "n_input_missing": 0,
+    "n_outside_physical_envelope": 10850,
+    "fraction_outside_physical_envelope": 0.006920560890730403,
+    "physical_envelope": [
+      0.0,
+      1200.0
+    ],
+    "n_local_spikes": 4355,
+    "n_clipped_by_final_envelope": 8302,
+    "n_raised_by_final_envelope": 0,
+    "n_night_offset_zeroed": 728671,
+    "spike_window_steps": 15,
+    "spike_ratio_threshold": 1.8,
+    "night_offset_threshold_wm2": 5.0,
+    "zero_irradiance_below_horizon": true,
+    "night_solar_elevation_max_deg": 0.0,
+    "original_max": 3608.6,
+    "cleaned_max": 1200.0,
+    "original_mean": 150.5697162343091,
+    "cleaned_mean": 144.23757943813337,
+    "night_bias_before_wm2": 9.88977084866358,
+    "night_bias_after_wm2": 0.0
+  },
+  "target_sanity": {
+    "n_negative_clipped": 0,
+    "fraction_negative": 0.0,
+    "observed_max_w": 55294.668,
+    "rated_w": 55000.0,
+    "max_to_rated_ratio": 1.0053576,
+    "policy": "negative values clipped to zero; no other target modification"
+  },
+  "validation": {
+    "n_errors": 0,
+    "n_warnings": 0,
+    "n_info": 25,
+    "issues": [
+      {
+        "severity": "info",
+        "stage": "schema/pv/LSK North",
+        "check": "missing_target",
+        "message": "0.0232% of target values are NaN",
+        "detail": {
+          "n_missing": 21,
+          "n_rows": 90624
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/pv/LSK North",
+        "check": "zero_fraction",
+        "message": "50.10% of readings are exactly zero (expected: night-time)",
+        "detail": {
+          "fraction": 0.5010372528248588
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "target/plausibility",
+        "check": "observed_max",
+        "message": "LSK North: observed maximum 55.29 kW",
+        "detail": {
+          "observed_max_w": 55294.668
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "target/plausibility",
+        "check": "capacity_check",
+        "message": "LSK North: observed maximum is 1.005 x rated capacity (55.00 kW)",
+        "detail": {
+          "ratio": 1.0053576
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/ghi/2021",
+        "check": "range",
+        "message": "ghi: min=0.000 median=6.504 max=1021.200",
+        "detail": {
+          "variable": "ghi",
+          "minimum": 0.0,
+          "median": 6.5038,
+          "maximum": 1021.2
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/ghi/2022",
+        "check": "range",
+        "message": "ghi: min=0.000 median=21.524 max=1092.600",
+        "detail": {
+          "variable": "ghi",
+          "minimum": 0.0,
+          "median": 21.524,
+          "maximum": 1092.6
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/ghi/2023",
+        "check": "range",
+        "message": "ghi: min=0.000 median=33.223 max=3608.600",
+        "detail": {
+          "variable": "ghi",
+          "minimum": 0.0,
+          "median": 33.223,
+          "maximum": 3608.6
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/temperature/2021",
+        "check": "range",
+        "message": "temperature: min=5.409 median=24.043 max=37.626",
+        "detail": {
+          "variable": "temperature",
+          "minimum": 5.4085,
+          "median": 24.043,
+          "maximum": 37.626
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/temperature/2022",
+        "check": "range",
+        "message": "temperature: min=5.542 median=23.314 max=38.585",
+        "detail": {
+          "variable": "temperature",
+          "minimum": 5.5424,
+          "median": 23.314,
+          "maximum": 38.585
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/temperature/2023",
+        "check": "range",
+        "message": "temperature: min=6.380 median=23.656 max=39.744",
+        "detail": {
+          "variable": "temperature",
+          "minimum": 6.3802,
+          "median": 23.656,
+          "maximum": 39.744
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/relative_humidity/2021",
+        "check": "range",
+        "message": "relative_humidity: min=0.000 median=80.038 max=99.887",
+        "detail": {
+          "variable": "relative_humidity",
+          "minimum": 0.00049,
+          "median": 80.038,
+          "maximum": 99.887
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/relative_humidity/2022",
+        "check": "range",
+        "message": "relative_humidity: min=18.009 median=83.803 max=99.985",
+        "detail": {
+          "variable": "relative_humidity",
+          "minimum": 18.009,
+          "median": 83.803,
+          "maximum": 99.985
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/relative_humidity/2023",
+        "check": "range",
+        "message": "relative_humidity: min=0.101 median=81.496 max=99.989",
+        "detail": {
+          "variable": "relative_humidity",
+          "minimum": 0.10069,
+          "median": 81.496,
+          "maximum": 99.989
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/sea_level_pressure/2021",
+        "check": "range",
+        "message": "sea_level_pressure: min=999.179 median=1005.889 max=1012.239",
+        "detail": {
+          "variable": "sea_level_pressure",
+          "minimum": 999.17913,
+          "median": 1005.88913,
+          "maximum": 1012.23913
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/sea_level_pressure/2022",
+        "check": "range",
+        "message": "sea_level_pressure: min=1001.029 median=1006.089 max=1011.719",
+        "detail": {
+          "variable": "sea_level_pressure",
+          "minimum": 1001.02913,
+          "median": 1006.08913,
+          "maximum": 1011.71913
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/sea_level_pressure/2023",
+        "check": "range",
+        "message": "sea_level_pressure: min=997.389 median=1006.099 max=1013.149",
+        "detail": {
+          "variable": "sea_level_pressure",
+          "minimum": 997.38913,
+          "median": 1006.09913,
+          "maximum": 1013.14913
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/visibility/2021",
+        "check": "range",
+        "message": "visibility: min=0.139 median=15.987 max=16.009",
+        "detail": {
+          "variable": "visibility",
+          "minimum": 0.13948,
+          "median": 15.987,
+          "maximum": 16.009
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/visibility/2022",
+        "check": "range",
+        "message": "visibility: min=0.123 median=15.984 max=16.013",
+        "detail": {
+          "variable": "visibility",
+          "minimum": 0.12338,
+          "median": 15.984,
+          "maximum": 16.013
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/visibility/2023",
+        "check": "range",
+        "message": "visibility: min=0.118 median=15.791 max=16.008",
+        "detail": {
+          "variable": "visibility",
+          "minimum": 0.11778,
+          "median": 15.791,
+          "maximum": 16.008
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/wind_speed/2021",
+        "check": "range",
+        "message": "wind_speed: min=0.322 median=2.428 max=23.176",
+        "detail": {
+          "variable": "wind_speed",
+          "minimum": 0.32165,
+          "median": 2.4275,
+          "maximum": 23.176
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/wind_speed/2022",
+        "check": "range",
+        "message": "wind_speed: min=0.273 median=2.476 max=21.689",
+        "detail": {
+          "variable": "wind_speed",
+          "minimum": 0.27305,
+          "median": 2.4762,
+          "maximum": 21.689
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/wind_speed/2023",
+        "check": "range",
+        "message": "wind_speed: min=0.269 median=2.025 max=91.917",
+        "detail": {
+          "variable": "wind_speed",
+          "minimum": 0.2686,
+          "median": 2.0254,
+          "maximum": 91.917
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/rainfall/2022",
+        "check": "range",
+        "message": "rainfall: min=0.000 median=0.000 max=3.302",
+        "detail": {
+          "variable": "rainfall",
+          "minimum": 0.0,
+          "median": 0.0,
+          "maximum": 3.302
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "schema/met/rainfall/2023",
+        "check": "range",
+        "message": "rainfall: min=0.000 median=0.000 max=2.794",
+        "detail": {
+          "variable": "rainfall",
+          "minimum": 0.0,
+          "median": 0.0,
+          "maximum": 2.794
+        }
+      },
+      {
+        "severity": "info",
+        "stage": "merge/alignment",
+        "check": "missing_timestamps",
+        "message": "merged PV + weather: 0 absent timestamps (0.0000% of the expected grid)",
+        "detail": {
+          "n_observed": 90624,
+          "n_expected": 90624,
+          "n_missing": 0,
+          "missing_fraction": 0.0,
+          "first_timestamp": "2021-06-01 00:00:00",
+          "last_timestamp": "2023-12-31 23:45:00"
+        }
+      }
+    ]
+  },
+  "target": {
+    "station": {
+      "station": "LSK North",
+      "brick_name": "LSK_North",
+      "location": "Lee_Shau_Kee_Business_Building",
+      "latitude": 22.33,
+      "longitude": 114.18,
+      "altitude_m": 142.0,
+      "rated_kw": 55.0,
+      "rated_w": 55000.0,
+      "connection_date": "2021-04-30T00:00:00",
+      "metadata_found": true
+    },
+    "rated_w": 55000.0,
+    "frequency": "15min",
+    "n_rows_total": 90528,
+    "n_rows_daylight": 45718,
+    "fraction_daylight": 0.5050150229763167,
+    "date_range": [
+      "2021-06-02 00:00:00",
+      "2023-12-31 23:45:00"
+    ],
+    "columns_present": [
+      "Time",
+      "pv_power_w",
+      "ghi",
+      "temperature",
+      "relative_humidity",
+      "wind_speed",
+      "solar_elevation",
+      "solar_azimuth",
+      "sin_solar_elevation",
+      "cos_solar_elevation",
+      "solar_zenith",
+      "daylight",
+      "is_daylight",
+      "ghi_clear",
+      "clear_sky_index_raw",
+      "clear_sky_index",
+      "hour",
+      "minute",
+      "dayofyear",
+      "year",
+      "month",
+      "day",
+      "dayofweek",
+      "is_weekend",
+      "hours_since_midnight",
+      "hour_sin",
+      "hour_cos",
+      "doy_sin",
+      "doy_cos",
+      "pv_power_w_lag_0",
+      "pv_power_w_lag_1",
+      "pv_power_w_lag_2",
+      "pv_power_w_lag_4",
+      "pv_power_w_lag_8",
+      "pv_power_w_lag_12",
+      "pv_power_w_lag_24",
+      "pv_power_w_lag_48",
+      "pv_power_w_lag_96",
+      "pv_rolling_mean_4",
+      "pv_rolling_std_4",
+      "pv_rolling_mean_12",
+      "pv_rolling_std_12",
+      "pv_rolling_mean_24",
+      "pv_rolling_std_24",
+      "ghi_rollmean_4",
+      "ghi_rollmean_24",
+      "temperature_rollmean_4",
+      "temperature_rollmean_24",
+      "ghi_delta_1",
+      "ghi_slope_1",
+      "ghi_delta_4",
+      "ghi_slope_4",
+      "season",
+      "sigma_cv",
+      "regime"
+    ],
+    "target_all": {
+      "n": 90528,
+      "mean": 8305.427161862268,
+      "std": 13399.292482809866,
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "p25": 0.0,
+      "median": 0.0,
+      "p75": 12075.00025,
+      "p95": 39911.817999999934,
+      "p99": 49840.89235999998,
+      "max": 55294.668,
+      "n_zero": 45375,
+      "fraction_zero": 0.5012261399787911,
+      "n_negative": 0
+    },
+    "target_daylight": {
+      "n": 45718,
+      "mean": 16444.763108091945,
+      "std": 14888.817762874243,
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 113.90000039999994,
+      "p25": 3394.3333,
+      "median": 11849.8335,
+      "p75": 27619.166,
+      "p95": 45106.682400000005,
+      "p99": 51944.53912000001,
+      "max": 55294.668,
+      "n_zero": 1026,
+      "fraction_zero": 0.022441926593464282,
+      "n_negative": 0
+    },
+    "target_train_daylight": {
+      "n": 22477,
+      "mean": 16825.310278114168,
+      "std": 15298.774951409063,
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 99.666664,
+      "p25": 3538.3333,
+      "median": 12068.667,
+      "p75": 28080.0,
+      "p95": 46950.60080000001,
+      "p99": 52835.97232000001,
+      "max": 55294.668,
+      "n_zero": 536,
+      "fraction_zero": 0.02384659874538417,
+      "n_negative": 0
+    },
+    "ghi": {
+      "n": 90528,
+      "mean": 154.02575809133901,
+      "std": 253.88376694609266,
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "p25": 0.0,
+      "median": 5.702576666666666,
+      "p75": 209.8263333333333,
+      "p95": 717.1071999999998,
+      "p99": 1077.931733333333,
+      "max": 1200.0,
+      "n_zero": 43609,
+      "fraction_zero": 0.481718363379286,
+      "n_negative": 0
+    },
+    "temperature": {
+      "n": 90528,
+      "mean": 23.443666224338834,
+      "std": 5.626229690236795,
+      "min": 5.8202799999999995,
+      "p01": 9.7498062,
+      "p05": 13.646846666666667,
+      "p25": 19.283983333333335,
+      "median": 24.339166666666667,
+      "p75": 27.444116666666666,
+      "p95": 31.82719333333333,
+      "p99": 34.27829933333333,
+      "max": 39.60966666666666,
+      "n_zero": 0,
+      "fraction_zero": 0.0,
+      "n_negative": 0
+    },
+    "relative_humidity": {
+      "n": 90528,
+      "mean": 79.24845810591403,
+      "std": 16.332062534021606,
+      "min": 0.3118106666666666,
+      "p01": 30.967458666666666,
+      "p05": 46.560343333333336,
+      "p25": 70.27713333333332,
+      "median": 82.63680000000001,
+      "p75": 91.68893333333334,
+      "p95": 99.81133000000001,
+      "p99": 99.898,
+      "max": 99.9738,
+      "n_zero": 0,
+      "fraction_zero": 0.0,
+      "n_negative": 0
+    },
+    "wind_speed": {
+      "n": 90528,
+      "mean": 2.6282187923870617,
+      "std": 1.6561856660739525,
+      "min": 0.346958,
+      "p01": 0.5547020666666667,
+      "p05": 0.7816589333333335,
+      "p25": 1.4921658333333334,
+      "median": 2.29418,
+      "p75": 3.310408333333333,
+      "p95": 5.635100666666665,
+      "p99": 8.919987199999996,
+      "max": 52.18320000000001,
+      "n_zero": 0,
+      "fraction_zero": 0.0,
+      "n_negative": 0
+    },
+    "clear_sky_index_daylight": {
+      "n": 45718,
+      "mean": 0.5105968096660859,
+      "std": 0.3745737699028513,
+      "min": 0.0,
+      "p01": 0.0,
+      "p05": 0.0,
+      "p25": 0.17616103181462137,
+      "median": 0.47085060602235446,
+      "p75": 0.8039625221651486,
+      "p95": 1.2,
+      "p99": 1.2,
+      "max": 1.2,
+      "n_zero": 4865,
+      "fraction_zero": 0.10641322892514983,
+      "n_negative": 0
+    },
+    "outlier_profiles": [
+      {
+        "variable": "pv_power_w",
+        "n": 90528,
+        "min": 0.0,
+        "q1": 0.0,
+        "median": 0.0,
+        "q3": 12075.00025,
+        "max": 55294.668,
+        "iqr": 12075.00025,
+        "tukey_upper_fence": 30187.500625,
+        "tukey_lower_fence": -18112.500375,
+        "n_above_upper_fence": 9900,
+        "n_below_lower_fence": 0,
+        "skewness": 1.6411390812383053,
+        "kurtosis": 1.5777530221266516
+      },
+      {
+        "variable": "ghi",
+        "n": 90528,
+        "min": 0.0,
+        "q1": 0.0,
+        "median": 5.702576666666666,
+        "q3": 209.8263333333333,
+        "max": 1200.0,
+        "iqr": 209.8263333333333,
+        "tukey_upper_fence": 524.5658333333333,
+        "tukey_lower_fence": -314.73949999999996,
+        "n_above_upper_fence": 10433,
+        "n_below_lower_fence": 0,
+        "skewness": 1.8861032160934381,
+        "kurtosis": 2.987571512605044
+      },
+      {
+        "variable": "temperature",
+        "n": 90528,
+        "min": 5.8202799999999995,
+        "q1": 19.283983333333335,
+        "median": 24.339166666666667,
+        "q3": 27.444116666666666,
+        "max": 39.60966666666666,
+        "iqr": 8.16013333333333,
+        "tukey_upper_fence": 39.68431666666666,
+        "tukey_lower_fence": 7.043783333333339,
+        "n_above_upper_fence": 0,
+        "n_below_lower_fence": 154,
+        "skewness": -0.3842543778743115,
+        "kurtosis": -0.3746244929715874
+      },
+      {
+        "variable": "relative_humidity",
+        "n": 90528,
+        "min": 0.3118106666666666,
+        "q1": 70.27713333333332,
+        "median": 82.63680000000001,
+        "q3": 91.68893333333334,
+        "max": 99.9738,
+        "iqr": 21.411800000000014,
+        "tukey_upper_fence": 123.80663333333337,
+        "tukey_lower_fence": 38.159433333333304,
+        "n_above_upper_fence": 0,
+        "n_below_lower_fence": 2003,
+        "skewness": -1.0548033353688029,
+        "kurtosis": 1.078796942270143
+      },
+      {
+        "variable": "wind_speed",
+        "n": 90528,
+        "min": 0.346958,
+        "q1": 1.4921658333333334,
+        "median": 2.29418,
+        "q3": 3.310408333333333,
+        "max": 52.18320000000001,
+        "iqr": 1.8182424999999998,
+        "tukey_upper_fence": 6.037772083333333,
+        "tukey_lower_fence": -1.235197916666666,
+        "n_above_upper_fence": 3589,
+        "n_below_lower_fence": 0,
+        "skewness": 2.3378512888634897,
+        "kurtosis": 18.00764525317044
+      }
+    ],
+    "split_sizes": {
+      "train": 43776,
+      "val": 11712,
+      "test": 35040
+    }
+  }
+}

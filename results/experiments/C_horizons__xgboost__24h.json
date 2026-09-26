@@ -1,60 +1,60 @@
 {
   "spec": {
-    "experiment_id": "C_horizons__smart_persistence__6h",
-    "model": "smart_persistence",
-    "horizon": "6h",
-    "horizon_steps": 24,
+    "experiment_id": "C_horizons__xgboost__24h",
+    "model": "xgboost",
+    "horizon": "24h",
+    "horizon_steps": 96,
     "features": "full",
     "seed": 42,
     "ablation": null,
     "concurrent_weather": false,
-    "label": "C_horizons / smart_persistence / 6h / full",
+    "label": "C_horizons / xgboost / 24h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead."
   },
   "metrics_daylight": {
-    "mae": 12388.147636092672,
-    "rmse": 18040.85961099439,
-    "mse": 325472615.50360864,
-    "smape": 136.51214116857636,
-    "r2": -0.5732184165437864,
-    "bias": -8407.168436000879,
-    "peak_error": 55003.0,
-    "n": 17661.0,
-    "nrmse_capacity": 0.3280156292908071,
-    "nrmse_mean": 1.1581848926898894,
-    "skill_vs_persistence_rmse": 0.19397681981708847,
-    "skill_vs_persistence_mae": 0.28317839624825547,
-    "persistence_rmse": 22382.556798056805,
-    "persistence_mae": 17282.05117040953,
-    "skill_vs_smart_persistence_rmse": 0.0025847569205214027,
-    "skill_vs_smart_persistence_mae": -0.0016553531517935482,
-    "smart_persistence_rmse": 18087.61169048708,
-    "smart_persistence_mae": 12367.67476668728
+    "mae": 7028.167366637195,
+    "rmse": 9994.412461795935,
+    "mse": 99888280.45650189,
+    "smape": 62.81375618885146,
+    "r2": 0.5179184362065943,
+    "bias": 572.7504719316689,
+    "peak_error": 42046.03106966957,
+    "n": 17593.0,
+    "nrmse_capacity": 0.18171659021447154,
+    "nrmse_mean": 0.6418591536520529,
+    "skill_vs_persistence_rmse": 0.12081181935119767,
+    "skill_vs_persistence_mae": 0.035526665934935475,
+    "persistence_rmse": 11367.773909813593,
+    "persistence_mae": 7287.052029748566,
+    "skill_vs_smart_persistence_rmse": 0.1301015837029288,
+    "skill_vs_smart_persistence_mae": 0.0684084668365933,
+    "smart_persistence_rmse": 11489.171924624856,
+    "smart_persistence_mae": 7544.258525806516
   },
   "metrics_all_steps": {
-    "mae": 6259.094094796877,
-    "rmse": 12821.072160128188,
-    "mse": 164379891.33521405,
-    "smape": 72.37670294198367,
-    "r2": 0.004548190469384372,
-    "bias": -4244.583137871349,
-    "peak_error": 55003.0,
-    "n": 34969.0,
-    "nrmse_capacity": 0.2331104029114216,
-    "nrmse_mean": 1.629610153876092,
-    "skill_vs_persistence_rmse": 0.31935934454211445,
-    "skill_vs_persistence_mae": 0.4950701519524128,
-    "persistence_rmse": 18836.77099996782,
-    "persistence_mae": 12395.967715117104,
-    "skill_vs_smart_persistence_rmse": 0.0026130646883261166,
-    "skill_vs_smart_persistence_mae": -0.00043104960466178177,
-    "smart_persistence_rmse": 12854.662224066255,
-    "smart_persistence_mae": 6256.397277223922
+    "mae": 3659.1396560258927,
+    "rmse": 7111.721558219609,
+    "mse": 50576583.52164554,
+    "smape": 130.3326947496396,
+    "r2": 0.693984488608868,
+    "bias": 325.8556395113571,
+    "peak_error": 42046.03106966957,
+    "n": 34825.0,
+    "nrmse_capacity": 0.1293040283312656,
+    "nrmse_mean": 0.9040228285670894,
+    "skill_vs_persistence_rmse": 0.1198135475470985,
+    "skill_vs_persistence_mae": 0.006150650959223403,
+    "persistence_rmse": 8079.789842709667,
+    "persistence_mae": 3681.7850306563537,
+    "skill_vs_smart_persistence_rmse": 0.1291142117855878,
+    "skill_vs_smart_persistence_mae": 0.040105508730501116,
+    "smart_persistence_rmse": 8166.078324461878,
+    "smart_persistence_mae": 3812.022768446701
   },
   "metadata": {
-    "model_family": "baseline",
-    "model_kind": "rule",
-    "model_description": "Persistence rescaled by the change in clear-sky reference between the forecast origin and the target.",
+    "model_family": "classical_ml",
+    "model_kind": "sklearn",
+    "model_description": "Second-order boosted trees with explicit regularisation.",
     "feature_spec": "full",
     "n_features": 33,
     "feature_columns": [
@@ -93,54 +93,68 @@
       "ghi_slope_4"
     ],
     "lookback_steps": 24,
-    "horizon": "6h",
-    "horizon_steps": 24,
+    "horizon": "24h",
+    "horizon_steps": 96,
     "seed": 42,
     "split_sizes": {
-      "train": 43705,
-      "val": 11641,
-      "test": 34969
+      "train": 43561,
+      "val": 11497,
+      "test": 34825
     },
     "split_date_ranges": {
       "train": [
         "2021-06-02 05:45:00",
-        "2022-08-31 11:45:00"
+        "2022-08-29 23:45:00"
       ],
       "val": [
         "2022-09-01 05:45:00",
-        "2022-12-31 11:45:00"
+        "2022-12-29 23:45:00"
       ],
       "test": [
         "2023-01-01 05:45:00",
-        "2023-12-31 11:45:00"
+        "2023-12-29 23:45:00"
       ]
     },
     "target_split_dates": {
       "train": [
-        "2021-06-02 11:45:00",
-        "2022-08-31 17:45:00"
+        "2021-06-03 05:45:00",
+        "2022-08-30 23:45:00"
       ],
       "val": [
-        "2022-09-01 11:45:00",
-        "2022-12-31 17:45:00"
+        "2022-09-02 05:45:00",
+        "2022-12-30 23:45:00"
       ],
       "test": [
-        "2023-01-01 11:45:00",
-        "2023-12-31 17:45:00"
+        "2023-01-02 05:45:00",
+        "2023-12-30 23:45:00"
       ]
     },
     "concurrent_weather": false,
     "information_set": "weather observed at or before the forecast origin (strict historical setting)",
     "training": {
-      "requires_training": false
+      "requires_training": true,
+      "train_seconds": 133.5537069000129,
+      "tuning": {
+        "tuned": false,
+        "reason": "no grid configured"
+      },
+      "describe": {
+        "family": "classical_ml",
+        "name": "xgboost",
+        "estimator": "XGBRegressor",
+        "requires_training": true,
+        "substitution_note": null,
+        "best_params": null,
+        "random_state": 42
+      }
     },
     "cost": {
-      "train_seconds": 0.0,
-      "inference_ms_per_window": 0.0,
-      "n_parameters": 0
+      "train_seconds": 133.5537069000129,
+      "inference_ms_per_window": 0.003588396267115011,
+      "n_parameters": 400
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T19:32:41+00:00",
+      "timestamp_utc": "2026-09-26T19:45:28+00:00",
       "seed": 42,
       "git_revision": "79bc6cf",
       "platform": {
@@ -182,26 +196,26 @@
       "primary_station": "LSK North",
       "rated_w": 55000.0
     },
-    "experiment_label": "C_horizons / smart_persistence / 6h / full",
+    "experiment_label": "C_horizons / xgboost / 24h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead.",
     "ablation": null,
     "regime_distribution_test": {
       "scope": "daylight",
-      "n": 17661,
+      "n": 17593,
       "counts": {
-        "Cloudy": 6006,
-        "Clear": 5824,
-        "High-variability": 3432,
-        "Partly cloudy": 2399
+        "Cloudy": 5996,
+        "Clear": 5783,
+        "High-variability": 3430,
+        "Partly cloudy": 2384
       },
       "shares": {
-        "Cloudy": 0.340071,
-        "Clear": 0.329766,
-        "High-variability": 0.194326,
-        "Partly cloudy": 0.135836
+        "Cloudy": 0.340817,
+        "Clear": 0.32871,
+        "High-variability": 0.194964,
+        "Partly cloudy": 0.135508
       }
     },
-    "wall_seconds_including_setup": 2.7731707000057213
+    "wall_seconds_including_setup": 135.9621895000164
   },
   "training_history": [],
   "feature_importance": null

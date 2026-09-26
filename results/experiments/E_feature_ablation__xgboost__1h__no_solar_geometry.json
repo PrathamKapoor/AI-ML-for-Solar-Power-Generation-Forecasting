@@ -1,53 +1,53 @@
 {
   "spec": {
-    "experiment_id": "E_feature_ablation__xgboost__1h",
+    "experiment_id": "E_feature_ablation__xgboost__1h__no_solar_geometry",
     "model": "xgboost",
     "horizon": "1h",
     "horizon_steps": 4,
-    "features": "full",
+    "features": "no_solar_geometry",
     "seed": 42,
-    "ablation": null,
+    "ablation": "One tree model and one recurrent model, with each input group removed in turn.",
     "concurrent_weather": false,
-    "label": "E_feature_ablation / xgboost / 1h / full",
+    "label": "E_feature_ablation / xgboost / 1h / no_solar_geometry",
     "notes": "One tree model and one recurrent model, with each input group removed in turn."
   },
   "metrics_daylight": {
-    "mae": 4505.286986616272,
-    "rmse": 6835.318540512612,
-    "mse": 46721579.55027547,
-    "smape": 48.57495172422751,
-    "r2": 0.7740155546022816,
-    "bias": 570.8281859178672,
-    "peak_error": 39732.183581967896,
+    "mae": 4479.38201297228,
+    "rmse": 6788.443324263327,
+    "mse": 46082962.76673532,
+    "smape": 49.09772573229802,
+    "r2": 0.777104436892631,
+    "bias": 674.7473008096632,
+    "peak_error": 41783.83335649927,
     "n": 17679.0,
-    "nrmse_capacity": 0.12427851891841113,
-    "nrmse_mean": 0.4388618179837461,
-    "skill_vs_persistence_rmse": 0.25229247589518855,
-    "skill_vs_persistence_mae": 0.31901916577962186,
+    "nrmse_capacity": 0.12342624225933321,
+    "nrmse_mean": 0.4358521934140037,
+    "skill_vs_persistence_rmse": 0.2574201011369234,
+    "skill_vs_persistence_mae": 0.32293474110588805,
     "persistence_rmse": 9141.700892599894,
     "persistence_mae": 6615.879273275225,
-    "skill_vs_smart_persistence_rmse": 0.14051361977995036,
-    "skill_vs_smart_persistence_mae": 0.09626179421170067,
+    "skill_vs_smart_persistence_rmse": 0.14640780155031585,
+    "skill_vs_smart_persistence_mae": 0.10145820333537281,
     "smart_persistence_rmse": 7952.794480306486,
     "smart_persistence_mae": 4985.168224338227
   },
   "metrics_all_steps": {
-    "mae": 2318.2534167266895,
-    "rmse": 4859.804831266882,
-    "mse": 23617702.998004925,
-    "smape": 123.15317721549076,
-    "r2": 0.8568933557174888,
-    "bias": 308.043387356521,
-    "peak_error": 39732.183581967896,
+    "mae": 2315.293244351778,
+    "rmse": 4828.177835405796,
+    "mse": 23311301.2103038,
+    "smape": 123.47374276025782,
+    "r2": 0.8587499347270467,
+    "bias": 368.09009214046694,
+    "peak_error": 41783.83335649927,
     "n": 35009.0,
-    "nrmse_capacity": 0.08836008784121603,
-    "nrmse_mean": 0.6178465976571587,
-    "skill_vs_persistence_rmse": 0.2525119116566299,
-    "skill_vs_persistence_mae": 0.31263215309630277,
+    "nrmse_capacity": 0.08778505155283266,
+    "nrmse_mean": 0.6138257300574623,
+    "skill_vs_persistence_rmse": 0.2573764696989914,
+    "skill_vs_persistence_mae": 0.31350985149507393,
     "persistence_rmse": 6501.514749268427,
     "persistence_mae": 3372.6532702532495,
-    "skill_vs_smart_persistence_rmse": 0.14021325169344045,
-    "skill_vs_smart_persistence_mae": 0.08281594398921566,
+    "skill_vs_smart_persistence_rmse": 0.14580863522719012,
+    "skill_vs_smart_persistence_mae": 0.08398709416879613,
     "smart_persistence_rmse": 5652.3374439519785,
     "smart_persistence_mae": 2527.577100292977
   },
@@ -55,15 +55,13 @@
     "model_family": "classical_ml",
     "model_kind": "sklearn",
     "model_description": "Second-order boosted trees with explicit regularisation.",
-    "feature_spec": "full",
-    "n_features": 33,
+    "feature_spec": "no_solar_geometry",
+    "n_features": 31,
     "feature_columns": [
       "ghi",
       "temperature",
       "relative_humidity",
       "wind_speed",
-      "solar_elevation",
-      "sin_solar_elevation",
       "hour_sin",
       "hour_cos",
       "doy_sin",
@@ -133,7 +131,7 @@
     "information_set": "weather observed at or before the forecast origin (strict historical setting)",
     "training": {
       "requires_training": true,
-      "train_seconds": 619.1201523999916,
+      "train_seconds": 101.76008160001948,
       "tuning": {
         "tuned": false,
         "reason": "no grid configured"
@@ -149,12 +147,12 @@
       }
     },
     "cost": {
-      "train_seconds": 619.1201523999916,
-      "inference_ms_per_window": 0.002869070809682582,
+      "train_seconds": 101.76008160001948,
+      "inference_ms_per_window": 0.0031250821218320617,
       "n_parameters": 400
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T19:42:44+00:00",
+      "timestamp_utc": "2026-09-26T19:46:03+00:00",
       "seed": 42,
       "git_revision": "79bc6cf",
       "platform": {
@@ -196,9 +194,9 @@
       "primary_station": "LSK North",
       "rated_w": 55000.0
     },
-    "experiment_label": "E_feature_ablation / xgboost / 1h / full",
+    "experiment_label": "E_feature_ablation / xgboost / 1h / no_solar_geometry",
     "notes": "One tree model and one recurrent model, with each input group removed in turn.",
-    "ablation": null,
+    "ablation": "One tree model and one recurrent model, with each input group removed in turn.",
     "regime_distribution_test": {
       "scope": "daylight",
       "n": 17679,
@@ -215,7 +213,7 @@
         "Partly cloudy": 0.136376
       }
     },
-    "wall_seconds_including_setup": 625.513497100008
+    "wall_seconds_including_setup": 104.70823369998834
   },
   "training_history": [],
   "feature_importance": null

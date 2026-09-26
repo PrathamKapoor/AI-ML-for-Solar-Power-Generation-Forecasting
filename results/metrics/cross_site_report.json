@@ -1,0 +1,163 @@
+{
+  "panel": {
+    "LSK North": {
+      "rated_w": 55000.0,
+      "first": "2021-06-02 00:00:00",
+      "last": "2023-12-31 23:45:00",
+      "n_rows": 90528,
+      "train": 43776,
+      "val": 11712,
+      "test": 35040
+    },
+    "SQ1": {
+      "rated_w": 27600.0,
+      "first": "2021-06-02 00:00:00",
+      "last": "2023-12-31 23:45:00",
+      "n_rows": 90528,
+      "train": 43776,
+      "val": 11712,
+      "test": 35040
+    }
+  },
+  "train_site": "LSK North",
+  "models": [
+    "xgboost"
+  ],
+  "horizons": [
+    "1h"
+  ],
+  "seeds": [
+    42
+  ],
+  "protocols": {
+    "within_site": [
+      {
+        "protocol": "within_site",
+        "mae": 4505.286986616272,
+        "rmse": 6835.318540512612,
+        "mse": 46721579.55027547,
+        "smape": 48.57495172422751,
+        "r2": 0.7740155546022816,
+        "bias": 570.8281859178672,
+        "peak_error": 39732.183581967896,
+        "n": 17679.0,
+        "nrmse_capacity": 0.12427851891841113,
+        "nrmse_mean": 0.4388618179837461,
+        "skill_vs_persistence_rmse": 0.25229247589518855,
+        "train_sites": "LSK North",
+        "test_site": "LSK North",
+        "model": "xgboost",
+        "horizon": "1h",
+        "seed": 42,
+        "rated_w": 55000.0,
+        "train_seconds": 0.0,
+        "n_parameters": 0,
+        "n_features": 33
+      },
+      {
+        "protocol": "within_site",
+        "mae": 2236.373731311218,
+        "rmse": 3414.1070588003854,
+        "mse": 11656127.008950617,
+        "smape": 53.89639284077773,
+        "r2": 0.7715878447202289,
+        "bias": 540.3546341654499,
+        "peak_error": 22684.690656114035,
+        "n": 17679.0,
+        "nrmse_capacity": 0.123699531115956,
+        "nrmse_mean": 0.45699695410255653,
+        "skill_vs_persistence_rmse": 0.24262416923391394,
+        "train_sites": "SQ1",
+        "test_site": "SQ1",
+        "model": "xgboost",
+        "horizon": "1h",
+        "seed": 42,
+        "rated_w": 27600.0,
+        "train_seconds": 0.0,
+        "n_parameters": 0,
+        "n_features": 33
+      }
+    ],
+    "cross_site": [
+      {
+        "protocol": "cross_site",
+        "mae": 4633.487895060969,
+        "rmse": 6395.295885660985,
+        "mse": 40899809.465152316,
+        "smape": 73.29091077947032,
+        "r2": 0.1985319288908065,
+        "bias": 4145.9297424214055,
+        "peak_error": 30790.525013430102,
+        "n": 17679.0,
+        "nrmse_capacity": 0.23171361904568785,
+        "nrmse_mean": 0.8560454285691341,
+        "skill_vs_persistence_rmse": -0.4187143083027194,
+        "train_sites": "LSK North",
+        "test_site": "SQ1",
+        "model": "xgboost",
+        "horizon": "1h",
+        "seed": 42,
+        "rated_w": 27600.0,
+        "train_seconds": 0.0,
+        "n_parameters": 0,
+        "n_features": 33
+      }
+    ],
+    "leave_one_site_out": [
+      {
+        "protocol": "leave_one_site_out",
+        "mae": 6934.014269477018,
+        "rmse": 10414.867716847724,
+        "mse": 108469469.55943693,
+        "smape": 59.69547058542759,
+        "r2": 0.4753513653236595,
+        "bias": -5159.46958987702,
+        "peak_error": 43252.27476379432,
+        "n": 17679.0,
+        "nrmse_capacity": 0.18936123121541318,
+        "nrmse_mean": 0.6686868729212498,
+        "skill_vs_persistence_rmse": -0.1392702341944314,
+        "train_sites": "SQ1",
+        "test_site": "LSK North",
+        "model": "xgboost",
+        "horizon": "1h",
+        "seed": 42,
+        "rated_w": 55000.0,
+        "train_seconds": 0.0,
+        "n_parameters": 0,
+        "n_features": 33
+      },
+      {
+        "protocol": "leave_one_site_out",
+        "mae": 4633.487895060969,
+        "rmse": 6395.295885660985,
+        "mse": 40899809.465152316,
+        "smape": 73.29091077947032,
+        "r2": 0.1985319288908065,
+        "bias": 4145.9297424214055,
+        "peak_error": 30790.525013430102,
+        "n": 17679.0,
+        "nrmse_capacity": 0.23171361904568785,
+        "nrmse_mean": 0.8560454285691341,
+        "skill_vs_persistence_rmse": -0.4187143083027194,
+        "train_sites": "LSK North",
+        "test_site": "SQ1",
+        "model": "xgboost",
+        "horizon": "1h",
+        "seed": 42,
+        "rated_w": 27600.0,
+        "train_seconds": 0.0,
+        "n_parameters": 0,
+        "n_features": 33
+      }
+    ]
+  },
+  "leakage_controls": [
+    "feature scalers fitted on training-site training rows only",
+    "target scaler fitted on training sites only; inversion returns the held-out site's true watts because standardisation is affine",
+    "early stopping monitored on training-site validation rows only",
+    "held-out site scored once, after fitting was complete",
+    "nRMSE normalised by each site's own rated capacity from the dataset metadata",
+    "site selection fixed in configuration from capacity spread and coverage, never from model performance"
+  ]
+}

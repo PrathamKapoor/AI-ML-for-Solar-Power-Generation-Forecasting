@@ -1,60 +1,60 @@
 {
   "spec": {
-    "experiment_id": "C_horizons__smart_persistence__24h",
-    "model": "smart_persistence",
+    "experiment_id": "C_horizons__random_forest__24h",
+    "model": "random_forest",
     "horizon": "24h",
     "horizon_steps": 96,
     "features": "full",
     "seed": 42,
     "ablation": null,
     "concurrent_weather": false,
-    "label": "C_horizons / smart_persistence / 24h / full",
+    "label": "C_horizons / random_forest / 24h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead."
   },
   "metrics_daylight": {
-    "mae": 7284.310457241181,
-    "rmse": 11366.237713522916,
-    "mse": 129191359.76031066,
-    "smape": 64.19947378232139,
-    "r2": 0.376495696419879,
-    "bias": -9.701469057924331,
-    "peak_error": 51441.3458722113,
+    "mae": 7020.276452780363,
+    "rmse": 9818.311891648293,
+    "mse": 96399248.40168229,
+    "smape": 59.68655874268806,
+    "r2": 0.5347572287198483,
+    "bias": 899.8810489884361,
+    "peak_error": 39917.75301644508,
     "n": 17593.0,
-    "nrmse_capacity": 0.20665886751859847,
-    "nrmse_mean": 0.7299602399738166,
-    "skill_vs_persistence_rmse": 0.00013513606998738492,
-    "skill_vs_persistence_mae": 0.0003762251862883259,
+    "nrmse_capacity": 0.1785147616663326,
+    "nrmse_mean": 0.630549658136966,
+    "skill_vs_persistence_rmse": 0.1363030291117664,
+    "skill_vs_persistence_mae": 0.03660953371529696,
     "persistence_rmse": 11367.773909813593,
     "persistence_mae": 7287.052029748566,
-    "skill_vs_smart_persistence_rmse": 0.010700006223986702,
-    "skill_vs_smart_persistence_mae": 0.034456410484361766,
+    "skill_vs_smart_persistence_rmse": 0.1454291087241364,
+    "skill_vs_smart_persistence_mae": 0.06945441639278094,
     "smart_persistence_rmse": 11489.171924624856,
     "smart_persistence_mae": 7544.258525806516
   },
   "metrics_all_steps": {
-    "mae": 3680.4000346729385,
-    "rmse": 8078.6979729139175,
-    "mse": 65265360.937563434,
-    "smape": 33.27809204659239,
-    "r2": 0.6051094911365915,
-    "bias": -4.867689259901272,
-    "peak_error": 51441.3458722113,
+    "mae": 3547.1529384096757,
+    "rmse": 6978.490390958746,
+    "mse": 48699328.13670355,
+    "smape": 128.52469384492707,
+    "r2": 0.7053428925704348,
+    "bias": 454.81166922444936,
+    "peak_error": 39917.75301644508,
     "n": 34825.0,
-    "nrmse_capacity": 0.14688541768934396,
-    "nrmse_mean": 1.026942257627028,
-    "skill_vs_persistence_rmse": 0.00013513591529046298,
-    "skill_vs_persistence_mae": 0.0003761751356700094,
+    "nrmse_capacity": 0.1268816434719772,
+    "nrmse_mean": 0.8870868425762918,
+    "skill_vs_persistence_rmse": 0.1363029822792502,
+    "skill_vs_persistence_mae": 0.036567070354641795,
     "persistence_rmse": 8079.789842709667,
     "persistence_mae": 3681.7850306563537,
-    "skill_vs_smart_persistence_rmse": 0.01070040576101361,
-    "skill_vs_smart_persistence_mae": 0.03452831784302146,
+    "skill_vs_smart_persistence_rmse": 0.14542940764426127,
+    "skill_vs_smart_persistence_mae": 0.06948275131760362,
     "smart_persistence_rmse": 8166.078324461878,
     "smart_persistence_mae": 3812.022768446701
   },
   "metadata": {
-    "model_family": "baseline",
-    "model_kind": "rule",
-    "model_description": "Persistence rescaled by the change in clear-sky reference between the forecast origin and the target.",
+    "model_family": "classical_ml",
+    "model_kind": "sklearn",
+    "model_description": "Bagged decision trees on the flattened lookback.",
     "feature_spec": "full",
     "n_features": 33,
     "feature_columns": [
@@ -132,15 +132,29 @@
     "concurrent_weather": false,
     "information_set": "weather observed at or before the forecast origin (strict historical setting)",
     "training": {
-      "requires_training": false
+      "requires_training": true,
+      "train_seconds": 536.8825369999977,
+      "tuning": {
+        "tuned": false,
+        "reason": "no grid configured"
+      },
+      "describe": {
+        "family": "classical_ml",
+        "name": "random_forest",
+        "estimator": "RandomForestRegressor",
+        "requires_training": true,
+        "substitution_note": null,
+        "best_params": null,
+        "random_state": 42
+      }
     },
     "cost": {
-      "train_seconds": 0.0,
-      "inference_ms_per_window": 0.0,
-      "n_parameters": 0
+      "train_seconds": 536.8825369999977,
+      "inference_ms_per_window": 0.1065731141423741,
+      "n_parameters": 200
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T19:32:42+00:00",
+      "timestamp_utc": "2026-09-26T19:42:01+00:00",
       "seed": 42,
       "git_revision": "79bc6cf",
       "platform": {
@@ -182,7 +196,7 @@
       "primary_station": "LSK North",
       "rated_w": 55000.0
     },
-    "experiment_label": "C_horizons / smart_persistence / 24h / full",
+    "experiment_label": "C_horizons / random_forest / 24h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead.",
     "ablation": null,
     "regime_distribution_test": {
@@ -201,7 +215,7 @@
         "Partly cloudy": 0.135508
       }
     },
-    "wall_seconds_including_setup": 2.8647381000046153
+    "wall_seconds_including_setup": 550.6507003000006
   },
   "training_history": [],
   "feature_importance": null

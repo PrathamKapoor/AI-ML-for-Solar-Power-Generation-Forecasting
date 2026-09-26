@@ -140,9 +140,9 @@
       "n_parameters": 0
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T16:19:50+00:00",
+      "timestamp_utc": "2026-09-26T19:32:25+00:00",
       "seed": 42,
-      "git_revision": "d469139",
+      "git_revision": "79bc6cf",
       "platform": {
         "python": "3.13.14",
         "implementation": "CPython",
@@ -201,6 +201,8 @@
         "Partly cloudy": 0.135836
       }
     },
-    "wall_seconds_including_setup": 9.868999199999962
-  }
+    "wall_seconds_including_setup": 15.900428599998122
+  },
+  "training_history": [],
+  "feature_importance": null
 }

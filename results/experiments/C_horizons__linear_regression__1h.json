@@ -1,60 +1,60 @@
 {
   "spec": {
-    "experiment_id": "C_horizons__smart_persistence__6h",
-    "model": "smart_persistence",
-    "horizon": "6h",
-    "horizon_steps": 24,
+    "experiment_id": "C_horizons__linear_regression__1h",
+    "model": "linear_regression",
+    "horizon": "1h",
+    "horizon_steps": 4,
     "features": "full",
     "seed": 42,
     "ablation": null,
     "concurrent_weather": false,
-    "label": "C_horizons / smart_persistence / 6h / full",
+    "label": "C_horizons / linear_regression / 1h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead."
   },
   "metrics_daylight": {
-    "mae": 12388.147636092672,
-    "rmse": 18040.85961099439,
-    "mse": 325472615.50360864,
-    "smape": 136.51214116857636,
-    "r2": -0.5732184165437864,
-    "bias": -8407.168436000879,
-    "peak_error": 55003.0,
-    "n": 17661.0,
-    "nrmse_capacity": 0.3280156292908071,
-    "nrmse_mean": 1.1581848926898894,
-    "skill_vs_persistence_rmse": 0.19397681981708847,
-    "skill_vs_persistence_mae": 0.28317839624825547,
-    "persistence_rmse": 22382.556798056805,
-    "persistence_mae": 17282.05117040953,
-    "skill_vs_smart_persistence_rmse": 0.0025847569205214027,
-    "skill_vs_smart_persistence_mae": -0.0016553531517935482,
-    "smart_persistence_rmse": 18087.61169048708,
-    "smart_persistence_mae": 12367.67476668728
+    "mae": 5174.369380497698,
+    "rmse": 7456.88030636432,
+    "mse": 55605063.90344404,
+    "smape": 57.61696776985329,
+    "r2": 0.7310476304851212,
+    "bias": 2165.562179722847,
+    "peak_error": 49273.22239753775,
+    "n": 17679.0,
+    "nrmse_capacity": 0.13557964193389674,
+    "nrmse_mean": 0.4787692085368148,
+    "skill_vs_persistence_rmse": 0.18430055916611954,
+    "skill_vs_persistence_mae": 0.21788636600436329,
+    "persistence_rmse": 9141.700892599894,
+    "persistence_mae": 6615.879273275225,
+    "skill_vs_smart_persistence_rmse": 0.062357222378900734,
+    "skill_vs_smart_persistence_mae": -0.03795281275279061,
+    "smart_persistence_rmse": 7952.794480306486,
+    "smart_persistence_mae": 4985.168224338227
   },
   "metrics_all_steps": {
-    "mae": 6259.094094796877,
-    "rmse": 12821.072160128188,
-    "mse": 164379891.33521405,
-    "smape": 72.37670294198367,
-    "r2": 0.004548190469384372,
-    "bias": -4244.583137871349,
-    "peak_error": 55003.0,
-    "n": 34969.0,
-    "nrmse_capacity": 0.2331104029114216,
-    "nrmse_mean": 1.629610153876092,
-    "skill_vs_persistence_rmse": 0.31935934454211445,
-    "skill_vs_persistence_mae": 0.4950701519524128,
-    "persistence_rmse": 18836.77099996782,
-    "persistence_mae": 12395.967715117104,
-    "skill_vs_smart_persistence_rmse": 0.0026130646883261166,
-    "skill_vs_smart_persistence_mae": -0.00043104960466178177,
-    "smart_persistence_rmse": 12854.662224066255,
-    "smart_persistence_mae": 6256.397277223922
+    "mae": 3550.2798047510837,
+    "rmse": 5545.235707018521,
+    "mse": 30749639.046393193,
+    "smape": 128.01810299182176,
+    "r2": 0.8136788468717921,
+    "bias": 728.9789226164253,
+    "peak_error": 49273.22239753775,
+    "n": 35009.0,
+    "nrmse_capacity": 0.10082246740033673,
+    "nrmse_mean": 0.7049881906255987,
+    "skill_vs_persistence_rmse": 0.1470855760740234,
+    "skill_vs_persistence_mae": -0.05266670489507397,
+    "persistence_rmse": 6501.514749268427,
+    "persistence_mae": 3372.6532702532495,
+    "skill_vs_smart_persistence_rmse": 0.01894822062473589,
+    "skill_vs_smart_persistence_mae": -0.4046178074407951,
+    "smart_persistence_rmse": 5652.3374439519785,
+    "smart_persistence_mae": 2527.577100292977
   },
   "metadata": {
-    "model_family": "baseline",
-    "model_kind": "rule",
-    "model_description": "Persistence rescaled by the change in clear-sky reference between the forecast origin and the target.",
+    "model_family": "classical_ml",
+    "model_kind": "sklearn",
+    "model_description": "Ordinary least squares on the flattened lookback.",
     "feature_spec": "full",
     "n_features": 33,
     "feature_columns": [
@@ -93,54 +93,68 @@
       "ghi_slope_4"
     ],
     "lookback_steps": 24,
-    "horizon": "6h",
-    "horizon_steps": 24,
+    "horizon": "1h",
+    "horizon_steps": 4,
     "seed": 42,
     "split_sizes": {
-      "train": 43705,
-      "val": 11641,
-      "test": 34969
+      "train": 43745,
+      "val": 11681,
+      "test": 35009
     },
     "split_date_ranges": {
       "train": [
         "2021-06-02 05:45:00",
-        "2022-08-31 11:45:00"
+        "2022-08-31 21:45:00"
       ],
       "val": [
         "2022-09-01 05:45:00",
-        "2022-12-31 11:45:00"
+        "2022-12-31 21:45:00"
       ],
       "test": [
         "2023-01-01 05:45:00",
-        "2023-12-31 11:45:00"
+        "2023-12-31 21:45:00"
       ]
     },
     "target_split_dates": {
       "train": [
-        "2021-06-02 11:45:00",
-        "2022-08-31 17:45:00"
+        "2021-06-02 06:45:00",
+        "2022-08-31 22:45:00"
       ],
       "val": [
-        "2022-09-01 11:45:00",
-        "2022-12-31 17:45:00"
+        "2022-09-01 06:45:00",
+        "2022-12-31 22:45:00"
       ],
       "test": [
-        "2023-01-01 11:45:00",
-        "2023-12-31 17:45:00"
+        "2023-01-01 06:45:00",
+        "2023-12-31 22:45:00"
       ]
     },
     "concurrent_weather": false,
     "information_set": "weather observed at or before the forecast origin (strict historical setting)",
     "training": {
-      "requires_training": false
+      "requires_training": true,
+      "train_seconds": 8.491214599984232,
+      "tuning": {
+        "tuned": false,
+        "reason": "no grid configured for this model"
+      },
+      "describe": {
+        "family": "classical_ml",
+        "name": "linear_regression",
+        "estimator": "LinearRegression",
+        "requires_training": true,
+        "substitution_note": null,
+        "best_params": null,
+        "random_state": 42
+      }
     },
     "cost": {
-      "train_seconds": 0.0,
-      "inference_ms_per_window": 0.0,
-      "n_parameters": 0
+      "train_seconds": 8.491214599984232,
+      "inference_ms_per_window": 0.001271527321980103,
+      "n_parameters": 793
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T19:32:41+00:00",
+      "timestamp_utc": "2026-09-26T19:32:53+00:00",
       "seed": 42,
       "git_revision": "79bc6cf",
       "platform": {
@@ -182,26 +196,26 @@
       "primary_station": "LSK North",
       "rated_w": 55000.0
     },
-    "experiment_label": "C_horizons / smart_persistence / 6h / full",
+    "experiment_label": "C_horizons / linear_regression / 1h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead.",
     "ablation": null,
     "regime_distribution_test": {
       "scope": "daylight",
-      "n": 17661,
+      "n": 17679,
       "counts": {
-        "Cloudy": 6006,
+        "Cloudy": 6012,
         "Clear": 5824,
         "High-variability": 3432,
-        "Partly cloudy": 2399
+        "Partly cloudy": 2411
       },
       "shares": {
-        "Cloudy": 0.340071,
-        "Clear": 0.329766,
-        "High-variability": 0.194326,
-        "Partly cloudy": 0.135836
+        "Cloudy": 0.340064,
+        "Clear": 0.32943,
+        "High-variability": 0.194129,
+        "Partly cloudy": 0.136376
       }
     },
-    "wall_seconds_including_setup": 2.7731707000057213
+    "wall_seconds_including_setup": 11.067034599982435
   },
   "training_history": [],
   "feature_importance": null

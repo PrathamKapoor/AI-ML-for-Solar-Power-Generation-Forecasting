@@ -184,16 +184,43 @@ experiments:
     horizons: ["1h", "6h"]
 
   # ---------------------------------------------------------------------------
+  # Experiment M - Multi-seed replication
+  # ---------------------------------------------------------------------------
+  # Question: how much of a neural model's score is architecture and how much is
+  # initialisation? A single seed cannot answer that, so every neural model is
+  # repeated over five seeds at the default horizon, on the identical split and
+  # the identical input set as Experiment B.
+  #
+  # Seed 42 is the declared default and is already recorded under group B, so the
+  # five seeds here are the full set and none of them is a special case. The
+  # spread across seeds is what the paper reports; the best-of-seeds number is
+  # never used, because reporting the best run of five would be reporting a
+  # selection, not a performance.
+  M_multiseed:
+    description: "Neural models repeated over five seeds at the default horizon."
+    models: [lstm, gru, cnn_lstm, attention_lstm, transformer]
+    horizons: ["1h"]
+    seeds: [42, 123, 456, 789, 2026]
+
+  # ---------------------------------------------------------------------------
   # Experiment J - Cross-site generalisation
   # ---------------------------------------------------------------------------
-  # Question: does a model fitted on one site transfer to sites it has never
-  # seen? The holdout panel is defined in configs/data.yaml under
-  # dataset.holdout_stations and is never used for fitting or tuning.
+  # Question: does a model fitted on one site transfer to sites it has never seen?
+  # The holdout panel is defined in configs/data.yaml under
+  # dataset.holdout_stations and is never used for fitting, feature scaling,
+  # early stopping or model selection.
+  #
+  # Implemented by scripts/run_cross_site.py, which runs the four protocols:
+  # within-site (the reference), cross-site (train on the primary station, test on
+  # each holdout), and leave-one-site-out (train on the pooled remainder). Each
+  # site is processed by the same pipeline as the primary station, so only the PV
+  # target and the rated capacity differ between sites.
   J_cross_site:
-    description: "Train on LSK North, evaluate on six unseen sites."
-    horizons: ["1h", "6h"]
-    models: [xgboost, lstm, attention_lstm, transformer]
+    description: "Within-site, cross-site and leave-one-site-out transfer."
     holdout_stations: true
+    models: [xgboost, lstm, attention_lstm, transformer]
+    horizons: ["1h", "6h"]
+    seeds: [42]
 
   # ---------------------------------------------------------------------------
   # Experiment K - Uncertainty

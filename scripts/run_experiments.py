@@ -48,6 +48,9 @@ def main() -> int:
     parser.add_argument("--horizons", nargs="*", default=None,
                         help="restrict to these horizons (splits one group "
                              "across parallel processes)")
+    parser.add_argument("--seeds", nargs="*", type=int, default=None,
+                        help="repeat every plan once per seed, for the "
+                             "multi-seed experiment")
     parser.add_argument("--list", action="store_true", dest="list_only",
                         help="print the planned experiment matrix and exit")
     parser.add_argument("--skip-pipeline", action="store_true",
@@ -59,7 +62,7 @@ def main() -> int:
     set_thread_env(args.threads)
     config = load_config()
     plans = build_plans(config, only=args.only, skip=args.skip,
-                        horizons=args.horizons)
+                        horizons=args.horizons, seeds=args.seeds)
 
     if args.list_only:
         total = 0
@@ -107,3 +110,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

@@ -1,0 +1,6 @@
+protocol,model,horizon,test_site,train_sites,seed,rated_w,mae,rmse,mse,smape,r2,bias,peak_error,n,nrmse_capacity,nrmse_mean,skill_vs_persistence_rmse,train_seconds,n_parameters,n_features
+cross_site,xgboost,1h,SQ1,LSK North,42,27600,4633.49,6395.3,4.08998e+07,73.2909,0.198532,4145.93,30790.5,17679,0.231714,0.856045,-0.418714,0,0,33
+leave_one_site_out,xgboost,1h,LSK North,SQ1,42,55000,6934.01,10414.9,1.08469e+08,59.6955,0.475351,-5159.47,43252.3,17679,0.189361,0.668687,-0.13927,0,0,33
+leave_one_site_out,xgboost,1h,SQ1,LSK North,42,27600,4633.49,6395.3,4.08998e+07,73.2909,0.198532,4145.93,30790.5,17679,0.231714,0.856045,-0.418714,0,0,33
+within_site,xgboost,1h,LSK North,LSK North,42,55000,4505.29,6835.32,4.67216e+07,48.575,0.774016,570.828,39732.2,17679,0.124279,0.438862,0.252292,0,0,33
+within_site,xgboost,1h,SQ1,SQ1,42,27600,2236.37,3414.11,1.16561e+07,53.8964,0.771588,540.355,22684.7,17679,0.1237,0.456997,0.242624,0,0,33

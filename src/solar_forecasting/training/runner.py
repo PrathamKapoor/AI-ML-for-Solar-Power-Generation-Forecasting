@@ -61,7 +61,8 @@ def _horizons(config: Config, names: Iterable[str] | None) -> list[dict[str, Any
 
 def build_plans(config: Config, only: list[str] | None = None,
                 skip: list[str] | None = None,
-                horizons: list[str] | None = None) -> list[ExperimentPlan]:
+                horizons: list[str] | None = None,
+                seeds: list[int] | None = None) -> list[ExperimentPlan]:
     """Turn the experiment configuration into runnable plans.
 
     Experiments marked ``analysis_only`` in the configuration (model ablation,
@@ -72,10 +73,15 @@ def build_plans(config: Config, only: list[str] | None = None,
 
     ``horizons`` restricts every plan to a subset of its declared horizons, so
     that one long experiment group can be split across parallel processes.
+
+    ``seeds`` replaces the single declared seed with one plan entry per seed,
+    which is what the multi-seed experiment needs: a repeated run of the *same*
+    configuration, distinguished by seed so that the spread across initialisations
+    can be reported.
     """
     declared = config.section("experiments")
     defaults = declared.get("defaults", {})
-    seed = int(defaults.get("seed", 42))
+    seed_list = [int(s) for s in seeds] if seeds else [int(defaults.get("seed", 42))]
 
     plans: list[ExperimentPlan] = []
     for group, spec in declared.items():
@@ -115,18 +121,23 @@ def build_plans(config: Config, only: list[str] | None = None,
         for model in models:
             for horizon in hz:
                 for feature_spec in feature_specs:
-                    suffix = "" if feature_spec == "full" else f"__{feature_spec}"
-                    specs.append(ExperimentSpec(
-                        experiment_id=f"{group}__{model}__{horizon['name']}{suffix}",
-                        model=model,
-                        horizon=horizon["name"],
-                        horizon_steps=horizon["steps"],
-                        features=feature_spec,
-                        seed=seed,
-                        ablation=(spec["description"] if feature_spec != "full" else None),
-                        label=f"{group} / {model} / {horizon['name']} / {feature_spec}",
-                        notes=spec.get("description", ""),
-                    ))
+                    for seed in seed_list:
+                        suffix = "" if feature_spec == "full" else f"__{feature_spec}"
+                        seed_suffix = "" if seed_list == [int(defaults.get("seed", 42))] \
+                            else f"__seed{seed}"
+                        specs.append(ExperimentSpec(
+                            experiment_id=(f"{group}__{model}__{horizon['name']}"
+                                           f"{suffix}{seed_suffix}"),
+                            model=model,
+                            horizon=horizon["name"],
+                            horizon_steps=horizon["steps"],
+                            features=feature_spec,
+                            seed=seed,
+                            ablation=(spec["description"] if feature_spec != "full" else None),
+                            label=(f"{group} / {model} / {horizon['name']} / "
+                                   f"{feature_spec} / seed {seed}"),
+                            notes=spec.get("description", ""),
+                        ))
         plans.append(ExperimentPlan(group=group,
                                     description=spec.get("description", ""),
                                     specs=specs))
@@ -241,8 +252,8 @@ def run_plans(config: Config, plans: list[ExperimentPlan], pipeline_result: dict
         for spec in plan.specs:
             if only_models and spec.model not in only_models:
                 continue
-            key = (spec.model, spec.horizon, spec.features)
-            if any((r.spec.model, r.spec.horizon, r.spec.features) == key
+            key = (spec.model, spec.horizon, spec.features, spec.seed)
+            if any((r.spec.model, r.spec.horizon, r.spec.features, r.spec.seed) == key
                    for r in results.values()):
                 continue
             started = time.perf_counter()

@@ -273,6 +273,39 @@ def stage_statistics(config: Config, predictions: dict[str, pd.DataFrame],
         write_table(table, tables_dir(config) / "statistical_significance.csv")
     assumptions = stat_mod.ASSUMPTIONS
     write_json(assumptions, tables_dir(config) / "statistical_assumptions.json")
+
+    # --- temporal dependence diagnostics ---------------------------------- #
+    # The choice of block length and the power of every test above rest on how
+    # strongly the errors are autocorrelated, so it is measured rather than
+    # assumed and reported alongside the intervals.
+    dependence: dict[str, Any] = {}
+    best_model = None
+    candidates = [m for m in frame.columns
+                  if m not in ("Time", "actual", "daylight", "persistence")]
+    if candidates:
+        means = {m: float(np.sqrt(np.mean(
+            (actual - frame[m].to_numpy(dtype=float)) ** 2))) for m in candidates}
+        best_model = min(means, key=means.get)
+    if best_model is not None:
+        model_errors = actual - frame[best_model].to_numpy(dtype=float)
+        reference_errors = actual - frame["persistence"].to_numpy(dtype=float)
+        differential = stat_mod.paired_loss_difference(model_errors, reference_errors,
+                                                       loss="mae")
+        dependence["best_model"] = best_model
+        dependence["model_error"] = stat_mod.effective_sample_size(model_errors)
+        dependence["loss_differential"] = stat_mod.effective_sample_size(differential)
+        profile = stat_mod.autocorrelation_profile(model_errors, max_lag=192)
+        write_table(profile, tables_dir(config) / "error_autocorrelation.csv")
+        sensitivity = stat_mod.block_length_sensitivity(
+            differential, n_resamples=max(500, n_resamples // 4))
+        write_table(sensitivity, tables_dir(config) / "block_length_sensitivity.csv")
+        dependence["block_length_sensitivity"] = sensitivity.to_dict(orient="records")
+        dependence["interpretation"] = (
+            "The nominal sample size overstates the information in the error series by "
+            f"about {dependence['loss_differential']['integrated_autocorrelation_time']:.0f}x. "
+            "That is why an i.i.d. treatment would understate the interval width by "
+            "roughly that factor, and why the Diebold-Mariano test rejects nothing even "
+            "where the block-bootstrap interval excludes zero. Both are reported.")
     report["statistics"] = {
         "status": "ok",
         "n_models_compared": int(table["model"].nunique()) if not table.empty else 0,
@@ -282,6 +315,7 @@ def stage_statistics(config: Config, predictions: dict[str, pd.DataFrame],
         "confidence": confidence,
         "losses": losses,
         "assumptions": assumptions,
+        "temporal_dependence": dependence,
     }
     return table
 
@@ -401,6 +435,37 @@ def stage_uncertainty(config: Config, predictions: dict[str, pd.DataFrame],
                  "with the evaluation block under seasonal drift."),
     }
     return table
+
+
+# ---------------------------------------------------------------------------
+# Stage 7: canonical experiment matrix
+# ---------------------------------------------------------------------------
+def stage_matrix(config: Config, registry: pd.DataFrame,
+                 stratified_table: pd.DataFrame, report: dict[str, Any]
+                 ) -> pd.DataFrame:
+    """Build the one machine-readable result source for the whole study."""
+    from solar_forecasting.evaluation import matrix as matrix_mod
+
+    def read(path: Path) -> pd.DataFrame:
+        return pd.read_csv(path) if path.exists() else pd.DataFrame()
+
+    cross_site = read(tables_dir(config) / "cross_site_comparison.csv")
+    coverage = read(tables_dir(config) / "uncertainty_coverage.csv")
+    matrix, seed_summary = matrix_mod.build(registry, stratified_table, cross_site, coverage)
+    if not matrix.empty:
+        write_table(matrix, tables_dir(config) / "final_experiment_matrix.csv")
+    if not seed_summary.empty:
+        write_table(seed_summary, tables_dir(config) / "multi_seed_results.csv")
+    summary = matrix_mod.coverage_summary(matrix)
+    write_json(summary, metrics_dir(config) / "matrix_coverage.json")
+    report["matrix"] = {
+        "status": "ok" if not matrix.empty else "empty",
+        "rows": int(len(matrix)),
+        "written": ["final_experiment_matrix.csv"] +
+                   (["multi_seed_results.csv"] if not seed_summary.empty else []),
+        "coverage": summary,
+    }
+    return matrix
 
 
 # ---------------------------------------------------------------------------
@@ -622,6 +687,10 @@ def main() -> int:
     if not args.tables_only:
         stage_figures(config, all_tables, predictions, rated_w, report)
         print(f"figures: {len(report.get('figures', {}).get('written', []))} written")
+
+    stage_matrix(config, registry,
+                 all_tables.get("error_analysis", pd.DataFrame()), report)
+    print(f"matrix: {report['matrix']['rows']} rows")
 
     if args.report:
         path = write_markdown_report(config, all_tables, registry, report)

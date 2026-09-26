@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from typing import Callable, Sequence
 
 import numpy as np
+import pandas as pd
 from scipy import stats
 
 ASSUMPTIONS: dict[str, str] = {
@@ -324,6 +325,94 @@ def wilcoxon_signed_rank(errors_a, errors_b, loss: str = "mae") -> dict[str, obj
             "result is the primary one."
         ),
     }
+
+
+def autocorrelation_profile(values, max_lag: int = 96) -> pd.DataFrame:
+    """Autocorrelation of a series at every lag up to ``max_lag``.
+
+    Reported because the choice of bootstrap block length and the power of every
+    test in this project rest on the answer. If forecast errors were
+    independent, an i.i.d. bootstrap and an uncorrected Diebold-Mariano test
+    would both be valid and the block size would not matter.
+    """
+    array = _as_float(values)
+    array = array - array.mean()
+    denominator = float(np.dot(array, array))
+    rows = []
+    for lag in range(0, int(max_lag) + 1):
+        if lag == 0:
+            value = 1.0
+        elif lag < array.size:
+            value = float(np.dot(array[:-lag], array[lag:]) / denominator)
+        else:
+            value = float("nan")
+        rows.append({"lag": lag, "autocorrelation": value,
+                     "lag_hours": lag * 15 / 60.0})
+    return pd.DataFrame(rows)
+
+
+def integrated_autocorrelation_time(values, max_lag: int | None = None) -> float:
+    """The integrated autocorrelation time, 1 / (1 + 2 * sum of autocorrelations).
+
+    This is the factor by which the effective sample size falls below the nominal
+    one. A value of 1 means independent observations; a value of 50 means the
+    series carries the information of only about 1/50 as many independent
+    observations, which is exactly why an i.i.d. treatment of these errors would
+    overstate the evidence by roughly that factor in the width of an interval.
+    """
+    array = _as_float(values)
+    max_lag = int(min(max_lag or min(200, array.size // 4), array.size - 2))
+    profile = autocorrelation_profile(array, max_lag=max_lag)
+    acf = profile["autocorrelation"].to_numpy(dtype=float)[1:]
+    # Stop at the first lag whose contribution is negligible, so that noise in
+    # the tail of the ACF does not accumulate.
+    significant = acf[: np.argmax(np.abs(acf) < 0.05)] if (np.abs(acf) >= 0.05).any() else acf[:1]
+    return float(max(1.0, 1.0 + 2.0 * float(np.sum(significant))))
+
+
+def effective_sample_size(values, max_lag: int | None = None) -> dict[str, float]:
+    """Nominal and effective sample size, with the reduction factor."""
+    array = _as_float(values)
+    tau = integrated_autocorrelation_time(array, max_lag=max_lag)
+    return {
+        "n_observations": float(array.size),
+        "integrated_autocorrelation_time": tau,
+        "effective_sample_size": float(array.size / tau),
+        "variance_inflation_if_iid": tau,
+    }
+
+
+def block_length_sensitivity(differentials, blocks: Sequence[int] = (1, 16, 48, 96, 192, 384),
+                             n_resamples: int = 2000, confidence: float = 0.95,
+                             seed: int = 42) -> pd.DataFrame:
+    """Bootstrap interval width as a function of block length.
+
+    The interval for a mean loss differential narrows as the block length grows
+    and then plateaus once the block spans the dependence range. Reporting the
+    curve makes the choice of block length auditable instead of asserted, and it
+    shows how much a too-short block would understate the uncertainty.
+    """
+    d = _as_float(differentials)
+    rng_master = np.random.default_rng(seed)
+    rows = []
+    for block in blocks:
+        rng = np.random.default_rng(int(rng_master.integers(0, 2 ** 31 - 1)))
+        draws = np.empty(int(n_resamples), dtype=float)
+        for i in range(int(n_resamples)):
+            idx = _block_indices(d.size, int(block), rng)
+            draws[i] = d[idx].mean()
+        alpha = (1.0 - float(confidence)) / 2.0
+        low, high = np.quantile(draws, alpha), np.quantile(draws, 1.0 - alpha)
+        rows.append({
+            "block_length_steps": int(block),
+            "block_hours": int(block) * 15 / 60.0,
+            "ci_low": float(low), "ci_high": float(high),
+            "ci_width": float(high - low),
+            "se": float(np.std(draws, ddof=1)),
+        })
+    frame = pd.DataFrame(rows)
+    frame["relative_width"] = frame["ci_width"] / frame["ci_width"].max()
+    return frame
 
 
 def compare_models(predictions: dict[str, np.ndarray], actual: np.ndarray,

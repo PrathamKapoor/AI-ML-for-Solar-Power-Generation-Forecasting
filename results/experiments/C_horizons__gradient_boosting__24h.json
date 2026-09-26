@@ -1,60 +1,60 @@
 {
   "spec": {
-    "experiment_id": "C_horizons__smart_persistence__24h",
-    "model": "smart_persistence",
+    "experiment_id": "C_horizons__gradient_boosting__24h",
+    "model": "gradient_boosting",
     "horizon": "24h",
     "horizon_steps": 96,
     "features": "full",
     "seed": 42,
     "ablation": null,
     "concurrent_weather": false,
-    "label": "C_horizons / smart_persistence / 24h / full",
+    "label": "C_horizons / gradient_boosting / 24h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead."
   },
   "metrics_daylight": {
-    "mae": 7284.310457241181,
-    "rmse": 11366.237713522916,
-    "mse": 129191359.76031066,
-    "smape": 64.19947378232139,
-    "r2": 0.376495696419879,
-    "bias": -9.701469057924331,
-    "peak_error": 51441.3458722113,
+    "mae": 6912.976462730495,
+    "rmse": 9704.643369275407,
+    "mse": 94180102.92482112,
+    "smape": 62.96285845359163,
+    "r2": 0.5454672851637188,
+    "bias": 653.8791845488264,
+    "peak_error": 40620.72652005725,
     "n": 17593.0,
-    "nrmse_capacity": 0.20665886751859847,
-    "nrmse_mean": 0.7299602399738166,
-    "skill_vs_persistence_rmse": 0.00013513606998738492,
-    "skill_vs_persistence_mae": 0.0003762251862883259,
+    "nrmse_capacity": 0.17644806125955287,
+    "nrmse_mean": 0.6232496610790069,
+    "skill_vs_persistence_rmse": 0.14630221833515145,
+    "skill_vs_persistence_mae": 0.05133427969101223,
     "persistence_rmse": 11367.773909813593,
     "persistence_mae": 7287.052029748566,
-    "skill_vs_smart_persistence_rmse": 0.010700006223986702,
-    "skill_vs_smart_persistence_mae": 0.034456410484361766,
+    "skill_vs_smart_persistence_rmse": 0.15532264353400882,
+    "skill_vs_smart_persistence_mae": 0.08367715142801724,
     "smart_persistence_rmse": 11489.171924624856,
     "smart_persistence_mae": 7544.258525806516
   },
   "metrics_all_steps": {
-    "mae": 3680.4000346729385,
-    "rmse": 8078.6979729139175,
-    "mse": 65265360.937563434,
-    "smape": 33.27809204659239,
-    "r2": 0.6051094911365915,
-    "bias": -4.867689259901272,
-    "peak_error": 51441.3458722113,
+    "mae": 3654.9771672175398,
+    "rmse": 6906.1821965521,
+    "mse": 47695352.53197319,
+    "smape": 130.46669868987743,
+    "r2": 0.7114174845399437,
+    "bias": 346.3886323402539,
+    "peak_error": 40620.72652005725,
     "n": 34825.0,
-    "nrmse_capacity": 0.14688541768934396,
-    "nrmse_mean": 1.026942257627028,
-    "skill_vs_persistence_rmse": 0.00013513591529046298,
-    "skill_vs_persistence_mae": 0.0003761751356700094,
+    "nrmse_capacity": 0.12556694902822,
+    "nrmse_mean": 0.8778952202804887,
+    "skill_vs_persistence_rmse": 0.14525224900700906,
+    "skill_vs_persistence_mae": 0.007281213654680707,
     "persistence_rmse": 8079.789842709667,
     "persistence_mae": 3681.7850306563537,
-    "skill_vs_smart_persistence_rmse": 0.01070040576101361,
-    "skill_vs_smart_persistence_mae": 0.03452831784302146,
+    "skill_vs_smart_persistence_rmse": 0.15428411017510069,
+    "skill_vs_smart_persistence_mae": 0.04119744575742734,
     "smart_persistence_rmse": 8166.078324461878,
     "smart_persistence_mae": 3812.022768446701
   },
   "metadata": {
-    "model_family": "baseline",
-    "model_kind": "rule",
-    "model_description": "Persistence rescaled by the change in clear-sky reference between the forecast origin and the target.",
+    "model_family": "classical_ml",
+    "model_kind": "sklearn",
+    "model_description": "scikit-learn gradient-boosted trees; documented fallback for xgboost.",
     "feature_spec": "full",
     "n_features": 33,
     "feature_columns": [
@@ -132,15 +132,29 @@
     "concurrent_weather": false,
     "information_set": "weather observed at or before the forecast origin (strict historical setting)",
     "training": {
-      "requires_training": false
+      "requires_training": true,
+      "train_seconds": 63.02435669998522,
+      "tuning": {
+        "tuned": false,
+        "reason": "no grid configured"
+      },
+      "describe": {
+        "family": "classical_ml",
+        "name": "gradient_boosting",
+        "estimator": "HistGradientBoostingRegressor",
+        "requires_training": true,
+        "substitution_note": null,
+        "best_params": null,
+        "random_state": 42
+      }
     },
     "cost": {
-      "train_seconds": 0.0,
-      "inference_ms_per_window": 0.0,
+      "train_seconds": 63.02435669998522,
+      "inference_ms_per_window": 0.06332385642484113,
       "n_parameters": 0
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T19:32:42+00:00",
+      "timestamp_utc": "2026-09-26T19:43:12+00:00",
       "seed": 42,
       "git_revision": "79bc6cf",
       "platform": {
@@ -182,7 +196,7 @@
       "primary_station": "LSK North",
       "rated_w": 55000.0
     },
-    "experiment_label": "C_horizons / smart_persistence / 24h / full",
+    "experiment_label": "C_horizons / gradient_boosting / 24h / full",
     "notes": "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead.",
     "ablation": null,
     "regime_distribution_test": {
@@ -201,7 +215,7 @@
         "Partly cloudy": 0.135508
       }
     },
-    "wall_seconds_including_setup": 2.8647381000046153
+    "wall_seconds_including_setup": 68.97115599998506
   },
   "training_history": [],
   "feature_importance": null
