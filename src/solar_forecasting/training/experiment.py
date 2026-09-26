@@ -108,8 +108,8 @@ def select_features(columns: list[str], features_spec: str,
         if features_spec in groups:
             return apply_feature_ablation(columns, list(columns),
                                          groups[features_spec]["remove"])
-    known = sorted((feature_config.get("ablation_groups") or {}).keys()
-                   + (feature_config.get("feature_regimes") or {}).keys())
+    known = sorted(list(feature_config.get("ablation_groups") or {})
+                   + list(feature_config.get("feature_regimes") or {}))
     raise KeyError(
         f"unknown feature specification {features_spec!r}. "
         f"Available: 'full' or {known}")
