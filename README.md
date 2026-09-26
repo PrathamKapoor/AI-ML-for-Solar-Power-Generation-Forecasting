@@ -387,3 +387,15 @@ results, please cite it as software with the version tag.
 MIT — see `LICENSE`. The dataset is redistributed by its authors under CC0 1.0
 and is fetched by `scripts/download_data.py`; no rights in that data are claimed
 here.
+
+---
+
+## AI-ML-for-Solar-Power-Generation-Forecasting
+
+Repository: <https://github.com/PrathamKapoor/AI-ML-for-Solar-Power-Generation-Forecasting>
+
+No API keys, tokens or environment variables are required to run this project. The
+dataset is published under CC0 1.0 and is fetched directly by
+`scripts/download_data.py`; there is no account, registration or credential
+involved, so no `.env` file is needed. Optional configuration lives in
+`configs/*.yaml` and is documented in `docs/`.
