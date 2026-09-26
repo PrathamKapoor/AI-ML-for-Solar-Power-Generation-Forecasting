@@ -1,0 +1,2690 @@
+[
+  {
+    "id": "G1",
+    "category": "G",
+    "category_name": "Systematic review / state of the field",
+    "from_seed": "ml-pv-review-comparison",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1109/access.2023.3270041",
+    "title": "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison",
+    "title_variants": [
+      "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison"
+    ],
+    "authors_crossref": [
+      "Jwaone Gaboitaolelwe",
+      "Adamu Murtala Zungeru",
+      "Abid Yahya",
+      "Caspar K. Lebekwe",
+      "Dasari Naga Vinod",
+      "Ayodeji Olalekan Salau"
+    ],
+    "authors_openalex": [
+      "Jwaone Gaboitaolelwe",
+      "Adamu Murtala Zungeru",
+      "Abid Yahya",
+      "Caspar K. Lebekwe",
+      "Dasari Naga Vinod",
+      "Ayodeji Olalekan Salau"
+    ],
+    "authors_s2": [
+      "Jwaone Gaboitaolelwe",
+      "A. M. Zungeru",
+      "A. Yahya",
+      "C. Lebekwe",
+      "Dasari Naga Vinod",
+      "Ayodeji Olalekan Salau"
+    ],
+    "date_parts_crossref": [
+      2023
+    ],
+    "published_print": [
+      2023
+    ],
+    "published_online": null,
+    "publication_date_s2": null,
+    "year_openalex": 2023,
+    "container_crossref": "IEEE Access",
+    "container_openalex": "IEEE Access",
+    "venue_s2": "IEEE Access",
+    "journal_s2": "IEEE Access",
+    "publisher_crossref": "Institute of Electrical and Electronics Engineers (IEEE)",
+    "publisher_openalex": "Institute of Electrical and Electronics Engineers",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1109/access.2023.3270041",
+    "url_openalex": "https://doi.org/10.1109/access.2023.3270041",
+    "abstract": "The growing interest in renewable energy and the falling prices of solar panels place solar electricity in a favourable position for adoption. However, the high-rate adoption of intermittent renewable energy introduces challenges and the potential to create power instability between the available power generation and the load demand. Hence, accurate solar Photovoltaic (PV) power forecasting is essential to maintain system reliability and maximize renewable energy integration. The current solar PV power forecasting approaches are an essential tool to maintain system reliability and maximize renewable energy integration. This paper presents a comprehensive and comparative review of existing Machine Learning (ML) based approaches used in PV power forecasting, focusing on short-term horizons. We provide an overview of factors affecting solar PV power forecasting and an overview of existing PV power forecasting methods in the literature, with a specific focus on ML-based models. To further enhance the comparison and provide more insights into the advancement in the area, we simulate the performance of different ML methods used in solar PV power forecasting and, finally, a discussion on the results of the work.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Renewable energy",
+      "Computer science",
+      "Solar power",
+      "Solar energy",
+      "Grid parity",
+      "Reliability (semiconductor)",
+      "Reliability engineering"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Renewable energy",
+      "Computer science",
+      "Solar power",
+      "Solar energy",
+      "Grid parity",
+      "Reliability (semiconductor)",
+      "Reliability engineering"
+    ],
+    "citation_count_s2": 195,
+    "citation_count_crossref": 241,
+    "citation_count_openalex": 236,
+    "open_access_pdf": "https://ieeexplore.ieee.org/ielx7/6287639/6514899/10107594.pdf",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "G2",
+    "category": "G",
+    "category_name": "Systematic review / state of the field",
+    "from_seed": "systematic-review-dl-solar-pv",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review",
+      "container": "Energy Strategy Reviews"
+    },
+    "doi": "10.1016/j.esr.2025.101735",
+    "title": "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review",
+    "title_variants": [
+      "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review"
+    ],
+    "authors_crossref": [
+      "Oussama Khouili",
+      "Mohamed Hanine",
+      "Mohamed Louzazni",
+      "Miguel Angel López Flores",
+      "Eduardo García Villena",
+      "Imran Ashraf"
+    ],
+    "authors_openalex": [
+      "Oussama Khouili",
+      "Mohamed Hanine",
+      "Mohamed Louzazni",
+      "Miguel Ángel López Flores",
+      "Eduardo García Villena",
+      "Imran Ashraf"
+    ],
+    "authors_s2": [
+      "Oussama Khouili",
+      "Mohamed Hanine",
+      "Mohamed Louzazni",
+      "Miguel Angel Alor Flores",
+      "Eduardo García Villena",
+      "Imran Ashraf"
+    ],
+    "date_parts_crossref": [
+      2025,
+      5
+    ],
+    "published_print": [
+      2025,
+      5
+    ],
+    "published_online": null,
+    "publication_date_s2": "2025-05-01",
+    "year_openalex": 2025,
+    "container_crossref": "Energy Strategy Reviews",
+    "container_openalex": "Energy Strategy Reviews",
+    "venue_s2": "Energy Strategy Reviews",
+    "journal_s2": "Energy Strategy Reviews",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "review",
+    "url_crossref": "https://doi.org/10.1016/j.esr.2025.101735",
+    "url_openalex": "https://doi.org/10.1016/j.esr.2025.101735",
+    "abstract": "Accurate solar and photovoltaic (PV) power forecasting is essential for optimizing grid integration, managing energy storage, and maximizing the efficiency of solar power systems. Deep learning (DL) models have shown promise in this area due to their ability to learn complex, non-linear relationships within large datasets. This study presents a systematic literature review (SLR) of deep learning applications for solar PV forecasting, addressing a gap in the existing literature, which often focuses on traditional ML or broader renewable energy applications. This review specifically aims to identify the DL architectures employed, preprocessing and feature engineering techniques used, the input features leveraged, evaluation metrics applied, and the persistent challenges in this field. Through a rigorous analysis of 26 selected papers from an initial set of 155 articles retrieved from the Web of Science database, we found that Long Short-Term Memory (LSTM) networks were the most frequently used algorithm (appearing in 32.69% of the papers), closely followed by Convolutional Neural Networks (CNNs) at 28.85%. Furthermore, Wavelet Transform (WT) was found to be the most prominent data decomposition technique, while Pearson Correlation was the most used for feature selection. We also found that ambient temperature, pressure, and humidity are the most common input features. Our systematic evaluation provides critical insights into state-of-the-art DL-based solar forecasting and identifies key areas for upcoming research. Future research should prioritize the development of more robust and interpretable models, as well as explore the integration of multi-source data to further enhance forecasting accuracy. Such advancements are crucial for the effective integration of solar energy into future power grids. • Review of DL approaches on solar and photovoltaic power forecasting. • Data preprocessing techniques and feature engineering approach for DL algorithms. • Prominent features employed for DL-based solar forecasting. • Obstacles in DL-based solar forecasting.",
+    "abstract_source": "openalex_inverted_index",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Engineering",
+      "Electrical engineering"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Engineering",
+      "Electrical engineering"
+    ],
+    "citation_count_s2": 49,
+    "citation_count_crossref": 51,
+    "citation_count_openalex": 50,
+    "open_access_pdf": "https://doi.org/10.1016/j.esr.2025.101735",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "G3",
+    "category": "G",
+    "category_name": "Systematic review / state of the field",
+    "from_seed": "dl-solar-irradiance-review",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Deep learning models for solar irradiance forecasting: A comprehensive review",
+      "container": "Journal of Cleaner Production"
+    },
+    "doi": "10.1016/j.jclepro.2021.128566",
+    "title": "Deep learning models for solar irradiance forecasting: A comprehensive review",
+    "title_variants": [
+      "Deep learning models for solar irradiance forecasting: A comprehensive review"
+    ],
+    "authors_crossref": [
+      "Pratima Kumari",
+      "Durga Toshniwal"
+    ],
+    "authors_openalex": [
+      "Pratima Kumari",
+      "Durga Toshniwal"
+    ],
+    "authors_s2": [
+      "P. Kumari",
+      "Durga Toshniwal"
+    ],
+    "date_parts_crossref": [
+      2021,
+      10
+    ],
+    "published_print": [
+      2021,
+      10
+    ],
+    "published_online": null,
+    "publication_date_s2": "2021-10-10",
+    "year_openalex": 2021,
+    "container_crossref": "Journal of Cleaner Production",
+    "container_openalex": "Journal of Cleaner Production",
+    "venue_s2": "",
+    "journal_s2": "Journal of Cleaner Production",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.jclepro.2021.128566",
+    "url_openalex": "https://doi.org/10.1016/j.jclepro.2021.128566",
+    "abstract": null,
+    "abstract_source": "unavailable_paywalled",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Solar irradiance",
+      "Irradiance",
+      "Environmental science",
+      "Meteorology",
+      "Computer science",
+      "Artificial intelligence",
+      "Geography"
+    ],
+    "concepts_openalex": [
+      "Solar irradiance",
+      "Irradiance",
+      "Environmental science",
+      "Meteorology",
+      "Computer science",
+      "Artificial intelligence",
+      "Geography",
+      "Physics"
+    ],
+    "citation_count_s2": 394,
+    "citation_count_crossref": 399,
+    "citation_count_openalex": 443,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_unavailable_note": [
+      "Crossref REST API (no abstract field)",
+      "OpenAlex work record (no abstract_inverted_index)",
+      "Semantic Scholar Graph API (abstract = null)",
+      "doi.org redirect + publisher landing page citation_abstract meta tag (bot-served shell, no abstract)",
+      "RePEc/IDEAS mirror (404 for this record)",
+      "search-engine indexed excerpts (returned only citing works, not the source abstract)"
+    ]
+  },
+  {
+    "id": "G4",
+    "category": "A",
+    "category_name": "Classical / conventional machine learning",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.rser.2022.112364",
+    "title": "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction",
+    "title_variants": [
+      "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction"
+    ],
+    "authors_crossref": [
+      "Dávid Markovics",
+      "Martin János Mayer"
+    ],
+    "authors_openalex": [
+      "Dávid Markovics",
+      "Martin János Mayer"
+    ],
+    "authors_s2": [
+      "Dávid Markovics",
+      "M. J. Mayer"
+    ],
+    "date_parts_crossref": [
+      2022,
+      6
+    ],
+    "published_print": [
+      2022,
+      6
+    ],
+    "published_online": null,
+    "publication_date_s2": "2022-06-01",
+    "year_openalex": 2022,
+    "container_crossref": "Renewable and Sustainable Energy Reviews",
+    "container_openalex": "Renewable and Sustainable Energy Reviews",
+    "venue_s2": "Renewable & Sustainable Energy Reviews",
+    "journal_s2": "Renewable and Sustainable Energy Reviews",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.rser.2022.112364",
+    "url_openalex": "https://doi.org/10.1016/j.rser.2022.112364",
+    "abstract": "The increase of the worldwide installed photovoltaic (PV) capacity and the intermittent nature of the solar resource highlights the importance of power forecasting for the grid integration of the technology. This study compares 24 machine learning models for deterministic day-ahead power forecasting based on numerical weather predictions (NWP), tested for two-year-long 15-min resolution datasets of 16 PV plants in Hungary. The effects of the predictor selection and the benefits of the hyperparameter tuning are also evaluated. The results show that the two most accurate models are kernel ridge regression and multilayer perceptron with an up to 44.6% forecast skill score over persistence. Supplementing the basic NWP data with Sun position angles and statistically processed irradiance values as the inputs of the learning models results in a 13.1% decrease of the root mean square error (RMSE), which underlines the importance of the predictor selection. The hyperparameter tuning is essential to exploit the full potential of the models, especially for the less robust models, which are prone to under or overfitting without proper tuning. The overall best forecasts have a 13.9% lower RMSE compared to the baseline scenario of using linear regression. Moreover, the power forecasts based on only daily average irradiance forecasts and the Sun position angles have only a 1.5% higher RMSE than the best scenario, which demonstrates the effectiveness of machine learning even for limited data availability. The results of this paper can support both researchers and practitioners in constructing the best data-driven techniques for NWP-based PV power forecasting.",
+    "abstract_source": "openalex_inverted_index",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Numerical weather prediction",
+      "Mean squared error",
+      "Overfitting",
+      "Forecast skill",
+      "Machine learning",
+      "Perceptron",
+      "Solar irradiance",
+      "Photovoltaic system"
+    ],
+    "concepts_openalex": [
+      "Numerical weather prediction",
+      "Mean squared error",
+      "Overfitting",
+      "Forecast skill",
+      "Machine learning",
+      "Perceptron",
+      "Solar irradiance",
+      "Photovoltaic system"
+    ],
+    "citation_count_s2": 429,
+    "citation_count_crossref": 469,
+    "citation_count_openalex": 484,
+    "open_access_pdf": "https://www.sciencedirect.com/science/article/pii/S136403212200274X/pdf",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "A1",
+    "category": "A",
+    "category_name": "Classical / conventional machine learning",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.asoc.2020.106389",
+    "title": "Short-term photovoltaic power generation forecasting based on random forest feature selection and CEEMD: A case study",
+    "title_variants": [
+      "Short-term photovoltaic power generation forecasting based on random forest feature selection and CEEMD: A case study"
+    ],
+    "authors_crossref": [
+      "Dongxiao Niu",
+      "Keke Wang",
+      "Lijie Sun",
+      "Jing Wu",
+      "Xiaomin Xu"
+    ],
+    "authors_openalex": [
+      "Dongxiao Niu",
+      "Keke Wang",
+      "Lijie Sun",
+      "Jing Wu",
+      "Xiaomin Xu"
+    ],
+    "authors_s2": [
+      "D. Niu",
+      "Ke-Ke Wang",
+      "Lijie Sun",
+      "Jing Wu",
+      "Xiao-Min Xu"
+    ],
+    "date_parts_crossref": [
+      2020,
+      8
+    ],
+    "published_print": [
+      2020,
+      8
+    ],
+    "published_online": null,
+    "publication_date_s2": "2020-08-01",
+    "year_openalex": 2020,
+    "container_crossref": "Applied Soft Computing",
+    "container_openalex": "Applied Soft Computing",
+    "venue_s2": "Applied Soft Computing",
+    "journal_s2": "Appl. Soft Comput.",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.asoc.2020.106389",
+    "url_openalex": "https://doi.org/10.1016/j.asoc.2020.106389",
+    "abstract": "Abstract To mitigate solar curtailment caused by large-scale development of photovoltaic (PV) power generation, accurate forecasting of PV power generation is important. A hybrid forecasting model was constructed that combines random forest (RF), improved grey ideal value approximation (IGIVA), complementary ensemble empirical mode decomposition (CEEMD), the particle swarm optimization algorithm based on dynamic inertia factor (DIFPSO), and backpropagation neural network (BPNN), called RF-CEEMD-DIFPSO-BPNN. PV power generation is affected by many factors. The RF method is used to calculate the importance degree and rank the factors, then eliminate the less important factors. Then, the importance degree calculated by RF is transferred as the weight values to the IGIVA model to screen the similar days of different weather types to improve the data quality of the training sets. Then, the original power sequence is decomposed into intrinsic mode functions (IMFs) at different frequencies and a residual component by CEEMD to weaken the fluctuation of the original sequence. We empirically analyzed a PV power plant to verify the effectiveness of the hybrid model, which proved that the RF-CEEMD-DIFPSO-BPNN is a promising approach in terms of PV power generation forecasting.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Random forest",
+      "Particle swarm optimization",
+      "Backpropagation",
+      "Artificial neural network",
+      "Artificial intelligence",
+      "Machine learning"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Random forest",
+      "Particle swarm optimization",
+      "Backpropagation",
+      "Artificial neural network",
+      "Artificial intelligence",
+      "Machine learning"
+    ],
+    "citation_count_s2": 226,
+    "citation_count_crossref": 242,
+    "citation_count_openalex": 262,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "A2",
+    "category": "A",
+    "category_name": "Classical / conventional machine learning",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1002/pip.1152",
+    "title": "Use of support vector regression and numerically predicted cloudiness to forecast power output of a photovoltaic power plant in Kitakyushu, Japan",
+    "title_variants": [
+      "Use of support vector regression and numerically predicted cloudiness to forecast power output of a photovoltaic power plant in Kitakyushu, Japan"
+    ],
+    "authors_crossref": [
+      "Joao Gari da Silva Fonseca",
+      "Takashi Oozeki",
+      "Takumi Takashima",
+      "Gentarou Koshimizu",
+      "Yoshihisa Uchida",
+      "Kazuhiko Ogimoto"
+    ],
+    "authors_openalex": [
+      "João Gari da Silva Fonseca",
+      "Takashi Oozeki",
+      "Takumi Takashima",
+      "Gentarou Koshimizu",
+      "Yoshihisa Uchida",
+      "Kazuhiko Ogimoto"
+    ],
+    "authors_s2": [
+      "João Gari da Silva Fonseca",
+      "T. Oozeki",
+      "T. Takashima",
+      "G. Koshimizu",
+      "Y. Uchida",
+      "K. Ogimoto"
+    ],
+    "date_parts_crossref": [
+      2011,
+      7,
+      22
+    ],
+    "published_print": [
+      2012,
+      11
+    ],
+    "published_online": [
+      2011,
+      7,
+      22
+    ],
+    "publication_date_s2": "2012-11-01",
+    "year_openalex": 2011,
+    "container_crossref": "Progress in Photovoltaics: Research and Applications",
+    "container_openalex": "Progress in Photovoltaics Research and Applications",
+    "venue_s2": "",
+    "journal_s2": "Progress in Photovoltaics: Research and Applications",
+    "publisher_crossref": "Wiley",
+    "publisher_openalex": "Wiley",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1002/pip.1152",
+    "url_openalex": "https://doi.org/10.1002/pip.1152",
+    "abstract": "ABSTRACT The development of a methodology to forecast accurately the power produced by photovoltaic systems can be an important tool for the dissemination and integration of such systems on the public electricity grids. Thus, the objective of this study was to forecast the power production of a 1‐MW photovoltaic power plant in Kitakyushu, Japan, using a new methodology based on support vector machines and on the use of several numerically predicted weather variables, including cloudiness. Hourly forecasts of the power produced for 1 year were carried out. Moreover, the effect of the use of numerically predicted cloudiness on the quality of the forecasts was also investigated. The forecasts of power production obtained with the proposed methodology had a root mean square error of 0.0948 MW h and a mean absolute error of 0.058 MW h. It was also found that the forecast and measured values of power production had a good level of correlation varying from 0.8 to 0.88 according to the season of the year. Finally, the use of numerically predicted cloudiness had an important role in the accuracy of the forecasts, and when cloudiness was not used, the root mean square error of the forecasts increased more than 32%, and the mean absolute error increased more than 42%. Copyright © 2011 John Wiley & Sons, Ltd.",
+    "abstract_source": "crossref",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Mean squared error",
+      "Photovoltaic system",
+      "Environmental science",
+      "Meteorology",
+      "Cloud cover",
+      "Power (physics)",
+      "Root mean square",
+      "Electricity generation"
+    ],
+    "concepts_openalex": [
+      "Mean squared error",
+      "Photovoltaic system",
+      "Environmental science",
+      "Meteorology",
+      "Cloud cover",
+      "Power (physics)",
+      "Root mean square",
+      "Electricity generation"
+    ],
+    "citation_count_s2": 153,
+    "citation_count_crossref": 132,
+    "citation_count_openalex": 156,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "A3",
+    "category": "A",
+    "category_name": "Classical / conventional machine learning",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.3390/en14133992",
+    "title": "Enhanced Random Forest Model for Robust Short-Term Photovoltaic Power Forecasting Using Weather Measurements",
+    "title_variants": [
+      "Enhanced Random Forest Model for Robust Short-Term Photovoltaic Power Forecasting Using Weather Measurements"
+    ],
+    "authors_crossref": [
+      "Mohamed Massaoudi",
+      "Ines Chihi",
+      "Lilia Sidhom",
+      "Mohamed Trabelsi",
+      "Shady S. Refaat",
+      "Fakhreddine S. Oueslati"
+    ],
+    "authors_openalex": [
+      "Mohamed Massaoudi",
+      "Inès Chihi",
+      "Lilia Sidhom",
+      "Mohamed Trabelsi",
+      "Shady S. Refaat",
+      "Fakhreddine Segni Oueslati"
+    ],
+    "authors_s2": [
+      "M. Massaoudi",
+      "I. Chihi",
+      "L. Sidhom",
+      "M. Trabelsi",
+      "Shady S. Refaat",
+      "F. Oueslati"
+    ],
+    "date_parts_crossref": [
+      2021,
+      7,
+      2
+    ],
+    "published_print": null,
+    "published_online": [
+      2021,
+      7,
+      2
+    ],
+    "publication_date_s2": "2021-07-02",
+    "year_openalex": 2021,
+    "container_crossref": "Energies",
+    "container_openalex": "Energies",
+    "venue_s2": "Energies",
+    "journal_s2": "Energies",
+    "publisher_crossref": "MDPI AG",
+    "publisher_openalex": "Multidisciplinary Digital Publishing Institute",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.3390/en14133992",
+    "url_openalex": "https://doi.org/10.3390/en14133992",
+    "abstract": "Short-term Photovoltaic (PV) Power Forecasting (STPF) is considered a topic of utmost importance in smart grids. The deployment of STPF techniques provides fast dispatching in the case of sudden variations due to stochastic weather conditions. This paper presents an efficient data-driven method based on enhanced Random Forest (RF) model. The proposed method employs an ensemble of attribute selection techniques to manage bias/variance optimization for STPF application and enhance the forecasting quality results. The overall architecture strategy gathers the relevant information to constitute a voted feature-weighting vector of weather inputs. The main emphasis in this paper is laid on the knowledge expertise obtained from weather measurements. The feature selection techniques are based on local Interpretable Model-Agnostic Explanations, Extreme Boosting Model, and Elastic Net. A comparative performance investigation using an actual database, collected from the weather sensors, demonstrates the superiority of the proposed technique versus several data-driven machine learning models when applied to a typical distributed PV system.",
+    "abstract_source": "crossref",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Random forest",
+      "Photovoltaic system",
+      "Computer science",
+      "Weighting",
+      "Boosting (machine learning)",
+      "Feature selection",
+      "Software deployment",
+      "Data mining"
+    ],
+    "concepts_openalex": [
+      "Random forest",
+      "Photovoltaic system",
+      "Computer science",
+      "Weighting",
+      "Boosting (machine learning)",
+      "Feature selection",
+      "Software deployment",
+      "Data mining"
+    ],
+    "citation_count_s2": 52,
+    "citation_count_crossref": 55,
+    "citation_count_openalex": 53,
+    "open_access_pdf": "https://www.mdpi.com/1996-1073/14/13/3992/pdf?version=1625236634",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "A4",
+    "category": "A",
+    "category_name": "Classical / conventional machine learning",
+    "from_seed": "stacked-gb-xgb-ridge",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "A stacked Gradient Boosting–XGBoost ensemble with ridge meta-learner for accurate short-term solar PV power forecasting in smart grids",
+      "container": "Scientific Reports"
+    },
+    "doi": "10.1038/s41598-026-47042-3",
+    "title": "A stacked Gradient Boosting–XGBoost ensemble with ridge meta-learner for accurate short-term solar PV power forecasting in smart grids",
+    "title_variants": [
+      "A stacked Gradient Boosting–XGBoost ensemble with ridge meta-learner for accurate short-term solar PV power forecasting in smart grids"
+    ],
+    "authors_crossref": [
+      "G. Rohini",
+      "T. Mariprasth",
+      "Seif Al Bustanji",
+      "Ievgen Zaitsev"
+    ],
+    "authors_openalex": [
+      "G. Rohini",
+      "T. Mariprasth",
+      "Seif Al Bustanji",
+      "Євген Олександрович ЗАЙЦЕВ"
+    ],
+    "authors_s2": [
+      "G. Rohini",
+      "T. Mariprasth",
+      "Seif Al Bustanji",
+      "I. Zaitsev"
+    ],
+    "date_parts_crossref": [
+      2026,
+      4,
+      10
+    ],
+    "published_print": null,
+    "published_online": [
+      2026,
+      4,
+      10
+    ],
+    "publication_date_s2": "2026-04-10",
+    "year_openalex": 2026,
+    "container_crossref": "Scientific Reports",
+    "container_openalex": "Scientific Reports",
+    "venue_s2": "Scientific Reports",
+    "journal_s2": "Scientific Reports",
+    "publisher_crossref": "Springer Science and Business Media LLC",
+    "publisher_openalex": "Nature Portfolio",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1038/s41598-026-47042-3",
+    "url_openalex": "https://doi.org/10.1038/s41598-026-47042-3",
+    "abstract": "As the solar photovoltaic (PV) penetration level increases in smart grids, precise and computationally efficient short-term forecasting becomes essential to aid operational planning and real-time energy management. However, the power produced by PV is highly nonlinear and stochastic due to variations in weather factors, which weakens the performance of single forecasting models. The aim of this work is to propose a stacked ensemble regression model that combines Gradient Boosting and XGBoost (Extreme Gradient Boosting) as base learners, with Ridge Regression as the meta-learner, for very short-term PV power prediction. The model operates using meteorological and operational parameters, such as temperature, humidity, wind profile, cloudiness distribution, and solar situation. Standard preprocessing steps (missing value imputation, feature selection, and normalization) are adopted to facilitate stable model training. An empirical study is carried out using real-world PV generation data, and the results are compared with popular gradient boosting algorithms such as Gradient Boosting, XGBoost, LightGBM (Light Gradient Boosting Machine), and CatBoost (Categorical Boosting), and machine learning models such as multilayer perceptron (MLP) and LSTM, using k-fold cross-validation. The boosted ensemble improves predictive accuracy, achieving MAE = 0.042 ± 0.002, MSE = 0.0031 ± 0.0002, and R² = 94% ± 1% under the experimental conditions used in this work. Nonparametric tests (i.e., the Wilcoxon signed-rank test and the Friedman test) show that such improvements are statistically significant (p < 0.05). Moreover, the inference latency of the proposed model is quite low, which demonstrates its suitability for near-real-time deployment in real-world smart grid scenarios. According to experimental results, lightweight ensemble learning can stand as a competitive and practical alternative to complicated deep learning methods for short-term PV power forecasting when data availability and computational budget are taken into account.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Ridge",
+      "Photovoltaic system",
+      "Power (physics)",
+      "Smart grid",
+      "Solar energy"
+    ],
+    "concepts_openalex": [
+      "Ridge",
+      "Computer science",
+      "Photovoltaic system",
+      "Power (physics)",
+      "Smart grid",
+      "Remote sensing",
+      "Solar energy",
+      "Geology"
+    ],
+    "citation_count_s2": 8,
+    "citation_count_crossref": 10,
+    "citation_count_openalex": 10,
+    "open_access_pdf": "https://www.nature.com/articles/s41598-026-47042-3_reference.pdf",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "B1",
+    "category": "B",
+    "category_name": "Recurrent / RNN-based forecasting",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.energy.2019.116225",
+    "title": "Photovoltaic power forecasting based LSTM-Convolutional Network",
+    "title_variants": [
+      "Photovoltaic power forecasting based LSTM-Convolutional Network"
+    ],
+    "authors_crossref": [
+      "Kejun Wang",
+      "Xiaoxia Qi",
+      "Hongda Liu"
+    ],
+    "authors_openalex": [
+      "Kejun Wang",
+      "Xiaoxia Qi",
+      "Hongda Liu"
+    ],
+    "authors_s2": [
+      "Kejun Wang",
+      "Xiaoxia Qi",
+      "Hong-Da Liu"
+    ],
+    "date_parts_crossref": [
+      2019,
+      12
+    ],
+    "published_print": [
+      2019,
+      12
+    ],
+    "published_online": null,
+    "publication_date_s2": "2019-12-15",
+    "year_openalex": 2019,
+    "container_crossref": "Energy",
+    "container_openalex": "Energy",
+    "venue_s2": "",
+    "journal_s2": "Energy",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.energy.2019.116225",
+    "url_openalex": "https://doi.org/10.1016/j.energy.2019.116225",
+    "abstract": "Abstract The volatile and intermittent nature of solar energy itself presents a significant challenge in integrating it into existing energy systems. Accurate photovoltaic power prediction plays an important role in solving this problem. With the development of deep learning, more and more scholars have applied the deep learning model to time series prediction and achieved very good results. In this paper, a hybrid deep learning model (LSTM-Convolutional Network) is proposed and applied to photovoltaic power prediction. In the proposed hybrid prediction model, the temporal features of the data are extracted first by the long-short term memory network, and then the spatial features of the data are extracted by the convolutional neural network model. In order to show the superior performance of the proposed hybrid prediction model, the prediction results of the hybrid model are compared with those of the single model (long-short term memory network, convolutional neural network) and the hybrid network (Convolutional-LSTM Network) model, and the results of eight error evaluation indexes are given. The results show that the hybrid prediction model has better prediction effect than the single prediction model, and the proposed hybrid model (extract the temporal characteristics of data first, and then extract the spatial characteristics of data) is better than Convolutional-LSTM Network (extract the spatial characteristics of data first, and then extract the temporal characteristics of data).",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Computer science",
+      "Convolutional neural network",
+      "Photovoltaic system",
+      "Artificial intelligence",
+      "Deep learning",
+      "Data modeling",
+      "Artificial neural network",
+      "Hybrid neural network"
+    ],
+    "concepts_openalex": [
+      "Computer science",
+      "Convolutional neural network",
+      "Photovoltaic system",
+      "Artificial intelligence",
+      "Deep learning",
+      "Data modeling",
+      "Artificial neural network",
+      "Hybrid neural network"
+    ],
+    "citation_count_s2": 463,
+    "citation_count_crossref": 483,
+    "citation_count_openalex": 506,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "B2",
+    "category": "B",
+    "category_name": "Recurrent / RNN-based forecasting",
+    "from_seed": "adaptive-mv-lstm",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Forecasting hourly day-ahead solar photovoltaic power generation by assembling a new adaptive multivariate data analysis with a long short-term memory network",
+      "container": "Sustainable Energy, Grids and Networks"
+    },
+    "doi": "10.1016/j.segan.2023.101133",
+    "title": "Forecasting hourly day-ahead solar photovoltaic power generation by assembling a new adaptive multivariate data analysis with a long short-term memory network",
+    "title_variants": [
+      "Forecasting hourly day-ahead solar photovoltaic power generation by assembling a new adaptive multivariate data analysis with a long short-term memory network"
+    ],
+    "authors_crossref": [
+      "Priya Gupta",
+      "Rhythm Singh"
+    ],
+    "authors_openalex": [
+      "Priya Gupta",
+      "Rhythm Singh"
+    ],
+    "authors_s2": [
+      "Priya Gupta",
+      "Rhythm Singh"
+    ],
+    "date_parts_crossref": [
+      2023,
+      9
+    ],
+    "published_print": [
+      2023,
+      9
+    ],
+    "published_online": null,
+    "publication_date_s2": "2023-08-01",
+    "year_openalex": 2023,
+    "container_crossref": "Sustainable Energy, Grids and Networks",
+    "container_openalex": "Sustainable Energy Grids and Networks",
+    "venue_s2": "Sustainable Energy, Grids and Networks",
+    "journal_s2": "Sustainable Energy, Grids and Networks",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.segan.2023.101133",
+    "url_openalex": "https://doi.org/10.1016/j.segan.2023.101133",
+    "abstract": "Accurate multi-step PV power forecasting is a challenging task because of complex time series and error buildup in muti-step forecasts. This work is based on developing a decomposition-based hybrid model for hourly day-ahead PV power forecasting. Noise-assisted multivariate empirical mode decomposition (NA-MEMD) is an updated version of a popular MEMD technique that breaks the original series into several subseries termed as intrinsic mode functions (IMFs). Due to IMFs' statistically independent behavior, a separate long short-term memory (LSTM) network is designed for each set of multivariate IMFs. A single LSTM model is trained to simultaneously predict the IMF of the target variable for the sunshine hours of a day. Incorporating NA-MEMD with LSTM showed an average % RMSE (% MAE) reduction of 47.65 (50.99) and 11.11 (15.76) compared to the standalone LSTM and MEMD-based LSTM model, respectively, across three locations. The proposed model reported an average RMSE of 65.08 W/m2 across three locations. This investigation indicates that decomposition-based hybrid models can potentially reduce the error of multi-step forecasts. This study also recommends using NA-MEMD instead of MEMD because it improves forecast accuracy and requires less time for data demarcation (MEMD: 251 sec, NA-MEMD: 195 sec).",
+    "abstract_source": "publisher_abstract_via_sciencedirect_indexed_excerpt",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Computer science",
+      "Multivariate statistics",
+      "Photovoltaic system",
+      "Mean squared error",
+      "Mode (computer interface)",
+      "Time series",
+      "Term (time)",
+      "Artificial intelligence"
+    ],
+    "concepts_openalex": [
+      "Computer science",
+      "Multivariate statistics",
+      "Photovoltaic system",
+      "Mean squared error",
+      "Mode (computer interface)",
+      "Time series",
+      "Term (time)",
+      "Artificial intelligence"
+    ],
+    "citation_count_s2": 30,
+    "citation_count_crossref": 27,
+    "citation_count_openalex": 33,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_source_url": "https://www.sciencedirect.com/science/article/abs/pii/S0038092X18306510"
+  },
+  {
+    "id": "B3",
+    "category": "B",
+    "category_name": "Recurrent / RNN-based forecasting",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1109/access.2019.2946057",
+    "title": "An LSTM Short-Term Solar Irradiance Forecasting Under Complicated Weather Conditions",
+    "title_variants": [
+      "An LSTM Short-Term Solar Irradiance Forecasting Under Complicated Weather Conditions"
+    ],
+    "authors_crossref": [
+      "Yunjun Yu",
+      "Junfei Cao",
+      "Jianyong Zhu"
+    ],
+    "authors_openalex": [
+      "Yunjun Yu",
+      "Junfei Cao",
+      "Jianyong Zhu"
+    ],
+    "authors_s2": [
+      "Yunjun Yu",
+      "Junfei Cao",
+      "Jian-Yong Zhu"
+    ],
+    "date_parts_crossref": [
+      2019
+    ],
+    "published_print": [
+      2019
+    ],
+    "published_online": null,
+    "publication_date_s2": "2019-10-10",
+    "year_openalex": 2019,
+    "container_crossref": "IEEE Access",
+    "container_openalex": "IEEE Access",
+    "venue_s2": "IEEE Access",
+    "journal_s2": "IEEE Access",
+    "publisher_crossref": "Institute of Electrical and Electronics Engineers (IEEE)",
+    "publisher_openalex": "Institute of Electrical and Electronics Engineers",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1109/access.2019.2946057",
+    "url_openalex": "https://doi.org/10.1109/access.2019.2946057",
+    "abstract": "Complicated weather conditions lead to intermittent, random and volatility in photovoltaic (PV) systems, which makes PV predictions difficult. A recurrent neural network (RNN) is considered to be an effective tool for time-series data prediction. However, when the weather changes intensely, the long-term sequence of multivariate may cause gradient vanishing (exploding) during the training of RNN, leading the prediction results to local optimum. Long short-term memory (LSTM) network is the deep structure of RNN. Due to its special hidden layer unit structure, it can preserve the trend information contained in the long-term sequence, which is allowed to solve the problems of RNN and improve performance. An LSTM-based approach is applied for short-term predictions in this study based on a timescale that encompasses global horizontal irradiance (GHI) one hour in advance and one day in advance. Inaccurate forecasts usually occur on cloudy days, and the results of ANN and SVR in the literature prove this. To improve prediction accuracy on cloudy days, the clearness-index was introduced as an input data for the LSTM model and to classify the type of weather by k-means during the data processing, where cloudy days are classified as the cloudy and the mixed(partially cloudy). NN models are established to compare the accuracy of different approaches and the cross-regional study is to prove whether the method can be generalizable. From the results of hourly forecast, the R2 coefficient of LSTM on cloudy days and mixed days is exceeding 0.9, while the R2 of RNN is only 0.70 and 0.79 in Atlanta and Hawaii. From the results of daily forecast, All R2 on cloudy days is about 0.85. However, the LSTM is still very effective in improving of RNN and more accurate than other models.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Term (time)",
+      "Irradiance",
+      "Solar irradiance",
+      "Meteorology",
+      "Weather forecasting",
+      "Computer science",
+      "Environmental science",
+      "Astronomy"
+    ],
+    "concepts_openalex": [
+      "Term (time)",
+      "Irradiance",
+      "Solar irradiance",
+      "Meteorology",
+      "Weather forecasting",
+      "Computer science",
+      "Environmental science",
+      "Astronomy"
+    ],
+    "citation_count_s2": 258,
+    "citation_count_crossref": 300,
+    "citation_count_openalex": 319,
+    "open_access_pdf": "https://ieeexplore.ieee.org/ielx7/6287639/8600701/08864021.pdf",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "B4",
+    "category": "B",
+    "category_name": "Recurrent / RNN-based forecasting",
+    "from_seed": "short-term-solar-dl-config",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Short-term solar power forecast with deep learning: Exploring optimal input and output configuration",
+      "container": "Solar Energy"
+    },
+    "doi": "10.1016/j.solener.2019.06.041",
+    "title": "Short-term solar power forecast with deep learning: Exploring optimal input and output configuration",
+    "title_variants": [
+      "Short-term solar power forecast with deep learning: Exploring optimal input and output configuration"
+    ],
+    "authors_crossref": [
+      "Yuchi Sun",
+      "Vignesh Venugopal",
+      "Adam R. Brandt"
+    ],
+    "authors_openalex": [
+      "Yuchi Sun",
+      "Vignesh Venugopal",
+      "Adam R. Brandt"
+    ],
+    "authors_s2": [
+      "Yuchi Sun",
+      "V. Venugopal",
+      "A. Brandt"
+    ],
+    "date_parts_crossref": [
+      2019,
+      8
+    ],
+    "published_print": [
+      2019,
+      8
+    ],
+    "published_online": null,
+    "publication_date_s2": "2019-08-01",
+    "year_openalex": 2019,
+    "container_crossref": "Solar Energy",
+    "container_openalex": "Solar Energy",
+    "venue_s2": "Solar Energy",
+    "journal_s2": "Solar Energy",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.solener.2019.06.041",
+    "url_openalex": "https://doi.org/10.1016/j.solener.2019.06.041",
+    "abstract": "Abstract The volatility of cloud movement introduces significant uncertainty in short-term solar power forecasting, which can complicate the operation of modern power systems. This work proposes a specialized convolutional neural network (CNN) “SUNSET” to predict 15-min ahead minutely-averaged PV output. The model is characterized by its usage of hybrid input, temporal history and strong regularization. On a 1-year database, the “baseline” model achieves 16.3% forecast skill in cloudy conditions and 15.7% in all weather conditions, relative to a smart persistence forecast. Optimal input and output configurations are explored and suggestions are given. In terms of input, both sky images and PV output history are found to be crucial. Output-wise, training against PV output significantly outperforms using clear sky index (CSI). Careful down-sampling can reduce the training time by as much as 83% without affecting accuracy. For lag term configurations, using the same length of history as the forecast horizon is a good heuristic, while using slightly shorter history yielded a modest 0.5–0.9% improvement in this case. To ensure reproducibility and facilitate future works, the code base of this work is available at Github/YuchiSun/SUNSET.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Computer science",
+      "Term (time)",
+      "Sky",
+      "Deep learning",
+      "Forecast skill",
+      "Volatility (finance)",
+      "Heuristic",
+      "Lag"
+    ],
+    "concepts_openalex": [
+      "Computer science",
+      "Term (time)",
+      "Sky",
+      "Deep learning",
+      "Forecast skill",
+      "Volatility (finance)",
+      "Heuristic",
+      "Lag"
+    ],
+    "citation_count_s2": 177,
+    "citation_count_crossref": 195,
+    "citation_count_openalex": 195,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "C1",
+    "category": "C",
+    "category_name": "Hybrid deep learning",
+    "from_seed": "dl-wavelet-solar-pv",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Deep learning and wavelet transform integrated approach for short-term solar PV power prediction",
+      "container": "Measurement"
+    },
+    "doi": "10.1016/j.measurement.2020.108250",
+    "title": "Deep learning and wavelet transform integrated approach for short-term solar PV power prediction",
+    "title_variants": [
+      "Deep learning and wavelet transform integrated approach for short-term solar PV power prediction"
+    ],
+    "authors_crossref": [
+      "Manohar Mishra",
+      "Pandit Byomakesha Dash",
+      "Janmenjoy Nayak",
+      "Bighnaraj Naik",
+      "Subrat Kumar Swain"
+    ],
+    "authors_openalex": [
+      "Manohar Mishra",
+      "Pandit Byomakesha Dash",
+      "Janmenjoy Nayak",
+      "Bighnaraj Naik",
+      "Subrat Kumar Swain"
+    ],
+    "authors_s2": [
+      "Manohar Mishra",
+      "Pandit Byomakesha Dash",
+      "Janmenjoy Nayak",
+      "B. Naik",
+      "Subrat Kumar Swain"
+    ],
+    "date_parts_crossref": [
+      2020,
+      12
+    ],
+    "published_print": [
+      2020,
+      12
+    ],
+    "published_online": null,
+    "publication_date_s2": "2020-12-15",
+    "year_openalex": 2020,
+    "container_crossref": "Measurement",
+    "container_openalex": "Measurement",
+    "venue_s2": "",
+    "journal_s2": "Measurement",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.measurement.2020.108250",
+    "url_openalex": "https://doi.org/10.1016/j.measurement.2020.108250",
+    "abstract": "Abstract A novel short-term solar power prediction model is presented in this work, by utilizing the learning ability of Long-Shot-Term-Memory network (LSTM) based deep learning (DL) technique and the concept of wavelet transform (WT). In this proposed WT-LSTM model, the WT is used to decompose the recorded solar energy time-series data into different frequency series followed by the statistical feature extraction process. The LSTM with dropout based DL model is proposed to predict the futuristic value of solar energy generation in different time-horizon (hourly and day basis), where the statistical WT based features combined with several other meteorological factors such as temperature, wind speed, pressure, cloudy-index, humidity and altimeter index are modelled as input to the LSTM model. The efficiency of the suggested WT-LSTM model has been proved by comparing statistical performance measures in terms of RMSE, MAPE, MAE and R2 score, with other contemporary machine learning and deep-learning based models.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Mean squared error",
+      "Wavelet transform",
+      "Artificial intelligence",
+      "Computer science",
+      "Deep learning",
+      "Dropout (neural networks)",
+      "Artificial neural network",
+      "Wavelet"
+    ],
+    "concepts_openalex": [
+      "Mean squared error",
+      "Wavelet transform",
+      "Artificial intelligence",
+      "Computer science",
+      "Deep learning",
+      "Dropout (neural networks)",
+      "Artificial neural network",
+      "Wavelet"
+    ],
+    "citation_count_s2": 176,
+    "citation_count_crossref": 199,
+    "citation_count_openalex": 212,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "C2",
+    "category": "C",
+    "category_name": "Hybrid deep learning",
+    "from_seed": "intra-hour-multisource",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Intra-Hour Photovoltaic Generation Forecasting Based on Multi-Source Data and Deep Learning Methods",
+      "container": "IEEE Transactions on Sustainable Energy"
+    },
+    "doi": "10.1109/tste.2021.3123337",
+    "title": "Intra-Hour Photovoltaic Generation Forecasting Based on Multi-Source Data and Deep Learning Methods",
+    "title_variants": [
+      "Intra-Hour Photovoltaic Generation Forecasting Based on Multi-Source Data and Deep Learning Methods"
+    ],
+    "authors_crossref": [
+      "Tiechui Yao",
+      "Jue Wang",
+      "Haoyan Wu",
+      "Pei Zhang",
+      "Shigang Li",
+      "Ke Xu",
+      "Xiaoyan Liu",
+      "Xuebin Chi"
+    ],
+    "authors_openalex": [
+      "Tiechui Yao",
+      "Jue Wang",
+      "Haoyan Wu",
+      "Pei Zhang",
+      "Shigang Li",
+      "Ke Xu",
+      "Xiaoyan Liu",
+      "Xuebin Chi"
+    ],
+    "authors_s2": [
+      "Tiechui Yao",
+      "Jue Wang",
+      "Haoyan Wu",
+      "Pei Zhang",
+      "Shi-Gang Li",
+      "Ke Xu",
+      "Xiaoyan Liu",
+      "Xuebin Chi"
+    ],
+    "date_parts_crossref": [
+      2022,
+      1
+    ],
+    "published_print": [
+      2022,
+      1
+    ],
+    "published_online": null,
+    "publication_date_s2": "2022-01-01",
+    "year_openalex": 2021,
+    "container_crossref": "IEEE Transactions on Sustainable Energy",
+    "container_openalex": "IEEE Transactions on Sustainable Energy",
+    "venue_s2": "IEEE Transactions on Sustainable Energy",
+    "journal_s2": "IEEE Transactions on Sustainable Energy",
+    "publisher_crossref": "Institute of Electrical and Electronics Engineers (IEEE)",
+    "publisher_openalex": "Institute of Electrical and Electronics Engineers",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1109/tste.2021.3123337",
+    "url_openalex": "https://doi.org/10.1109/tste.2021.3123337",
+    "abstract": "Global issues pertaining to climate change have necessitated the rapid deployment of new energy sources, such as photovoltaic (PV) generation. In smart grids, accurate forecasting is essential to ensure the reliability and economy of the power system. However, PV generation is severely affected by meteorological factors, which hinders accurate forecasting. Various types of data, such as local measurement data, numerical weather prediction, and satellite images, can reflect meteorological dynamics over different time scales. This paper proposes a novel data-driven forecasting framework based on deep learning, which integrates an advanced U-net and an encoder-decoder architecture to cooperatively process multi-source (time series recording and satellite image) data. The adaption of the neural networks to the data sources and the collaborative learning of both spatial and temporal features boost the model accuracy. The experimental results for 50 real-world PV power stations indicate that the proposed framework features a higher accuracy than that of other baseline models.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Software deployment",
+      "Deep learning",
+      "Data modeling",
+      "Reliability (semiconductor)",
+      "Artificial neural network",
+      "Electricity generation"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Software deployment",
+      "Deep learning",
+      "Data modeling",
+      "Reliability (semiconductor)",
+      "Artificial neural network",
+      "Electricity generation"
+    ],
+    "citation_count_s2": 86,
+    "citation_count_crossref": 99,
+    "citation_count_openalex": 101,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "C3",
+    "category": "C",
+    "category_name": "Hybrid deep learning",
+    "from_seed": "feature-extraction-attention",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Short-term photovoltaic power forecasting with feature extraction and attention mechanisms",
+      "container": "Renewable Energy"
+    },
+    "doi": "10.1016/j.renene.2024.120437",
+    "title": "Short-term photovoltaic power forecasting with feature extraction and attention mechanisms",
+    "title_variants": [
+      "Short-term photovoltaic power forecasting with feature extraction and attention mechanisms"
+    ],
+    "authors_crossref": [
+      "Wencheng Liu",
+      "Zhizhong Mao"
+    ],
+    "authors_openalex": [
+      "Wen‐Cheng Liu",
+      "Zhizhong Mao"
+    ],
+    "authors_s2": [
+      "Wen-Cheng Liu",
+      "Zhi-Zhong Mao"
+    ],
+    "date_parts_crossref": [
+      2024,
+      5
+    ],
+    "published_print": [
+      2024,
+      5
+    ],
+    "published_online": null,
+    "publication_date_s2": "2024-04-01",
+    "year_openalex": 2024,
+    "container_crossref": "Renewable Energy",
+    "container_openalex": "Renewable Energy",
+    "venue_s2": "Renewable Energy",
+    "journal_s2": "Renewable Energy",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.renene.2024.120437",
+    "url_openalex": "https://doi.org/10.1016/j.renene.2024.120437",
+    "abstract": "The uncertainty of weather conditions has always been a major challenge limiting the performance of photovoltaic (PV) power prediction. Enhancing the accuracy and stability of PV power prediction is crucial for optimizing grid operation. In response to this challenge, this study introduces a hybrid model that integrates an attention mechanism with the Convolutional Neural Network (CNN) and Bidirectional Long Short-Term Memory Network (BiLSTM). This model aims to mitigate the adverse impact of weather variability on the accuracy of PV power prediction by effectively extracting key features from multidimensional time series data. Additionally, through ablation experiments, this research further assesses the contribution of each model component to performance. Validated with actual data collected from a 1 MW PV power station in China, our proposed model demonstrates significant performance advantages compared to eight advanced prediction models. Ablation study results reveal that removing the CNN component led to a 58.2% increase in MAE and a 53.9% increase in RMSE, while the removal of the attention mechanism resulted in an 83.8% increase in maximum error. These findings underscore the substantial enhancement in prediction accuracy achieved through the integration of CNN and BiLSTM, and the introduction of the attention mechanism significantly boosts the model's prediction stability.",
+    "abstract_source": "publisher_abstract_via_repec_indexed_excerpt",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Stability (learning theory)",
+      "Component (thermodynamics)",
+      "Convolutional neural network",
+      "Artificial neural network",
+      "Term (time)",
+      "Predictive modelling"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Stability (learning theory)",
+      "Component (thermodynamics)",
+      "Convolutional neural network",
+      "Artificial neural network",
+      "Term (time)",
+      "Predictive modelling"
+    ],
+    "citation_count_s2": 109,
+    "citation_count_crossref": 110,
+    "citation_count_openalex": 110,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_source_url": "https://ideas.repec.org/a/eee/renene/v226y2024ics0960148124005020.html"
+  },
+  {
+    "id": "C4",
+    "category": "C",
+    "category_name": "Hybrid deep learning",
+    "from_seed": "cnn-lstm-attention-neighbors",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "A Hybrid Convolutional–Long Short-Term Memory–Attention Framework for Short-Term Photovoltaic Power Forecasting, Incorporating Data from Neighboring Stations",
+      "container": "Applied Sciences"
+    },
+    "doi": "10.3390/app14125189",
+    "title": "A Hybrid Convolutional–Long Short-Term Memory–Attention Framework for Short-Term Photovoltaic Power Forecasting, Incorporating Data from Neighboring Stations",
+    "title_variants": [
+      "A Hybrid Convolutional–Long Short-Term Memory–Attention Framework for Short-Term Photovoltaic Power Forecasting, Incorporating Data from Neighboring Stations"
+    ],
+    "authors_crossref": [
+      "Feng Hu",
+      "Linghua Zhang",
+      "Jiaqi Wang"
+    ],
+    "authors_openalex": [
+      "Hu Feng",
+      "Linghua Zhang",
+      "Jiaqi Wang"
+    ],
+    "authors_s2": [
+      "Feng Hu",
+      "Linghua Zhang",
+      "Jiaqi Wang"
+    ],
+    "date_parts_crossref": [
+      2024,
+      6,
+      14
+    ],
+    "published_print": null,
+    "published_online": [
+      2024,
+      6,
+      14
+    ],
+    "publication_date_s2": "2024-06-14",
+    "year_openalex": 2024,
+    "container_crossref": "Applied Sciences",
+    "container_openalex": "Applied Sciences",
+    "venue_s2": "Applied Sciences",
+    "journal_s2": "Applied Sciences",
+    "publisher_crossref": "MDPI AG",
+    "publisher_openalex": "Multidisciplinary Digital Publishing Institute",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.3390/app14125189",
+    "url_openalex": "https://doi.org/10.3390/app14125189",
+    "abstract": "To enhance the safety of grid operations, this paper proposes a high-precision short-term photovoltaic (PV) power forecasting method that integrates information from surrounding PV stations and deep learning prediction models. The proposed method utilizes numerical weather prediction (NWP) data of the target PV station and highly correlated features from nearby stations as inputs. This study first analyzes the correlation between irradiance and power sequences and calculates a comprehensive similarity index based on distance factors. Stations with high-similarity indices are selected as data sources. Subsequently, Bayesian optimization is employed to determine the optimal data fusion ratio. The selected data are then used to model power predictions through the convolutional long short-term memory with attention (Conv-LSTM-ATT) deep neural network. Experimental results show that the proposed model significantly outperforms three classical models in terms of forecasting accuracy. The data fusion strategy determined by Bayesian optimization reduces the root mean square error (RMSE) of the test set by 20.04%, 28.24%, and 30.94% under sunny, cloudy, and rainy conditions, respectively.",
+    "abstract_source": "crossref",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Mean squared error",
+      "Term (time)",
+      "Convolutional neural network",
+      "Data set",
+      "Artificial neural network",
+      "Data mining"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Mean squared error",
+      "Term (time)",
+      "Convolutional neural network",
+      "Data set",
+      "Artificial neural network",
+      "Data mining"
+    ],
+    "citation_count_s2": 15,
+    "citation_count_crossref": 16,
+    "citation_count_openalex": 13,
+    "open_access_pdf": "https://doi.org/10.3390/app14125189",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "C5",
+    "category": "C",
+    "category_name": "Hybrid deep learning",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.energy.2022.124661",
+    "title": "LOWESS smoothing and Random Forest based GRU model: A short-term photovoltaic power generation forecasting method",
+    "title_variants": [
+      "LOWESS smoothing and Random Forest based GRU model: A short-term photovoltaic power generation forecasting method"
+    ],
+    "authors_crossref": [
+      "Yeming Dai",
+      "Yanxin Wang",
+      "Mingming Leng",
+      "Xinyu Yang",
+      "Qiong Zhou"
+    ],
+    "authors_openalex": [
+      "Yeming Dai",
+      "Yanxin Wang",
+      "Mingming Leng",
+      "Xinyu Yang",
+      "Qiong Zhou"
+    ],
+    "authors_s2": null,
+    "date_parts_crossref": [
+      2022,
+      10
+    ],
+    "published_print": [
+      2022,
+      10
+    ],
+    "published_online": null,
+    "publication_date_s2": null,
+    "year_openalex": 2022,
+    "container_crossref": "Energy",
+    "container_openalex": "Energy",
+    "venue_s2": null,
+    "journal_s2": null,
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.energy.2022.124661",
+    "url_openalex": "https://doi.org/10.1016/j.energy.2022.124661",
+    "abstract": "Photovoltaic (PV) power generation forecasting mainly includes data processing and model prediction, in which data processing is a necessary prerequisite. Existing studies generally overlook the effect of data fluctuation on prediction performance. To address this, this paper compares five data smoothing techniques for daily PV power generation - locally weighted scatterplot smoothing (LOWESS), locally estimated scatterplot smoothing (LOESS), percentile filtering (PF), Savitzky-Golay smoothing (SG) and adjacent average (AAv) - and retains the one with the lowest prediction error. Random Forest is then used for feature selection to identify the natural factors that most affect daily PV power generation. Finally, the GRU prediction model is optimised by adding RepeatVector and TimeDistributed layers, which the authors argue differentiates it from other optimised GRU models in terms of model hierarchy and multidimensional input handling. The method is validated on daily PV power generation data from Xuhui District, Shanghai, China, and additionally on DKASC (Alice Springs, Australia) data to compare short-term forecasting against medium- and long-term forecasting horizons. The authors position the contribution as the combination of smoothing-based data processing, Random Forest feature selection and an improved GRU architecture, which none of the compared reference models jointly provide.",
+    "abstract_source": "publisher_abstract_via_sciencedirect_indexed_excerpt",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Term (time)",
+      "Random forest",
+      "Smoothing",
+      "Econometrics",
+      "Environmental science",
+      "Computer science",
+      "Engineering"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Term (time)",
+      "Random forest",
+      "Smoothing",
+      "Econometrics",
+      "Environmental science",
+      "Computer science",
+      "Engineering"
+    ],
+    "citation_count_s2": null,
+    "citation_count_crossref": 139,
+    "citation_count_openalex": 138,
+    "open_access_pdf": null,
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex"
+    ],
+    "abstract_source_url": "https://www.sciencedirect.com/science/article/abs/pii/S036054422201564X"
+  },
+  {
+    "id": "C6",
+    "category": "C",
+    "category_name": "Hybrid deep learning",
+    "from_seed": "cnn-lstm-attention-mech",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Short-Term Photovoltaic Power Forecasting Based on CNN–LSTM–Attention Mechanism",
+      "container": "Energies"
+    },
+    "doi": "10.3390/en19071747",
+    "title": "Short-Term Photovoltaic Power Forecasting Based on CNN–LSTM–Attention Mechanism",
+    "title_variants": [
+      "Short-Term Photovoltaic Power Forecasting Based on CNN–LSTM–Attention Mechanism"
+    ],
+    "authors_crossref": [
+      "Mingze Lei",
+      "Tao Chen",
+      "Yao Xiao",
+      "Caixia Yang",
+      "Worawat Sa-Ngiamvibool",
+      "Supannika Wattana",
+      "Buncha Wattana"
+    ],
+    "authors_openalex": [
+      "Mingze Lei",
+      "Tao Chen",
+      "Yao Xiao",
+      "Caixia Yang",
+      "Worawat Sa-Ngiamvibool",
+      "Supannika Wattana",
+      "Buncha Wattana"
+    ],
+    "authors_s2": [
+      "Ming-Ze Lei",
+      "Tao Chen",
+      "Yao Xiao",
+      "Cai-Xia Yang",
+      "W. Sa-ngiamvibool",
+      "S. Wattana",
+      "B. Wattana"
+    ],
+    "date_parts_crossref": [
+      2026,
+      4,
+      2
+    ],
+    "published_print": null,
+    "published_online": [
+      2026,
+      4,
+      2
+    ],
+    "publication_date_s2": "2026-04-02",
+    "year_openalex": 2026,
+    "container_crossref": "Energies",
+    "container_openalex": "Energies",
+    "venue_s2": "Energies",
+    "journal_s2": "Energies",
+    "publisher_crossref": "MDPI AG",
+    "publisher_openalex": "Multidisciplinary Digital Publishing Institute",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.3390/en19071747",
+    "url_openalex": "https://doi.org/10.3390/en19071747",
+    "abstract": "Accurate short-term photovoltaic (PV) power forecasting is crucial for maintaining grid stability. However, existing hybrid deep learning models suffer from inherent limitations owing to static feature-weighting mechanisms, often displaying significant phase lag and peak clipping under severe meteorological fluctuations. To address this, in this study, we adopt a hybrid CNN–LSTM–Attention forecasting framework incorporating an SE-based attention strategy. Field validation at a 150 kW PV power plant in Ningxia, China, demonstrated that the adopted model achieved a Root Mean Square Error (RMSE) convergence of 2.157 kW. Notably, this represented a 41.92% reduction in error compared to the standard LSTM benchmark and a further 16.46% improvement over the suboptimal CNN-LSTM baseline, explicitly confirming the specific contribution of the SE-based attention mechanism. Moreover, multi-weather evaluations and ablation studies confirm the framework’s robustness. Dynamic Time Warping (DTW) and Diebold–Mariano (DM) tests establish its statistical superiority and the reduction in phase lag against baselines. Residual analysis reveals a leptokurtic distribution with white noise properties, confirming the reduction in systematic bias. Consequently, this high-fidelity tracking allows precise minute-level ramping detection and decreases spinning reserve demands in practical power dispatch.",
+    "abstract_source": "crossref",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Benchmark (surveying)",
+      "Residual",
+      "Photovoltaic system",
+      "Reduction (mathematics)",
+      "Power (physics)",
+      "Clipping (morphology)",
+      "Noise (video)",
+      "Lag"
+    ],
+    "concepts_openalex": [
+      "Computer science",
+      "Benchmark (surveying)",
+      "Residual",
+      "Photovoltaic system",
+      "Reduction (mathematics)",
+      "Power (physics)",
+      "Clipping (morphology)",
+      "Noise (video)"
+    ],
+    "citation_count_s2": 4,
+    "citation_count_crossref": 4,
+    "citation_count_openalex": 4,
+    "open_access_pdf": "https://www.mdpi.com/1996-1073/19/7/1747/pdf?version=1775131757",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "D1",
+    "category": "D",
+    "category_name": "Advanced / attention-based architectures",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.rser.2024.114479",
+    "title": "Multi-step photovoltaic power forecasting using transformer and recurrent neural networks",
+    "title_variants": [
+      "Multi-step photovoltaic power forecasting using transformer and recurrent neural networks"
+    ],
+    "authors_crossref": [
+      "Jimin Kim",
+      "Josue Obregon",
+      "Hoonseok Park",
+      "Jae-Yoon Jung"
+    ],
+    "authors_openalex": [
+      "Jimin Kim",
+      "Josue Obregon",
+      "Hoonseok Park",
+      "Jae‐Yoon Jung"
+    ],
+    "authors_s2": [
+      "Jimin Kim",
+      "Josué Obregon",
+      "Hoonseok Park",
+      "Jae-Yoon Jung"
+    ],
+    "date_parts_crossref": [
+      2024,
+      8
+    ],
+    "published_print": [
+      2024,
+      8
+    ],
+    "published_online": null,
+    "publication_date_s2": "2024-08-01",
+    "year_openalex": 2024,
+    "container_crossref": "Renewable and Sustainable Energy Reviews",
+    "container_openalex": "Renewable and Sustainable Energy Reviews",
+    "venue_s2": "Renewable & Sustainable Energy Reviews",
+    "journal_s2": "Renewable and Sustainable Energy Reviews",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.rser.2024.114479",
+    "url_openalex": "https://doi.org/10.1016/j.rser.2024.114479",
+    "abstract": "Affordable and clean energy is an important UN sustainable development goal. Solar energy is more difficult to control than fossil fuels, highlighting the need for accurate solar power forecasts. This study develops three variants of the transformer networks, called PVTransNet, for a multi-step day-ahead photovoltaic power forecasting. The transformer networks use historical solar power generation, weather observation, weather forecast and solar geometry data as input to effectively predict next-day hourly power generation. In particular, the third variant model combines long short-term memory (LSTM) to transformer networks to supplement weather forecasts from the weather station. The combined model, PVTransNet-EDR, outperformed individual LSTM and other transformer models in the experiments conducted on data from two photovoltaic power plants. The model performed 48.3 % better, in mean absolute error, than simple LSTM in the power forecasting. Accurate solar power forecasting model is expected to be utilized for efficient energy storage and microgrid management, effective energy supply policy, and optimal plant location selection.",
+    "abstract_source": "publisher_abstract_via_openalex_indexed_highlights",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Artificial neural network",
+      "Transformer",
+      "Computer science",
+      "Engineering",
+      "Artificial intelligence",
+      "Environmental science",
+      "Electrical engineering"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Artificial neural network",
+      "Transformer",
+      "Computer science",
+      "Engineering",
+      "Artificial intelligence",
+      "Environmental science",
+      "Electrical engineering"
+    ],
+    "citation_count_s2": 148,
+    "citation_count_crossref": 162,
+    "citation_count_openalex": 153,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_source_url": "https://ui.adsabs.harvard.edu/abs/2024RSERv.20014479K/abstract"
+  },
+  {
+    "id": "D2",
+    "category": "D",
+    "category_name": "Advanced / attention-based architectures",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.egyai.2024.100444",
+    "title": "Photovoltaic power forecasting: A Transformer based framework",
+    "title_variants": [
+      "Photovoltaic power forecasting: A Transformer based framework"
+    ],
+    "authors_crossref": [
+      "Gabriele Piantadosi",
+      "Sofia Dutto",
+      "Antonio Galli",
+      "Saverio De Vito",
+      "Carlo Sansone",
+      "Girolamo Di Francia"
+    ],
+    "authors_openalex": [
+      "Gabriele Piantadosi",
+      "Sofia Dutto",
+      "Antonio Galli",
+      "Saverio De Vito",
+      "Carlo Sansone",
+      "Girolamo Di Francia"
+    ],
+    "authors_s2": [
+      "Gabriele Piantadosi",
+      "Sofia Dutto",
+      "Antonio Galli",
+      "S. De Vito",
+      "Carlo Sansone",
+      "G. Di Francia"
+    ],
+    "date_parts_crossref": [
+      2024,
+      12
+    ],
+    "published_print": [
+      2024,
+      12
+    ],
+    "published_online": null,
+    "publication_date_s2": "2024-11-01",
+    "year_openalex": 2024,
+    "container_crossref": "Energy and AI",
+    "container_openalex": "Energy and AI",
+    "venue_s2": "Energy and AI",
+    "journal_s2": "Energy and AI",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.egyai.2024.100444",
+    "url_openalex": "https://doi.org/10.1016/j.egyai.2024.100444",
+    "abstract": "The accurate prediction of photovoltaic (PV) energy production is a crucial task to optimise the integration of solar energy into the power grid and maximise the benefit of renewable source trading in the energy market. This paper systematically and quantitatively analyses the literature by comparing different machine learning techniques and the impact of different meteorological forecast providers. The methodology consists of an irradiance model coupled with a meteorological provider; this combination removes the constraint of a local irradiance measurement. The result is a Transformer Neural Network architecture, trained and tested using OpenMeteo data, whose performance is superior to other combinations, providing a MAE of 1.22 kW (0.95%), and a MAPE of 2.21%. The implications of our study suggest that adopting a comprehensive approach, integrating local weather data, modelled irradiance, and PV plant configuration data, can significantly improve the accuracy of PV power forecasting, thus contributing to more effective technological and economic integration. • This work focuses on PV power output forecasting with ML. • PV power forecasting with ML models on various datasets to evaluate their efficacy. • Transformer model shows the lowest errors when forecasting PV power production.",
+    "abstract_source": "openalex_inverted_index",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Transformer",
+      "Computer science",
+      "Electrical engineering",
+      "Reliability engineering",
+      "Environmental science",
+      "Engineering",
+      "Voltage"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Transformer",
+      "Computer science",
+      "Electrical engineering",
+      "Reliability engineering",
+      "Environmental science",
+      "Engineering",
+      "Voltage"
+    ],
+    "citation_count_s2": 93,
+    "citation_count_crossref": 96,
+    "citation_count_openalex": 86,
+    "open_access_pdf": "https://doi.org/10.1016/j.egyai.2024.100444",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "D3",
+    "category": "D",
+    "category_name": "Advanced / attention-based architectures",
+    "from_seed": "multiscale-fused-gcn-multisite",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Multi-scale fused Graph Convolutional Network for multi-site photovoltaic power forecasting",
+      "container": "Energy Conversion and Management"
+    },
+    "doi": "10.1016/j.enconman.2025.119773",
+    "title": "Multi-scale fused Graph Convolutional Network for multi-site photovoltaic power forecasting",
+    "title_variants": [
+      "Multi-scale fused Graph Convolutional Network for multi-site photovoltaic power forecasting"
+    ],
+    "authors_crossref": [
+      "Qi Sima",
+      "Xinze Zhang",
+      "Siyue Yang",
+      "Liang Shen",
+      "Yukun Bao"
+    ],
+    "authors_openalex": [
+      "Qi Sima",
+      "Xinze Zhang",
+      "Siyue Yang",
+      "Liang Chi Shen",
+      "Yukun Bao"
+    ],
+    "authors_s2": [
+      "Qi Sima",
+      "Xinze Zhang",
+      "Si-Yue Yang",
+      "Liang Shen",
+      "Yu-Kun Bao"
+    ],
+    "date_parts_crossref": [
+      2025,
+      6
+    ],
+    "published_print": [
+      2025,
+      6
+    ],
+    "published_online": null,
+    "publication_date_s2": "2025-06-01",
+    "year_openalex": 2025,
+    "container_crossref": "Energy Conversion and Management",
+    "container_openalex": "Energy Conversion and Management",
+    "venue_s2": "Energy Conversion and Management",
+    "journal_s2": "Energy Conversion and Management",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.enconman.2025.119773",
+    "url_openalex": "https://doi.org/10.1016/j.enconman.2025.119773",
+    "abstract": "In the context of the large-scale development of photovoltaic systems, the demand for multi-site PV power prediction is on the rise. Unlike site-by-site modeling, multi-site PV power prediction not only helps to reduce modeling costs but also has significant potential to enhance the prediction accuracy of individual sites. The diverse variations and fluctuations in inter-site correlations at different time scales present challenges for effective spatiotemporal mining among multiple sites. As solar azimuth and altitude evolve cyclically on hourly scales, sites of similar latitude show similar fluctuations, whereas sudden changes in irradiance due to cloud movement on minute scales lead to a decrease in the power correlation between sites. This study proposes the Multi-Scale Fused Graph Convolutional Neural Network (MSF-GCN), comprising multi-scale construction, a Multi-Graph Convolution block (MGCN), a Decomposed-Bidirectional-Fusion block (DBF) and multiple independent predictors. Raw data are processed by average downsampling to construct multi-scale observations. The MGCN block extracts spatial features from diverse graphs derived from geographic topology and from self-learning graphs with learnable adjacency matrices oriented to information at different time scales. The MLP-based DBF block decomposes data into seasonal and trend components along the time dimension and integrates them across scales through bottom-up and top-down MLPs, propagating fine-grained patterns from smaller to larger scales and distilling coarse context back to refine finer representations. Multiple independent predictors with identical structure but unshared weights project and combine the extracted features. Ablation experiments are used to elucidate the role of each block, and the authors report consistent accuracy improvements over existing methods with favourable run-time efficiency.",
+    "abstract_source": "publisher_abstract_via_sciencedirect_indexed_excerpt",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Graph",
+      "Scale (ratio)",
+      "Computer science",
+      "Environmental science",
+      "Engineering",
+      "Electrical engineering",
+      "Theoretical computer science"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Graph",
+      "Scale (ratio)",
+      "Computer science",
+      "Environmental science",
+      "Engineering",
+      "Electrical engineering",
+      "Theoretical computer science"
+    ],
+    "citation_count_s2": 13,
+    "citation_count_crossref": 18,
+    "citation_count_openalex": 16,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_source_url": "https://www.sciencedirect.com/science/article/abs/pii/S0196890425002961"
+  },
+  {
+    "id": "D4",
+    "category": "D",
+    "category_name": "Advanced / attention-based architectures",
+    "from_seed": "dl-ml-pv-generation",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Deep and Machine Learning Models to Forecast Photovoltaic Power Generation",
+      "container": "Energies"
+    },
+    "doi": "10.3390/en16104097",
+    "title": "Deep and Machine Learning Models to Forecast Photovoltaic Power Generation",
+    "title_variants": [
+      "Deep and Machine Learning Models to Forecast Photovoltaic Power Generation"
+    ],
+    "authors_crossref": [
+      "Sergio Cantillo-Luna",
+      "Ricardo Moreno-Chuquen",
+      "David Celeita",
+      "George Anders"
+    ],
+    "authors_openalex": [
+      "Sergio Cantillo-Luna",
+      "Ricardo Moreno Chuquen",
+      "David F. Celeita",
+      "George J. Anders"
+    ],
+    "authors_s2": [
+      "Sergio Cantillo-Luna",
+      "Ricardo Moreno-Chuquen",
+      "David F. Celeita",
+      "G. Anders"
+    ],
+    "date_parts_crossref": [
+      2023,
+      5,
+      15
+    ],
+    "published_print": null,
+    "published_online": [
+      2023,
+      5,
+      15
+    ],
+    "publication_date_s2": "2023-05-15",
+    "year_openalex": 2023,
+    "container_crossref": "Energies",
+    "container_openalex": "Energies",
+    "venue_s2": "Energies",
+    "journal_s2": "Energies",
+    "publisher_crossref": "MDPI AG",
+    "publisher_openalex": "Multidisciplinary Digital Publishing Institute",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.3390/en16104097",
+    "url_openalex": "https://doi.org/10.3390/en16104097",
+    "abstract": "The integration and management of distributed energy resources (DERs), including residential photovoltaic (PV) production, coupled with the widespread use of enabling technologies such as artificial intelligence, have led to the emergence of new tools, market models, and business opportunities. The accurate forecasting of these resources has become crucial to decision making, despite data availability and reliability issues in some parts of the world. To address these challenges, this paper proposes a deep and machine learning-based methodology for PV power forecasting, which includes XGBoost, random forest, support vector regressor, multi-layer perceptron, and LSTM-based tuned models, and introduces the ConvLSTM1D approach for this task. These models were evaluated on the univariate time-series prediction of low-volume residential PV production data across various forecast horizons. The proposed benchmarking and analysis approach considers technical and economic impacts, which can provide valuable insights for decision-making tools with these resources. The results indicate that the random forest and ConvLSTM1D model approaches yielded the most accurate forecasting performance, as demonstrated by the lowest RMSE, MAPE, and MAE across the different scenarios proposed.",
+    "abstract_source": "crossref",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Random forest",
+      "Computer science",
+      "Benchmarking",
+      "Photovoltaic system",
+      "Perceptron",
+      "Artificial intelligence",
+      "Machine learning",
+      "Decision tree"
+    ],
+    "concepts_openalex": [
+      "Random forest",
+      "Computer science",
+      "Benchmarking",
+      "Photovoltaic system",
+      "Perceptron",
+      "Artificial intelligence",
+      "Machine learning",
+      "Decision tree"
+    ],
+    "citation_count_s2": 50,
+    "citation_count_crossref": 52,
+    "citation_count_openalex": 53,
+    "open_access_pdf": "https://www.mdpi.com/1996-1073/16/10/4097/pdf?version=1684142385",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "D5",
+    "category": "D",
+    "category_name": "Advanced / attention-based architectures",
+    "from_seed": "hybrid-dl-comparative-ml",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Enhancing short-term solar power forecasting using a hybrid deep learning approach and a comparative analysis of machine learning models",
+      "container": "Energy Conversion and Management: X"
+    },
+    "doi": "10.1016/j.ecmx.2025.101431",
+    "title": "Enhancing short-term solar power forecasting using a hybrid deep learning approach and a comparative analysis of machine learning models",
+    "title_variants": [
+      "Enhancing short-term solar power forecasting using a hybrid deep learning approach and a comparative analysis of machine learning models"
+    ],
+    "authors_crossref": [
+      "Putri Nor Liyana Mohamad Radzi",
+      "Saad Mekhilef",
+      "Noraisyah Mohamed Shah",
+      "Muhammad Naveed Akhter",
+      "Mehdi Seyedmahmoudian",
+      "Yasser Almalaq",
+      "Addy Wahyudie"
+    ],
+    "authors_openalex": [
+      "Putri Nor Liyana Mohamad Radzi",
+      "Saad Mekhilef",
+      "Noraisyah Mohamed Shah",
+      "Muhammad Naveed Akhter",
+      "Mehdi Seyedmahmoudian",
+      "Yasser A. Almalaq",
+      "Addy Wahyudie"
+    ],
+    "authors_s2": [
+      "Putri Nor Liyana Mohamad Radzi",
+      "Saad Mekhilef",
+      "Noraisyah Mohamed Shah",
+      "Muhammad Naveed Akhter",
+      "M. Seyedmahmoudian",
+      "Yasser Almalaq",
+      "A. Wahyudie"
+    ],
+    "date_parts_crossref": [
+      2026,
+      1
+    ],
+    "published_print": [
+      2026,
+      1
+    ],
+    "published_online": null,
+    "publication_date_s2": "2026-01-01",
+    "year_openalex": 2025,
+    "container_crossref": "Energy Conversion and Management: X",
+    "container_openalex": "Energy Conversion and Management X",
+    "venue_s2": "Energy Conversion and Management: X",
+    "journal_s2": "Energy Conversion and Management: X",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.ecmx.2025.101431",
+    "url_openalex": "https://doi.org/10.1016/j.ecmx.2025.101431",
+    "abstract": "• Develop a GRU–LSTM hybrid model for hour-ahead solar power forecasting. • Introduce a sequential hybrid framework with recursive temporal forecasting. • Consider two PV types: Poly-crystalline (Array 1) and Mono-crystalline (Array 2) • Compare standalone and hybrid ML models using GRU as the core connection. • Array 1 achieves best results with RMSE 28.55 W, MAE 19.43 W, and R 2 0.9961. Photovoltaic (PV) energy is essential for sustainable urban infrastructure but remains constrained by weather-induced variability, particularly under tropical climatic conditions. Accurate solar power forecasting is critical for grid stability and resilient energy systems. This study proposes a hybrid deep learning model that integrates Gated Recurrent Unit (GRU) and Long Short-Term Memory (LSTM) architectures within a sequential configuration designed to enhance temporal feature learning. In the proposed model, the GRU functions as the primary connector, extracting short-term temporal dependencies and transferring them to the LSTM layer for long-term contextual representation. The model employs a recursive forecasting strategy using time-indexed data to effectively capture the nonlinear dynamics of PV power generation. Two PV technologies, Poly-crystalline (Array 1) and Mono-crystalline (Array 2), are evaluated. Model accuracy is assessed using statistical metrics supported by residual analyses to examine correlations between observed and predicted outputs. The proposed hybrid demonstrates superior predictive capability, achieving root mean square error (RMSE), mean absolute error (MAE), and coefficient of determination (R 2 ) values of 18.55 W, 19.43 W, and 0.9961 for Array 1, and 14.82 W, 11.85 W, and 0.9952 for Array 2, respectively. Incorporating GRU as the primary hybrid component yields performance improvements of 13.97% (RMSE) and 16.03% (MAE) for Array 1, and 16.41% (RMSE) and 12.44% (MAE) for Array 2. Beyond these quantitative enhancements, the study explores the functional advantages and limitations of employing GRU as the dominant connection module. Overall, the findings confirm that the proposed model, supported by recursive forecasting, provides a scalable solution for improving PV power prediction in variable tropical environments.",
+    "abstract_source": "openalex_inverted_index",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Mean squared error",
+      "Photovoltaic system",
+      "Residual",
+      "Deep learning",
+      "Hybrid system",
+      "Feature (linguistics)",
+      "Component (thermodynamics)",
+      "Stability (learning theory)"
+    ],
+    "concepts_openalex": [
+      "Mean squared error",
+      "Artificial intelligence",
+      "Photovoltaic system",
+      "Computer science",
+      "Residual",
+      "Machine learning",
+      "Deep learning",
+      "Hybrid system"
+    ],
+    "citation_count_s2": 16,
+    "citation_count_crossref": 3,
+    "citation_count_openalex": 2,
+    "open_access_pdf": "https://doi.org/10.1016/j.ecmx.2025.101431",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "E1",
+    "category": "E",
+    "category_name": "Physics-informed / domain-aware",
+    "from_seed": "dl-pv-domain-knowledge",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.energy.2021.120240",
+    "title": "Deep learning based forecasting of photovoltaic power generation by incorporating domain knowledge",
+    "title_variants": [
+      "Deep learning based forecasting of photovoltaic power generation by incorporating domain knowledge"
+    ],
+    "authors_crossref": [
+      "Xing Luo",
+      "Dongxiao Zhang",
+      "Xu Zhu"
+    ],
+    "authors_openalex": [
+      "Xing Luo",
+      "Dongxiao Zhang",
+      "Xu Zhu"
+    ],
+    "authors_s2": [
+      "Xing Luo",
+      "Dongxiao Zhang",
+      "Xu Zhu"
+    ],
+    "date_parts_crossref": [
+      2021,
+      6
+    ],
+    "published_print": [
+      2021,
+      6
+    ],
+    "published_online": null,
+    "publication_date_s2": "2021-06-15",
+    "year_openalex": 2021,
+    "container_crossref": "Energy",
+    "container_openalex": "Energy",
+    "venue_s2": "",
+    "journal_s2": "Energy",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.energy.2021.120240",
+    "url_openalex": "https://doi.org/10.1016/j.energy.2021.120240",
+    "abstract": "Abstract Solar energy constitutes an effective supplement to traditional energy sources. However, photovoltaic power generation (PVPG) is strongly weather-dependent, and thus highly intermittent. High-precision forecasting of PVPG forms the basis of the production, transmission, and distribution of electricity, ensuring the stability and reliability of power systems. In this work, we propose a deep learning based framework for accurate PVPG forecasting. In particular, taking advantage of the long short-term memory (LSTM) network in solving sequential-data based regression problems, this paper considers the specific domain knowledge of PV and proposes a physics-constrained LSTM (PC-LSTM) to forecast the hourly day-ahead PVPG. It aims to overcome the shortcoming of recent machine learning algorithms that are applied based only on massive data, and thus easily producing unreasonable forecasts. Real-life PV datasets are adopted to evaluate the feasibility and effectiveness of the models. Sensitivity analysis is conducted for the selection of input feature variables based on a two-stage hybrid method. The results indicate that the proposed PC-LSTM model possesses stronger forecasting capability than the standard LSTM model. It is more robust against PVPG forecasting, and more suitable for PVPG forecasting with sparse data in practice. The PC-LSTM model also demonstrates superior performance with higher accuracy of PVPG forecasting compared to conventional machine learning and statistical methods.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Computer science",
+      "Photovoltaic system",
+      "Artificial intelligence",
+      "Reliability (semiconductor)",
+      "Machine learning",
+      "Feature selection",
+      "Domain (mathematical analysis)",
+      "Domain knowledge"
+    ],
+    "concepts_openalex": [
+      "Computer science",
+      "Photovoltaic system",
+      "Artificial intelligence",
+      "Reliability (semiconductor)",
+      "Machine learning",
+      "Feature selection",
+      "Domain (mathematical analysis)",
+      "Domain knowledge"
+    ],
+    "citation_count_s2": 302,
+    "citation_count_crossref": 296,
+    "citation_count_openalex": 316,
+    "open_access_pdf": "https://www.sciencedirect.com/science/article/pii/S0360544221004898/pdf",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "E2",
+    "category": "E",
+    "category_name": "Physics-informed / domain-aware",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.energy.2024.131709",
+    "title": "Solar power forecasting using domain knowledge",
+    "title_variants": [
+      "Solar power forecasting using domain knowledge"
+    ],
+    "authors_crossref": [
+      "Rakesh Mondal",
+      "Surajit Kr Roy",
+      "Chandan Giri"
+    ],
+    "authors_openalex": [
+      "Rakesh Mondal",
+      "Surajit Kr Roy",
+      "Chandan Giri"
+    ],
+    "authors_s2": [
+      "R. Mondal",
+      "Surajit Kr Roy",
+      "Chandan Giri"
+    ],
+    "date_parts_crossref": [
+      2024,
+      9
+    ],
+    "published_print": [
+      2024,
+      9
+    ],
+    "published_online": null,
+    "publication_date_s2": "2024-05-01",
+    "year_openalex": 2024,
+    "container_crossref": "Energy",
+    "container_openalex": "Energy",
+    "venue_s2": "Energy",
+    "journal_s2": "Energy",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.energy.2024.131709",
+    "url_openalex": "https://doi.org/10.1016/j.energy.2024.131709",
+    "abstract": "Integrating renewable energy into the existing energy market is crucial. Solar power forecasting is essential since it depends on weather parameters and must integrate with the central grid to use the produced solar power effectively. Contemporary studies indicate that machine learning has the potential to predict the future generation of solar energy based on past data. This research demonstrates a broad range of solar power forecasting, combining one-year time series solar power generation data, solar panel physical features, and weather information with the help of machine learning and deep learning tools with domain knowledge. The dataset is curated and preprocessed. The authors propose a deep learning ensemble model based on Bi-LSTM. The proposed model can forecast well regardless of geographical position and is able to predict both short-term and long-term time horizons. The results are compared with the existing dataset and multiple standard deep learning models, and the proposed model is found to produce better performance than traditional models. The model is also validated using different solar plants in Durgapur, India, and for long-term forecasting it outperforms the base model.",
+    "abstract_source": "publisher_abstract_via_sciencedirect_indexed_excerpt",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Domain (mathematical analysis)",
+      "Power (physics)",
+      "Solar power",
+      "Computer science",
+      "Environmental science",
+      "Physics",
+      "Mathematics",
+      "Thermodynamics"
+    ],
+    "concepts_openalex": [
+      "Domain (mathematical analysis)",
+      "Power (physics)",
+      "Solar power",
+      "Computer science",
+      "Environmental science",
+      "Physics",
+      "Mathematics",
+      "Thermodynamics"
+    ],
+    "citation_count_s2": 16,
+    "citation_count_crossref": 18,
+    "citation_count_openalex": 17,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_source_url": "https://www.sciencedirect.com/science/article/abs/pii/S0360544224014828"
+  },
+  {
+    "id": "E3",
+    "category": "E",
+    "category_name": "Physics-informed / domain-aware",
+    "from_seed": "dl-prediction-models-stpv",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Deep learning prediction models for short-term solar photovoltaic power generation forecasting",
+      "container": "Next Energy"
+    },
+    "doi": "10.1016/j.nxener.2026.100531",
+    "title": "Deep learning prediction models for short-term solar photovoltaic power generation forecasting",
+    "title_variants": [
+      "Deep learning prediction models for short-term solar photovoltaic power generation forecasting"
+    ],
+    "authors_crossref": [
+      "Praveen Kumar Singh",
+      "Amit Saraswat",
+      "Yogesh Gupta"
+    ],
+    "authors_openalex": [
+      "Praveen Kumar Singh",
+      "Amit Kumar Saraswat",
+      "Yogesh Gupta"
+    ],
+    "authors_s2": [
+      "P. Singh",
+      "A. Saraswat",
+      "Yogesh Gupta"
+    ],
+    "date_parts_crossref": [
+      2026,
+      4
+    ],
+    "published_print": [
+      2026,
+      4
+    ],
+    "published_online": null,
+    "publication_date_s2": "2026-04-01",
+    "year_openalex": 2026,
+    "container_crossref": "Next Energy",
+    "container_openalex": "Next Energy",
+    "venue_s2": "Next Energy",
+    "journal_s2": "Next Energy",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.nxener.2026.100531",
+    "url_openalex": "https://doi.org/10.1016/j.nxener.2026.100531",
+    "abstract": "The increasing concerns about the environmental impact of fossil fuels have emphasized the importance of clean solar energy, which offers a pollution-free alternative for meeting growing energy needs. However, the accurate prediction of solar photovoltaic (SPV) based power generation is a very challenging task because of its inherent variability and uncertainty. To address this challenging problem, this paper applies several machine-learning, deep-learning, and their hybrid models such as: One-Dimensional Convolutional Neural Network (1D CNN), Bi-Directional Long Short-Term Memory (Bi-LSTM), Stacked LSTM, Artificial Neural Network (ANN), Linear Regression (LR), Support Vector Regression (SVR), XGBoost, and a hybrid CNN-LSTM model. These models are examined and compared on four different data sequences of DKASC Alice Springs dataset. The prediction performances of all these models are evaluated based on various error metrics: MAE (mean absolute error), explained variance, RMSE (root mean square error), R², and sMAPE (symmetric mean absolute percentage error). The simulation results demonstrates that Stacked LSTM model outperforms all other benchmark forecasting models and able to obtains average values of performance metrics i.e. MAE of 1.1157, RMSE of 2.3408, an Explained Variance of 0.8998, R² of 0.9004, and sMAPE of 1.1795 as evaluated across all four different data sequences. Moreover, a comprehensive statistical analysis, using Diebold Mariano Test and boxplots, confirms the further superiority of Stacked-LSTM model to efficiently address inherent uncertainty of solar power generation.",
+    "abstract_source": "openalex_inverted_index",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Mean squared error",
+      "Artificial neural network",
+      "Benchmark (surveying)",
+      "Photovoltaic system",
+      "Linear regression",
+      "Predictive modelling",
+      "Prediction interval",
+      "Deep learning"
+    ],
+    "concepts_openalex": [
+      "Mean squared error",
+      "Artificial neural network",
+      "Benchmark (surveying)",
+      "Photovoltaic system",
+      "Linear regression",
+      "Predictive modelling",
+      "Computer science",
+      "Prediction interval"
+    ],
+    "citation_count_s2": 14,
+    "citation_count_crossref": 13,
+    "citation_count_openalex": 13,
+    "open_access_pdf": "https://doi.org/10.1016/j.nxener.2026.100531",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "F1",
+    "category": "F",
+    "category_name": "Probabilistic / explainable / robust",
+    "from_seed": "prob-dl-bidir",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.2174/0123520965458194260410052152",
+    "title": "Day-Ahead Probabilistic Photovoltaic Power Forecasting based on Deep Feature Enhancement and Bidirectional Temporal Modeling",
+    "title_variants": [
+      "Day-Ahead Probabilistic Photovoltaic Power Forecasting based on Deep Feature Enhancement and Bidirectional Temporal Modeling"
+    ],
+    "authors_crossref": [
+      "Dan Li",
+      "Yawen Zhen",
+      "Qihong Pan",
+      "Senzhe Lei",
+      "Xiangyang Liang",
+      "Minghan Qu",
+      "Zhaoxi Lin",
+      "Liu Chao",
+      "Bin Yao"
+    ],
+    "authors_openalex": [
+      "Dan Li",
+      "Yawen Zhen",
+      "Qihong Pan",
+      "Senzhe Lei",
+      "Xiangyang Liang",
+      "Minghan Qu",
+      "Zhaoxi Lin",
+      "Liu Chao",
+      "Bin Yao"
+    ],
+    "authors_s2": [
+      "Dan Li",
+      "Yawen Zhen",
+      "Qihong Pan",
+      "Senzhe Lei",
+      "Xiang-Yang Liang",
+      "Minghan Qu",
+      "Zhaoxi Lin",
+      "Liu Chao",
+      "Bin Yao"
+    ],
+    "date_parts_crossref": [
+      2026,
+      4,
+      14
+    ],
+    "published_print": [
+      2026,
+      4,
+      14
+    ],
+    "published_online": null,
+    "publication_date_s2": "2026-04-14",
+    "year_openalex": 2026,
+    "container_crossref": "Recent Advances in Electrical &amp; Electronic Engineering (Formerly Recent Patents on Electrical &amp; Electronic Engineering)",
+    "container_openalex": "Recent Advances in Electrical & Electronic Engineering (Formerly Recent Patents on Electrical & Electronic Engineering)",
+    "venue_s2": "Recent Advances in Electrical &amp; Electronic Engineering (Formerly Recent Patents on Electrical &amp; Electronic Engineering)",
+    "journal_s2": "Recent Advances in Electrical &amp; Electronic Engineering (Formerly Recent Patents on Electrical &amp; Electronic Engineering)",
+    "publisher_crossref": "Bentham Science Publishers Ltd.",
+    "publisher_openalex": null,
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.2174/0123520965458194260410052152",
+    "url_openalex": "https://doi.org/10.2174/0123520965458194260410052152",
+    "abstract": "Introduction: The integration of photovoltaic (PV) power into the grid is challenged by the inherent uncertainty of PV power. This study aims to develop a probabilistic forecasting model for day-ahead PV power that effectively captures temporal dependencies while ensuring mathematically sound prediction intervals. Methods: This study develops a hybrid model integrating an Auto-Encoder (AE), a Bidirectional Long Short-Term Memory (BiLSTM) network, and Quantile Regression (QR). First, the AE was employed to learn a dense latent representation of input features, which was then concatenated with the original features. Next, the BiLSTM processed these features to capture bidirectional temporal dependencies. Finally, an Incremental Monotonicity Enforcement (IME) mechanism within the QR layer generated non-crossing prediction intervals by predicting a baseline value and nonnegative increments. Results: Experiments on a real-world PV dataset demonstrated that the proposed model outperforms several baseline models in day-ahead probabilistic forecasting. The generated prediction intervals were more reliable, sharper, and mathematically coherent. Discussion: These results suggest that integrating deep feature learning with monotonicity-enforced quantile regression effectively addresses the quantile crossing problem. The improved interval reliability has practical implications for grid scheduling. A limitation is the model's reliance on historical data quality. Conclusion: The proposed AE-BiLSTM-QR model with the IME mechanism provides an effective and reliable solution for day-ahead PV power probabilistic forecasting. It innovatively integrates deep feature learning, bidirectional temporal modeling, and structurally enforced quantile monotonicity, offering a reliable technical approach for the grid integration of solar energy.",
+    "abstract_source": "crossref",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Probabilistic logic",
+      "Probabilistic forecasting",
+      "Feature (linguistics)",
+      "Quantile regression",
+      "Photovoltaic system",
+      "Quantile",
+      "Interval (graph theory)",
+      "Grid"
+    ],
+    "concepts_openalex": [
+      "Probabilistic logic",
+      "Computer science",
+      "Probabilistic forecasting",
+      "Data mining",
+      "Feature (linguistics)",
+      "Quantile regression",
+      "Photovoltaic system",
+      "Quantile"
+    ],
+    "citation_count_s2": 0,
+    "citation_count_crossref": 0,
+    "citation_count_openalex": 0,
+    "open_access_pdf": "https://doi.org/10.2174/0123520965458194260410052152",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "F2",
+    "category": "F",
+    "category_name": "Probabilistic / explainable / robust",
+    "from_seed": "distribution-free-pdf-hybrid",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.solener.2025.113769",
+    "title": "Distribution-Free photovoltaic power probability density forecasting based on hybrid deep learning",
+    "title_variants": [
+      "Distribution-Free photovoltaic power probability density forecasting based on hybrid deep learning"
+    ],
+    "authors_crossref": [
+      "Haohao Feng",
+      "Yujing Shi",
+      "Mifeng Ren",
+      "Wenjie Zhang",
+      "Jianhua Zhang",
+      "Yusheng Zhao"
+    ],
+    "authors_openalex": [
+      "Haohao Feng",
+      "Yujing Shi",
+      "Mifeng Ren",
+      "Wenjie Zhang",
+      "Jianhua Zhang",
+      "Yusheng Zhao"
+    ],
+    "authors_s2": [
+      "Haohao Feng",
+      "Yujing Shi",
+      "M. Ren",
+      "Wen-Jie Zhang",
+      "Jianhua Zhang",
+      "Yusheng Zhao"
+    ],
+    "date_parts_crossref": [
+      2025,
+      11
+    ],
+    "published_print": [
+      2025,
+      11
+    ],
+    "published_online": null,
+    "publication_date_s2": null,
+    "year_openalex": 2025,
+    "container_crossref": "Solar Energy",
+    "container_openalex": "Solar Energy",
+    "venue_s2": "Solar Energy",
+    "journal_s2": "Solar Energy",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.solener.2025.113769",
+    "url_openalex": "https://doi.org/10.1016/j.solener.2025.113769",
+    "abstract": "Photovoltaic (PV) power generation exhibits high randomness, and probabilistic forecasting can effectively quantify its uncertainty. However, existing probabilistic forecasting models are constrained by prior distribution assumptions and incomplete representation, which weakens their ability to model the true data generation process, leading to suboptimal prediction results. To address this, this study proposes a distribution-free probabilistic density forecasting model for PV power based on B-spline-iTransformer-Multi-Head Cross Attention (BS-iMCFormer). The core of the model lies in: using B-splines to fit the probability density function (PDF), which is obtained through kernel density estimation (KDE), extracting control points that represent the characteristics of the PDF to construct the coefficient vector and transforming the PDF prediction into the prediction of the coefficient vector; utilizing iMCFormer to integrate meteorological, power, and coefficient vector cross-modal associations to achieve enhanced feature reconstruction; and employing B-spline interpolation to obtain the predicted PDF from the predicted coefficient vector, thus avoiding the constraints of parametric distribution assumptions and discrete representation. The study conducts experiments using data from a PV station in Hebei Province, China. The results show that the proposed model's predicted PDF significantly outperforms all comparison models in terms of visual overlap and statistical consistency with the real data's kernel density estimate. The core metric of distribution difference, KL divergence, is reduced by 54.82%, while MAE and RMSE decrease by 68.93% and 69.42%, respectively, and the correlation metric R2 improves by 6.76%.",
+    "abstract_source": "publisher_abstract_via_sciencedirect_indexed_excerpt",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Probability density function",
+      "Kernel density estimation",
+      "Probabilistic logic",
+      "Photovoltaic system",
+      "Probabilistic forecasting",
+      "Probability distribution",
+      "Parametric statistics",
+      "Statistical model"
+    ],
+    "concepts_openalex": [
+      "Probability density function",
+      "Kernel density estimation",
+      "Probabilistic logic",
+      "Computer science",
+      "Photovoltaic system",
+      "Probabilistic forecasting",
+      "Probability distribution",
+      "Parametric statistics"
+    ],
+    "citation_count_s2": 7,
+    "citation_count_crossref": 8,
+    "citation_count_openalex": 8,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_source_url": "https://www.sciencedirect.com/science/article/abs/pii/S0038092X19306620"
+  },
+  {
+    "id": "F3",
+    "category": "F",
+    "category_name": "Probabilistic / explainable / robust",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1007/s00202-024-02933-4",
+    "title": "Machine learning insights into forecasting solar power generation with explainable AI",
+    "title_variants": [
+      "Machine learning insights into forecasting solar power generation with explainable AI"
+    ],
+    "authors_crossref": [
+      "Gokcen Ozdemir",
+      "Murat Kuzlu",
+      "Ferhat Ozgur Catak"
+    ],
+    "authors_openalex": [
+      "Gokcen Ozdemir",
+      "Murat Kuzlu",
+      "Ferhat Özgür Çatak"
+    ],
+    "authors_s2": [
+      "Gokcen Ozdemir",
+      "M. Kuzlu",
+      "Ferhat Ozgur Catak"
+    ],
+    "date_parts_crossref": [
+      2024,
+      12,
+      28
+    ],
+    "published_print": [
+      2025,
+      6
+    ],
+    "published_online": [
+      2024,
+      12,
+      28
+    ],
+    "publication_date_s2": "2024-12-28",
+    "year_openalex": 2024,
+    "container_crossref": "Electrical Engineering",
+    "container_openalex": "Electrical Engineering",
+    "venue_s2": "Electrical Engineering",
+    "journal_s2": "Electrical Engineering",
+    "publisher_crossref": "Springer Science and Business Media LLC",
+    "publisher_openalex": "Springer Science+Business Media",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1007/s00202-024-02933-4",
+    "url_openalex": "https://doi.org/10.1007/s00202-024-02933-4",
+    "abstract": "Machine learning (ML) algorithms can provide highly accurate predictions, but their complexity often makes them difficult to interpret due to their black-box nature. Combining ML and Explainable Artificial Intelligence (XAI) makes these models more transparent and enables users to understand the key factors behind the predictions. This paper presents a variety of ML approaches combined with XAI to predict solar power generation, aiming to optimize energy management in smart grids. For this purpose, five different ML algorithms, namely Random Forest, Gradient Boosting, eXtreme Gradient Boosting, Light Gradient Boosting Machine, and Decision Three, and three different XAI models, namely Shapley Additive Explanation, Local Interpretable Model-agnostic Explanations, and Permutation Feature Importance were investigated. According to the findings, the Light Gradient Boosting Machine achieved the best performance, showing the lowest root mean squared error of 0.088, mean squared error of 0.007749, mean absolute error of 0.052896, and the highest R-squared value of 0.842645. XAI techniques provided detailed, actionable insights into the model behavior, helping to identify key features influencing predictions. While Permutation Feature Importance identified key features, Shapley Additive Explanations showed how this feature interacts with others, and Local Interpretable Model-Agnostic Explanations clarified individual predictions. This research provides the most comprehensive understanding in the literature on feature impact and model interpretability for solar power forecasting and contributes to sustainable energy applications by combining ML prediction with XAI interpretability for effective smart grid integration.",
+    "abstract_source": "publisher_landing_page_meta",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Artificial intelligence",
+      "Computer science",
+      "Power (physics)",
+      "Solar power",
+      "Machine learning",
+      "Engineering",
+      "Physics"
+    ],
+    "concepts_openalex": [
+      "Artificial intelligence",
+      "Computer science",
+      "Power (physics)",
+      "Solar power",
+      "Machine learning",
+      "Engineering",
+      "Physics",
+      "Quantum mechanics"
+    ],
+    "citation_count_s2": 27,
+    "citation_count_crossref": 25,
+    "citation_count_openalex": 22,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "url_resolved": "https://link.springer.com/article/10.1007/s00202-024-02933-4"
+  },
+  {
+    "id": "F4",
+    "category": "F",
+    "category_name": "Probabilistic / explainable / robust",
+    "from_seed": "rethinking-dl-pv",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Rethinking the use of deep learning methods for photovoltaic power forecasting",
+      "container": "Nature Communications"
+    },
+    "doi": "10.1038/s41467-026-73817-3",
+    "title": "Rethinking the use of deep learning methods for photovoltaic power forecasting",
+    "title_variants": [
+      "Rethinking the use of deep learning methods for photovoltaic power forecasting"
+    ],
+    "authors_crossref": [
+      "Yujia Zhang",
+      "Yuzhou Zhang",
+      "Zhixiang Dai",
+      "Rita Zhang"
+    ],
+    "authors_openalex": [
+      "Yujia Zhang",
+      "Yuzhou Zhang",
+      "Yuzhou Zhang",
+      "Rita Zhang",
+      "Zhixiang Dai",
+      "Rita Zhang"
+    ],
+    "authors_s2": [
+      "Yu-Jia Zhang",
+      "Yu-Zhou Zhang",
+      "Zhixiang Dai",
+      "Ri Zhang"
+    ],
+    "date_parts_crossref": [
+      2026,
+      6,
+      12
+    ],
+    "published_print": null,
+    "published_online": [
+      2026,
+      6,
+      12
+    ],
+    "publication_date_s2": "2026-06-12",
+    "year_openalex": 2026,
+    "container_crossref": "Nature Communications",
+    "container_openalex": "Nature Communications",
+    "venue_s2": "Nature Communications",
+    "journal_s2": "Nature Communications",
+    "publisher_crossref": "Springer Science and Business Media LLC",
+    "publisher_openalex": "Nature Portfolio",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1038/s41467-026-73817-3",
+    "url_openalex": "https://doi.org/10.1038/s41467-026-73817-3",
+    "abstract": "Abstract Accurate photovoltaic power forecasting is critical for grid stability, but remains challenged by weather uncertainties and difficulty integrating historical observations with forward-looking forecasts. We re-evaluate existing architectural choices in deep-learning models for time-series forecasting and demonstrate the importance of full encoder-decoder architectures and channel dependence modeling when both weather forecasts and historical data are available. Based on this insight, we propose Cross-Unet, a Transformer-based architecture featuring multi-scale temporal encoding, correlation-aware channel attention, and hierarchical cross-attention decoding to fuse historical generation data with weather forecasts. Evaluated on open-source datasets from four utility-scale plants in northern China and one aggregated plant in central Australia, using three types of forward-looking inputs: numerical weather prediction, satellite-derived irradiance, and AI-based weather model forecasts. Across the majority of evaluated configurations spanning five photovoltaic power stations, five forecasting horizons (4 hours to 7 days), and three forecast sources, Cross-Unet outperforms ten deep learning baselines and traditional operational benchmarks. By integrating advanced forecasting systems, such as modern AI weather models, into an end-to-end forecasting pipeline, Cross-Unet enables operational 15-minute-resolution predictions over 4-hour to 7-day horizons, supporting grid scheduling and energy trading.",
+    "abstract_source": "crossref",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Deep learning",
+      "Fuse (electrical)",
+      "Scheduling (production processes)",
+      "Grid",
+      "Probabilistic forecasting",
+      "Numerical weather prediction",
+      "Data modeling"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Deep learning",
+      "Fuse (electrical)",
+      "Scheduling (production processes)",
+      "Grid",
+      "Probabilistic forecasting",
+      "Numerical weather prediction"
+    ],
+    "citation_count_s2": 0,
+    "citation_count_crossref": 1,
+    "citation_count_openalex": 1,
+    "open_access_pdf": "https://doi.org/10.1038/s41467-026-73817-3",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  }
+]

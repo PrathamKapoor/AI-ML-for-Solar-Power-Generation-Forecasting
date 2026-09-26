@@ -1,0 +1,30 @@
+{
+  "_comment": "Candidates screened out of the final 30-paper corpus, with the reason for exclusion. Retained so the selection process is auditable and reproducible rather than opaque.",
+  "excluded": [
+    {
+      "seed_or_doi": "10.1080/23311804.2022.2042642",
+      "title": "Solar Photovoltaic Energy Forecasting Using Machine Learning and Deep Learning Technique",
+      "reason": "Peer-reviewed but published in a regional IEEE section conference (UPCON 2022) with a narrow experimental scope; excluded to keep the classical-ML category at five higher-quality sources. Verified metadata is retained in literature/verification/ for audit."
+    },
+    {
+      "seed_or_doi": "10.3390/app13126990",
+      "title": "Evaluating the Impact of Deep Learning Approaches on Solar and Photovoltaic Power Forecasting: A Systematic Review",
+      "reason": "Original seed DOI guess was wrong; the title was resolved to Energy Strategy Reviews (2025) and retained as G2 under its verified DOI."
+    },
+    {
+      "seed_or_doi": "arXiv (OpenAlex only match)",
+      "title": "Transformers Applied to Short-term Solar PV Power Output Forecasting",
+      "reason": "Resolves only to an arXiv preprint with no peer-reviewed version located. Excluded because the review corpus is restricted to peer-reviewed publications; transformer-family PV forecasting is instead represented by two journal articles (D1 RSER 2024, D2 Energy and AI 2024)."
+    },
+    {
+      "seed_or_doi": "10.1016/j.energy.2023.126306",
+      "title": "A Hybrid VMD-GRU Model for Enhanced Photovoltaic Power Forecasting",
+      "reason": "Resolved to a 2025 SENZE conference paper with zero citations and no abstract available from any source. Replaced by a peer-reviewed Energy (2022) hybrid decomposition-plus-recurrent study (C5, 10.1016/j.energy.2022.124661)."
+    },
+    {
+      "seed_or_doi": "10.1016/j.rser.2022.112364",
+      "title": "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction data",
+      "reason": "Not excluded. Initially seeded twice (G4 and A1); deduplicated to a single record and classified under category A because its contribution is a controlled classical-ML comparison."
+    }
+  ]
+}

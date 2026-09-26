@@ -1,0 +1,155 @@
+{
+  "_comment": "Seed candidate titles for literature discovery. These are discovery seeds only; every entry must be resolved against Crossref/OpenAlex metadata before use. Fields: id (stable slug), seed_title (title as given by the discovery seed), category (target literature category), verified_title (filled in by resolve_seeds.py from authoritative metadata), notes.",
+  "seeds": [
+    {
+      "id": "ml-pv-review-comparison",
+      "seed_title": "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison",
+      "category": "G"
+    },
+    {
+      "id": "se-forecasting-ml-survey",
+      "seed_title": "Solar Energy Forecasting Techniques Based on Machine Learning: Survey",
+      "category": "G"
+    },
+    {
+      "id": "dl-solar-irradiance-review",
+      "seed_title": "Deep Learning Models for Solar Irradiance Forecasting: A Comprehensive Review",
+      "category": "G"
+    },
+    {
+      "id": "ml-solar-radiation-review",
+      "seed_title": "Machine Learning Methods for Solar Radiation Forecasting: A Review",
+      "category": "G"
+    },
+    {
+      "id": "ann-pv-review-five",
+      "seed_title": "Artificial Neural Networks for Photovoltaic Power Forecasting: A Review of Five Promising Models",
+      "category": "G"
+    },
+    {
+      "id": "dl-ml-pv-generation",
+      "seed_title": "Deep and Machine Learning Models to Forecast Photovoltaic Power Generation",
+      "category": "D"
+    },
+    {
+      "id": "review-dl-industrial-pv",
+      "seed_title": "Review of Deep Learning Techniques for Power Generation Prediction of Industrial Solar Photovoltaic Plants",
+      "category": "G"
+    },
+    {
+      "id": "short-term-solar-dl-config",
+      "seed_title": "Short-Term Solar Power Forecast with Deep Learning: Exploring Optimal Input and Output Configuration",
+      "category": "B"
+    },
+    {
+      "id": "dl-pv-domain-knowledge",
+      "seed_title": "Deep Learning Based Forecasting of Photovoltaic Power Generation by Incorporating Domain Knowledge",
+      "category": "E"
+    },
+    {
+      "id": "dl-wavelet-solar-pv",
+      "seed_title": "Deep Learning and Wavelet Transform Integrated Approach for Short-Term Solar PV Power Prediction",
+      "category": "C"
+    },
+    {
+      "id": "intra-hour-multisource",
+      "seed_title": "Intra-Hour Photovoltaic Generation Forecasting Based on Multi-Source Data and Deep Learning Methods",
+      "category": "C"
+    },
+    {
+      "id": "solar-pv-ml-dl-technique",
+      "seed_title": "Solar Photovoltaic Energy Forecasting Using Machine Learning and Deep Learning Technique",
+      "category": "A"
+    },
+    {
+      "id": "adaptive-mv-lstm",
+      "seed_title": "Forecasting Hourly Day-Ahead Solar Photovoltaic Power Generation by Assembling a New Adaptive Multivariate Data Analysis with a Long Short-Term Memory Network",
+      "category": "B"
+    },
+    {
+      "id": "feature-extraction-attention",
+      "seed_title": "Short-Term Photovoltaic Power Forecasting with Feature Extraction and Attention Mechanisms",
+      "category": "C"
+    },
+    {
+      "id": "cnn-lstm-attention-neighbors",
+      "seed_title": "A Hybrid Convolutional-Long Short-Term Memory-Attention Framework for Short-Term Photovoltaic Power Forecasting, Incorporating Data from Neighboring Stations",
+      "category": "C"
+    },
+    {
+      "id": "transformers-solar-pv",
+      "seed_title": "Transformers Applied to Short-Term Solar PV Power Output Forecasting",
+      "category": "D"
+    },
+    {
+      "id": "dl-prediction-models-stpv",
+      "seed_title": "Deep Learning Prediction Models for Short-Term Solar Photovoltaic Power Generation Forecasting",
+      "category": "B"
+    },
+    {
+      "id": "hybrid-dl-comparative-ml",
+      "seed_title": "Enhancing Short-Term Solar Power Forecasting Using a Hybrid Deep Learning Approach and a Comparative Analysis of Machine Learning Models",
+      "category": "C"
+    },
+    {
+      "id": "vmd-gru",
+      "seed_title": "A Hybrid VMD-GRU Model for Enhanced Photovoltaic Power Forecasting",
+      "category": "C"
+    },
+    {
+      "id": "cnn-lstm-attention-mech",
+      "seed_title": "Short-Term Photovoltaic Power Forecasting Based on CNN-LSTM-Attention Mechanism",
+      "category": "C"
+    },
+    {
+      "id": "prob-dl-bidir",
+      "seed_title": "Day-Aead Probabilistic Photovoltaic Power Forecasting Based on Deep Feature Enhancement and Bidirectional Temporal Modeling",
+      "category": "F"
+    },
+    {
+      "id": "distribution-free-pdf-hybrid",
+      "seed_title": "Distribution-Free Photovoltaic Power Probability Density Forecasting Based on Hybrid Deep Learning",
+      "category": "F"
+    },
+    {
+      "id": "explainable-xgboost",
+      "seed_title": "An Explainable Photovoltaic Power Forecasting Method Based on XGBoost",
+      "category": "F"
+    },
+    {
+      "id": "stacked-gb-xgb-ridge",
+      "seed_title": "A Stacked Gradient Boosting-XGBoost Ensemble with Ridge Meta-Learner for Accurate Short-Term Solar PV Power Forecasting in Smart Grids",
+      "category": "A"
+    },
+    {
+      "id": "dl-pv-review-2",
+      "seed_title": "Deep Learning Models for PV Power Forecasting: Review",
+      "category": "G"
+    },
+    {
+      "id": "systematic-review-dl-solar-pv",
+      "seed_title": "Evaluating the Impact of Deep Learning Approaches on Solar and Photovoltaic Power Forecasting: A Systematic Review",
+      "category": "G"
+    },
+    {
+      "id": "data-driven-solar-review",
+      "seed_title": "A Review on Data-Driven Methods for Solar Energy Forecasting",
+      "category": "G"
+    },
+    {
+      "id": "ml-irradiance-slr",
+      "seed_title": "Solar Irradiance Forecasting Approaches Based on Machine Learning: A Systematic Literature Review",
+      "category": "G"
+    },
+    {
+      "id": "rethinking-dl-pv",
+      "seed_title": "Rethinking the Use of Deep Learning Methods for Photovoltaic Power Forecasting",
+      "category": "F"
+    },
+    {
+      "id": "multiscale-fused-gcn-multisite",
+      "seed_title": "Multi-scale Fused Graph Convolutional Network for Multi-site Photovoltaic Power Forecasting",
+      "category": "D"
+    }
+  ]
+}

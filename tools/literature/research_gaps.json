@@ -1,0 +1,115 @@
+{
+  "_comment": "Research gaps derived from systematic coding of the 30-paper corpus. Each gap cites the specific papers that evidence it, and quantitative claims ('N of 30') are computed by scripts/build_gap_evidence.py directly from the boolean coding fields in tools/literature/literature_analysis.json rather than asserted by hand. Gaps that the coding does NOT support are deliberately excluded; see literature/verification/gap_evidence.json for the computed counts including negative results.",
+  "gaps": [
+    {
+      "gap_id": "RG-01",
+      "research_gap": "No common-dataset benchmark places classical ML, recurrent deep learning and modern attention/transformer architectures under one identical chronological split with a strong persistence reference.",
+      "evidence_papers": "G1, G4, D1, B1, D5, D4, A4",
+      "evidence_basis": "coded count: only 2 of 30 papers report performance as skill relative to a persistence forecast (G4 persistence skill score; B4 smart-persistence skill). The remaining cross-model comparisons (D4, E3, A4) each use their own dataset and split, and G1 explicitly introduces its own simulation because the surveyed literature does not permit controlled comparison.",
+      "why_it_matters": "Without a shared split and a persistence anchor, headline improvements cannot be compared across studies, and an architecture can appear superior simply because it was benchmarked against a weak reference rather than a well-tuned classical model.",
+      "current_approaches": "Each study selects its own site, resolution, split rule and baseline set; the largest classical comparison (G4, 24 models, 16 plants) excludes deep learning, while transformer studies (D1, D2) compare against plain LSTM.",
+      "limitation": "Cross-family comparison is performed within studies, never across the field on shared data, so the field cannot currently answer which model family is preferable.",
+      "opportunity_for_our_project": "Run classical ML, recurrent DL and one transformer-family model on one publicly documented dataset with one chronological split, one scaling policy and one persistence anchor, and report all metrics on identical test windows.",
+      "testable_research_question": "RQ1/RQ4: Under an identical chronological split and a shared persistence anchor, do recurrent or attention-based architectures deliver a statistically significant improvement over well-tuned classical ML for short-term PV power forecasting?"
+    },
+    {
+      "gap_id": "RG-02",
+      "research_gap": "Weather-regime-stratified evaluation is rare, and where it exists each study uses an incompatible taxonomy, so regime-wise robustness cannot be compared.",
+      "evidence_papers": "B3, B4, C4, C6, A2, D2, G2",
+      "evidence_basis": "coded count: 5 of 30 papers report accuracy under named weather conditions. The taxonomies are mutually incompatible: B3 uses k-means on clearness index (clear / cloudy / mixed), C4 uses sunny / cloudy / rainy, C6 uses multi-weather evaluation, B4 uses cloudy vs all-weather, and A2 uses seasonal correlation. G2 identifies weather classification as a persistent challenge without providing a standard.",
+      "why_it_matters": "Aggregate error metrics average over easy clear-sky periods and hard broken-cloud periods, so a model can look strong overall while failing exactly when operators need it. Without a shared regime definition, the literature cannot establish which models are robust.",
+      "current_approaches": "Studies classify conditions ad hoc, often using a clearness index derived from the same irradiance signal being forecast, which partly confounds regime-wise error attribution.",
+      "limitation": "No transparent, documented regime definition based solely on information available at forecast time is applied consistently, and regime labels are rarely published alongside per-regime metrics.",
+      "opportunity_for_our_project": "Define one transparent regime taxonomy computed from forecast-time-available variables only, publish the regime assignment rule and the regime-wise metrics for every model, and test whether model ranking changes across regimes.",
+      "testable_research_question": "RQ3: Does the ranking of forecasting models change across clear, partly cloudy, cloudy and high-variability regimes, and do aggregate metrics conceal regime-specific failure?"
+    },
+    {
+      "gap_id": "RG-03",
+      "research_gap": "Differences between models are asserted from point estimates without formal statistical testing, so the literature cannot distinguish real improvement from sampling variation.",
+      "evidence_papers": "C6, A4, G4, D1, D4",
+      "evidence_basis": "coded count: 2 of 30 papers apply a formal significance test (C6 uses a Diebold-Mariano test and Dynamic Time Warping; A4 uses nonparametric tests). The strongest quantitative comparisons in the corpus (G4: 44.6% persistence skill; D1: 48.3% MAE improvement) report no significance test at all.",
+      "why_it_matters": "Error differences on a single test period can be produced by favourable weather sampling. Without paired tests and confidence intervals, an improvement claim is not verifiable and cannot be replicated.",
+      "current_approaches": "Point-estimate comparison of MAE/RMSE/R2, occasionally with dispersion across folds, but no paired error comparison over a common test set.",
+      "limitation": "No standard error-difference test with an appropriate small-sample correction is applied, and no bootstrap confidence intervals accompany headline gains.",
+      "opportunity_for_our_project": "Apply a Diebold-Mariano test with the Harvey-Leybourne-Newbold small-sample correction plus moving-block bootstrap confidence intervals to every model comparison, and report which differences survive.",
+      "testable_research_question": "RQ1/RQ4: Which of the observed model differences remain statistically significant after accounting for serial correlation in forecast errors?"
+    },
+    {
+      "gap_id": "RG-04",
+      "research_gap": "Temporal leakage through non-chronological validation is common, making reported accuracy incomparable with properly time-ordered studies.",
+      "evidence_papers": "A4, G4, D4, E3, A1, F3",
+      "evidence_basis": "A4 explicitly validates with k-fold cross-validation, which mixes neighbouring time steps across folds. A4 and A1 are additionally uninformative on split policy. By contrast G4 and F4 use time-ordered evaluation, so the corpus contains both practices without a stated norm.",
+      "why_it_matters": "Random or k-fold splitting of an autocorrelated series lets a model interpolate between near-duplicate neighbouring observations, inflating accuracy and making a weak model appear competitive with a strong one.",
+      "current_approaches": "Both k-fold cross-validation and chronological hold-out appear in the same corpus, with no reporting requirement for the split rule.",
+      "limitation": "Split policy is rarely stated explicitly and is never audited, so leakage cannot be detected by a reader.",
+      "opportunity_for_our_project": "Adopt a single strictly chronological split (train / validation / test with embargoed boundaries), fit scalers on training data only, state the exact information available at forecast time, and include a leakage unit test in the test suite.",
+      "testable_research_question": "RQ1: How much of the reported advantage of gradient-boosting and recurrent models survives when all models are evaluated under one strictly chronological, leakage-audited split?"
+    },
+    {
+      "gap_id": "RG-05",
+      "research_gap": "Multi-horizon evaluation is not systematic; horizon ranges differ per study and are rarely combined with a common baseline, so error growth with horizon is uncharacterised.",
+      "evidence_papers": "F4, B3, D4, E2, B2, C1, A2",
+      "evidence_basis": "Horizon definitions vary widely and are not comparable: F4 spans five horizons from 4 hours to 7 days; B3 uses 1 hour and 1 day; D4 uses 'various scenarios' without enumeration; E2 claims both short and long horizons without quantification; B2 is day-ahead hourly; C1 is hourly and daily. Only F4 enumerates a horizon grid and compares it consistently.",
+      "why_it_matters": "Operational value depends on horizon, and a model that wins at 15 minutes may lose at 6 hours. Without a shared horizon grid, statements about architecture suitability are not transferable.",
+      "current_approaches": "Each study fixes its own horizon set, typically one or two values, and reports aggregate accuracy across them.",
+      "limitation": "No study reports the full accuracy-versus-horizon curve for a common model set on common data.",
+      "opportunity_for_our_project": "Evaluate every model at a fixed ladder of horizons derived from the dataset resolution, report the accuracy-horizon curve, and test whether the model ranking is horizon-stable.",
+      "testable_research_question": "RQ2: Is model performance consistent across forecasting horizons, and does the relative advantage of advanced architectures shrink as the horizon grows?"
+    },
+    {
+      "gap_id": "RG-06",
+      "research_gap": "Uncertainty quantification is confined to a small minority of studies, is not paired with deterministic benchmarks on a shared split, and does not report the computational cost of its added machinery.",
+      "evidence_papers": "F1, F2, A4",
+      "evidence_basis": "coded count: 2 of 30 papers make probabilistic forecasting their central contribution (F1 quantile regression with enforced monotonicity; F2 distribution-free B-spline PDF forecasting). A4 reports only dispersion across k-fold repeats, which is variability rather than calibrated uncertainty. F1 and F2 report no computational cost, and F2's headline reductions (KL -54.82%, MAE -68.93%) are against unspecified comparison models rather than a shared deterministic baseline.",
+      "why_it_matters": "An operator needs calibrated intervals to reserve capacity and schedule storage. Deterministic accuracy alone does not quantify risk, and an interval method that costs ten times the inference time may be unusable in real time.",
+      "current_approaches": "Parametric quantile regression and non-parametric density estimation are both represented, but each in isolation, on a private dataset, with no shared evaluation protocol.",
+      "limitation": "No standard coverage or interval-width metric is reported in the retrieved abstracts, and no study pairs an uncertainty method with a deterministic baseline on the same test set while measuring inference cost.",
+      "opportunity_for_our_project": "Add conformal-prediction intervals around the best deterministic model, report coverage and mean interval width, verify finite-sample marginal coverage, and measure the inference-time overhead relative to the deterministic model.",
+      "testable_research_question": "RQ7: Can an accurate deterministic model be augmented with well-calibrated prediction intervals at acceptable computational cost, and does interval width track error growth across horizons and weather regimes?"
+    },
+    {
+      "gap_id": "RG-07",
+      "research_gap": "Explainability is applied only to inherently interpretable model families, while attention-based architectures are used without validating attention weights as explanations.",
+      "evidence_papers": "F3, A3, D1, D2, C6, F4, D3",
+      "evidence_basis": "coded count: 2 of 30 papers make explainability a contribution (F3 applies SHAP, LIME and permutation importance to five tree ensembles; A3 embeds LIME, Extreme Boosting and Elastic Net into feature weighting). C6, D1, D2 and F4 all rely on attention mechanisms for prediction but report no explanation analysis; D3's learned adjacency matrices are interpreted only through ablation. F3 restricts itself to tree ensembles, and no explanation-faithfulness validation is reported anywhere.",
+      "why_it_matters": "Attention weights are not explanations, and permutation importance does not establish causality. A benchmark that reports which meteorological variables drive error is more actionable for plant operators than an unexplained accuracy ranking.",
+      "current_approaches": "Post-hoc feature importance for tree models; attention weights assumed to be self-interpreting in deep models; no faithfulness or stability testing of explanations.",
+      "limitation": "No study validates explanations against a ground truth or a perturbation-based check, and no study compares explanation method behaviour across model families.",
+      "opportunity_for_our_project": "Apply SHAP to tree models and permutation importance computed on the chronological test set to sequence models, report the two side by side, and state explicitly that these are predictive attributions rather than causal effects.",
+      "testable_research_question": "RQ5/RQ7: Which meteorological and temporal variables dominate forecasting error, and do feature attributions obtained from tree and sequence models agree?"
+    },
+    {
+      "gap_id": "RG-08",
+      "research_gap": "Computational cost is almost never reported alongside accuracy, so the accuracy-versus-cost trade-off that governs deployment is unknown.",
+      "evidence_papers": "B2, B4, D3, F2, C2, D3",
+      "evidence_basis": "coded count: 3 of 30 papers report any cost-related quantity (B2 decomposition runtimes; B4 training-time reduction from downsampling; D3 qualitative run-time efficiency). F2's three-stage B-spline/KDE/transformer pipeline and C2's U-Net plus encoder-decoder on satellite imagery are both architecturally heavy yet report no cost, despite depending on inputs that add real-world latency.",
+      "why_it_matters": "A model that cannot run at the required cadence is not deployable, and inference cost per site scales across a fleet. Reporting accuracy alone encourages architectures that are impractical at grid scale.",
+      "current_approaches": "Cost is mentioned only incidentally, typically as a preprocessing runtime or a qualitative statement of efficiency.",
+      "limitation": "No study reports training time, inference latency, parameter count or memory alongside accuracy, so the two cannot be traded off.",
+      "opportunity_for_our_project": "Measure and report training duration, single-batch inference latency, parameter count and peak memory for every model under identical hardware and batch conditions, and present accuracy against cost rather than ranking on accuracy alone.",
+      "testable_research_question": "RQ1 (cost dimension): What is the accuracy-per-unit-cost profile of each model family, and which models are Pareto-optimal for operational deployment?"
+    },
+    {
+      "gap_id": "RG-09",
+      "research_gap": "Reproducibility artefacts are rare: publicly released forecasting code is the exception rather than the rule, and dataset provenance is frequently unstated.",
+      "evidence_papers": "B4, C5, D2, E3, F4, A2, A3",
+      "evidence_basis": "coded counts: 1 of 30 papers releases public code (B4, GitHub YuchiSun/SUNSET); 4 of 30 state that the dataset is publicly available (C5 DKASC, D2 OpenMeteo, E3 DKASC, F4 open-source plant datasets). The remainder describe data only as 'real-world', 'actual' or 'real-life' measurements, so exact site, record count and resolution cannot be recovered.",
+      "why_it_matters": "Without code and a named public dataset, a reported result cannot be reproduced or even approximately checked, so errors in preprocessing and leakage cannot be detected by the community.",
+      "current_approaches": "Method descriptions are detailed enough to reimplement approximately, but exact data splits, seeds and preprocessing parameters are not released.",
+      "limitation": "There is no expectation of artefact release, and no study in the corpus documents its random seeds or software environment.",
+      "opportunity_for_our_project": "Release the full pipeline, configuration files, exact split boundaries, seeds and software versions, record every experiment to machine-readable JSON, and document the dataset source and licence explicitly.",
+      "testable_research_question": "Not a research question but a design requirement: can an independent reader regenerate the reported numbers from the released artefacts alone?"
+    },
+    {
+      "gap_id": "RG-10",
+      "research_gap": "Forecast-error metric practice is inconsistent, and percentage errors are reported on a target that is exactly zero outside daylight hours without justification.",
+      "evidence_papers": "C1, D2, D4, E3, A2",
+      "evidence_basis": "C1, D2 and D4 report MAPE for a PV power target that is zero at night; no masking or epsilon treatment is described in their retrieved abstracts. E3 instead reports sMAPE, which is bounded for zero-containing targets. A2 reports absolute errors in MWh with correlation, avoiding the issue. The corpus therefore mixes three incompatible conventions, so metric values are not comparable across studies.",
+      "why_it_matters": "MAPE is undefined at zero and is dominated by near-zero daylight-morning and evening values, so it can rank models by behaviour in periods that carry negligible energy. Mixed conventions prevent meta-analysis.",
+      "current_approaches": "Studies freely mix MAE, RMSE, MAPE, sMAPE and R2 without a stated primary metric or a night-time masking policy.",
+      "limitation": "No shared primary metric, no explicit handling of zero-target periods, and no agreement on normalising error by installed capacity rather than by the observed mean.",
+      "opportunity_for_our_project": "Fix a primary metric family (MAE, RMSE, nRMSE, R2, sMAPE) with explicit formulas, avoid MAPE on the zero-containing target, report daylight and night-time periods separately, and justify every normalisation choice.",
+      "testable_research_question": "RQ3: Do aggregate rankings change when errors are restricted to daylight hours, i.e. how much of reported PV forecasting error is a night-time metric artefact?"
+    }
+  ]
+}

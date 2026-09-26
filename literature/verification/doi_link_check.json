@@ -1,0 +1,285 @@
+{
+  "checked": 30,
+  "counts": {
+    "resolved": 24,
+    "resolved_blocked": 6
+  },
+  "interpretation": {
+    "resolved": "DOI redirected to a publisher landing page that served the request.",
+    "resolved_blocked": "DOI redirected to the correct publisher landing page, which then refused the automated request. The link is valid; a browser opens it.",
+    "resolved_nonpublisher_host": "DOI redirected successfully to a host outside the publisher allow-list (e.g. an aggregator).",
+    "unresolved": "The DOI failed to reach a publisher landing page. This would indicate a genuinely broken link."
+  },
+  "results": [
+    {
+      "doi": "10.1109/access.2023.3270041",
+      "outcome": "resolved",
+      "http_status": 202,
+      "final_url": "https://ieeexplore.ieee.org/document/10107594/",
+      "final_host": "ieeexplore.ieee.org",
+      "paper_id": "G1",
+      "title": "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison"
+    },
+    {
+      "doi": "10.1016/j.esr.2025.101735",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S2211467X25000987",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "G2",
+      "title": "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review"
+    },
+    {
+      "doi": "10.1016/j.jclepro.2021.128566",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0959652621027736",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "G3",
+      "title": "Deep learning models for solar irradiance forecasting: A comprehensive review"
+    },
+    {
+      "doi": "10.1016/j.rser.2022.112364",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S136403212200274X",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "G4",
+      "title": "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction"
+    },
+    {
+      "doi": "10.1016/j.asoc.2020.106389",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S156849462030329X",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "A1",
+      "title": "Short-term photovoltaic power generation forecasting based on random forest feature selection and CEEMD: A case study"
+    },
+    {
+      "doi": "10.1002/pip.1152",
+      "outcome": "resolved_blocked",
+      "http_status": 403,
+      "final_url": "https://onlinelibrary.wiley.com/doi/10.1002/pip.1152",
+      "final_host": "onlinelibrary.wiley.com",
+      "paper_id": "A2",
+      "title": "Use of support vector regression and numerically predicted cloudiness to forecast power output of a photovoltaic power plant in Kitakyushu, Japan"
+    },
+    {
+      "doi": "10.3390/en14133992",
+      "outcome": "resolved_blocked",
+      "http_status": 403,
+      "final_url": "https://www.mdpi.com/1996-1073/14/13/3992",
+      "final_host": "www.mdpi.com",
+      "paper_id": "A3",
+      "title": "Enhanced Random Forest Model for Robust Short-Term Photovoltaic Power Forecasting Using Weather Measurements"
+    },
+    {
+      "doi": "10.1038/s41598-026-47042-3",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://www.nature.com/articles/s41598-026-47042-3",
+      "final_host": "www.nature.com",
+      "paper_id": "A4",
+      "title": "A stacked Gradient Boosting–XGBoost ensemble with ridge meta-learner for accurate short-term solar PV power forecasting in smart grids"
+    },
+    {
+      "doi": "10.1016/j.energy.2019.116225",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0360544219319206",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "B1",
+      "title": "Photovoltaic power forecasting based LSTM-Convolutional Network"
+    },
+    {
+      "doi": "10.1016/j.segan.2023.101133",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S2352467723001418",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "B2",
+      "title": "Forecasting hourly day-ahead solar photovoltaic power generation by assembling a new adaptive multivariate data analysis with a long short-term memory network"
+    },
+    {
+      "doi": "10.1109/access.2019.2946057",
+      "outcome": "resolved",
+      "http_status": 202,
+      "final_url": "https://ieeexplore.ieee.org/document/8864021/",
+      "final_host": "ieeexplore.ieee.org",
+      "paper_id": "B3",
+      "title": "An LSTM Short-Term Solar Irradiance Forecasting Under Complicated Weather Conditions"
+    },
+    {
+      "doi": "10.1016/j.solener.2019.06.041",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0038092X19306164",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "B4",
+      "title": "Short-term solar power forecast with deep learning: Exploring optimal input and output configuration"
+    },
+    {
+      "doi": "10.1016/j.measurement.2020.108250",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0263224120307892",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "C1",
+      "title": "Deep learning and wavelet transform integrated approach for short-term solar PV power prediction"
+    },
+    {
+      "doi": "10.1109/tste.2021.3123337",
+      "outcome": "resolved",
+      "http_status": 202,
+      "final_url": "https://ieeexplore.ieee.org/document/9591417/",
+      "final_host": "ieeexplore.ieee.org",
+      "paper_id": "C2",
+      "title": "Intra-Hour Photovoltaic Generation Forecasting Based on Multi-Source Data and Deep Learning Methods"
+    },
+    {
+      "doi": "10.1016/j.renene.2024.120437",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0960148124005020",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "C3",
+      "title": "Short-term photovoltaic power forecasting with feature extraction and attention mechanisms"
+    },
+    {
+      "doi": "10.3390/app14125189",
+      "outcome": "resolved_blocked",
+      "http_status": 403,
+      "final_url": "https://www.mdpi.com/2076-3417/14/12/5189",
+      "final_host": "www.mdpi.com",
+      "paper_id": "C4",
+      "title": "A Hybrid Convolutional–Long Short-Term Memory–Attention Framework for Short-Term Photovoltaic Power Forecasting, Incorporating Data from Neighboring Stations"
+    },
+    {
+      "doi": "10.1016/j.energy.2022.124661",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S036054422201564X",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "C5",
+      "title": "LOWESS smoothing and Random Forest based GRU model: A short-term photovoltaic power generation forecasting method"
+    },
+    {
+      "doi": "10.3390/en19071747",
+      "outcome": "resolved_blocked",
+      "http_status": 403,
+      "final_url": "https://www.mdpi.com/1996-1073/19/7/1747",
+      "final_host": "www.mdpi.com",
+      "paper_id": "C6",
+      "title": "Short-Term Photovoltaic Power Forecasting Based on CNN–LSTM–Attention Mechanism"
+    },
+    {
+      "doi": "10.1016/j.rser.2024.114479",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S1364032124002028",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "D1",
+      "title": "Multi-step photovoltaic power forecasting using transformer and recurrent neural networks"
+    },
+    {
+      "doi": "10.1016/j.egyai.2024.100444",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S2666546824001101",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "D2",
+      "title": "Photovoltaic power forecasting: A Transformer based framework"
+    },
+    {
+      "doi": "10.1016/j.enconman.2025.119773",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0196890425002961",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "D3",
+      "title": "Multi-scale fused Graph Convolutional Network for multi-site photovoltaic power forecasting"
+    },
+    {
+      "doi": "10.3390/en16104097",
+      "outcome": "resolved_blocked",
+      "http_status": 403,
+      "final_url": "https://www.mdpi.com/1996-1073/16/10/4097",
+      "final_host": "www.mdpi.com",
+      "paper_id": "D4",
+      "title": "Deep and Machine Learning Models to Forecast Photovoltaic Power Generation"
+    },
+    {
+      "doi": "10.1016/j.ecmx.2025.101431",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S259017452500563X",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "D5",
+      "title": "Enhancing short-term solar power forecasting using a hybrid deep learning approach and a comparative analysis of machine learning models"
+    },
+    {
+      "doi": "10.1016/j.energy.2021.120240",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0360544221004898",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "E1",
+      "title": "Deep learning based forecasting of photovoltaic power generation by incorporating domain knowledge"
+    },
+    {
+      "doi": "10.1016/j.energy.2024.131709",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0360544224014828",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "E2",
+      "title": "Solar power forecasting using domain knowledge"
+    },
+    {
+      "doi": "10.1016/j.nxener.2026.100531",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S2949821X26000219",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "E3",
+      "title": "Deep learning prediction models for short-term solar photovoltaic power generation forecasting"
+    },
+    {
+      "doi": "10.2174/0123520965458194260410052152",
+      "outcome": "resolved_blocked",
+      "http_status": 403,
+      "final_url": "https://www.eurekaselect.com/252424/article",
+      "final_host": "www.eurekaselect.com",
+      "paper_id": "F1",
+      "title": "Day-Ahead Probabilistic Photovoltaic Power Forecasting based on Deep Feature Enhancement and Bidirectional Temporal Modeling"
+    },
+    {
+      "doi": "10.1016/j.solener.2025.113769",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0038092X25005328",
+      "final_host": "linkinghub.elsevier.com",
+      "paper_id": "F2",
+      "title": "Distribution-Free photovoltaic power probability density forecasting based on hybrid deep learning"
+    },
+    {
+      "doi": "10.1007/s00202-024-02933-4",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://link.springer.com/article/10.1007/s00202-024-02933-4",
+      "final_host": "link.springer.com",
+      "paper_id": "F3",
+      "title": "Machine learning insights into forecasting solar power generation with explainable AI"
+    },
+    {
+      "doi": "10.1038/s41467-026-73817-3",
+      "outcome": "resolved",
+      "http_status": 200,
+      "final_url": "https://www.nature.com/articles/s41467-026-73817-3",
+      "final_host": "www.nature.com",
+      "paper_id": "F4",
+      "title": "Rethinking the use of deep learning methods for photovoltaic power forecasting"
+    }
+  ]
+}

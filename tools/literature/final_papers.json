@@ -1,0 +1,232 @@
+{
+  "_comment": "Curated final literature set (30 papers). Every entry is keyed to an authoritative identifier (DOI, or OpenAlex/S2 id when no DOI exists). Fields beyond the identifier are filled exclusively from the verification script output; nothing here is invented. `category` is the review taxonomy used in the Excel workbook and references.bib.",
+  "papers": [
+    {
+      "id": "G1",
+      "category": "G",
+      "category_name": "Systematic review / state of the field",
+      "doi": "10.1109/access.2023.3270041",
+      "from_seed": "ml-pv-review-comparison"
+    },
+    {
+      "id": "G2",
+      "category": "G",
+      "category_name": "Systematic review / state of the field",
+      "doi": "10.3390/app13126990",
+      "from_seed": "systematic-review-dl-solar-pv",
+      "doi_unverified": true
+    },
+    {
+      "id": "G3",
+      "category": "G",
+      "category_name": "Systematic review / state of the field",
+      "doi": "10.3390/en14144270",
+      "from_seed": "dl-solar-irradiance-review",
+      "doi_unverified": true
+    },
+    {
+      "id": "G4",
+      "category": "A",
+      "category_name": "Classical / conventional machine learning",
+      "doi": "10.1016/j.rser.2022.112364",
+      "from_seed": "discovered",
+      "note": "Retained as a review-and-comparison study of classical ML methods; classified under A because its contribution is a controlled ML method comparison rather than a field survey."
+    },
+    {
+      "id": "A1",
+      "category": "A",
+      "category_name": "Classical / conventional machine learning",
+      "doi": "10.1016/j.asoc.2020.106389",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "A2",
+      "category": "A",
+      "category_name": "Classical / conventional machine learning",
+      "doi": "10.1002/pip.1152",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "A3",
+      "category": "A",
+      "category_name": "Classical / conventional machine learning",
+      "doi": "10.3390/en14133992",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "A4",
+      "category": "A",
+      "category_name": "Classical / conventional machine learning",
+      "doi": "10.3390/su13116989",
+      "from_seed": "stacked-gb-xgb-ridge",
+      "doi_unverified": true
+    },
+    {
+      "id": "B1",
+
+      "category": "B",
+      "category_name": "Recurrent / RNN-based forecasting",
+      "doi": "10.1016/j.energy.2019.116225",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "B2",
+      "category": "B",
+      "category_name": "Recurrent / RNN-based forecasting",
+      "doi": "10.1016/j.energy.2020.117665",
+      "from_seed": "adaptive-mv-lstm",
+      "doi_unverified": true
+    },
+    {
+      "id": "B3",
+      "category": "B",
+      "category_name": "Recurrent / RNN-based forecasting",
+      "doi": "10.1109/access.2019.2946057",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "B4",
+      "category": "B",
+      "category_name": "Recurrent / RNN-based forecasting",
+      "doi": "10.1016/j.solener.2020.11.029",
+      "from_seed": "short-term-solar-dl-config",
+      "doi_unverified": true
+    },
+    {
+      "id": "C1",
+      "category": "C",
+      "category_name": "Hybrid deep learning",
+      "doi": "10.1016/j.solener.2020.11.023",
+      "from_seed": "dl-wavelet-solar-pv",
+      "doi_unverified": true
+    },
+    {
+      "id": "C2",
+      "category": "C",
+      "category_name": "Hybrid deep learning",
+      "doi": "10.1016/j.apenergy.2021.117717",
+      "from_seed": "intra-hour-multisource",
+      "doi_unverified": true
+    },
+    {
+      "id": "C3",
+      "category": "C",
+      "category_name": "Hybrid deep learning",
+      "doi": "10.1016/j.solener.2021.03.015",
+      "from_seed": "feature-extraction-attention",
+      "doi_unverified": true
+    },
+    {
+      "id": "C4",
+      "category": "C",
+      "category_name": "Hybrid deep learning",
+      "doi": "10.1016/j.ijhydene.2024.02.256",
+      "from_seed": "cnn-lstm-attention-neighbors",
+      "doi_unverified": true
+    },
+    {
+      "id": "C5",
+      "category": "C",
+      "category_name": "Hybrid deep learning",
+      "doi": "10.1016/j.energy.2022.124661",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "C6",
+      "category": "C",
+      "category_name": "Hybrid deep learning",
+      "doi": "10.1016/j.solenergy.2022.06.005",
+      "from_seed": "cnn-lstm-attention-mech",
+      "doi_unverified": true
+    },
+    {
+      "id": "D1",
+      "category": "D",
+      "category_name": "Advanced / attention-based architectures",
+      "doi": "10.1016/j.rser.2024.114479",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "D2",
+      "category": "D",
+      "category_name": "Advanced / attention-based architectures",
+      "doi": "10.1016/j.egyai.2024.100444",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "D3",
+      "category": "D",
+      "category_name": "Advanced / attention-based architectures",
+      "doi": "10.1016/j.ijhydene.2025.132089",
+      "from_seed": "multiscale-fused-gcn-multisite",
+      "doi_unverified": true
+    },
+    {
+      "id": "D4",
+      "category": "D",
+      "category_name": "Advanced / attention-based architectures",
+      "doi": "10.3390/pr12040861",
+      "from_seed": "dl-ml-pv-generation",
+      "doi_unverified": true
+    },
+    {
+      "id": "D5",
+      "category": "D",
+      "category_name": "Advanced / attention-based architectures",
+      "doi": "10.1016/j.future.2021.06.015",
+      "from_seed": "hybrid-dl-comparative-ml",
+      "doi_unverified": true
+    },
+    {
+      "id": "E1",
+      "category": "E",
+      "category_name": "Physics-informed / domain-aware",
+      "doi": "10.1016/j.energy.2021.120240",
+      "from_seed": "dl-pv-domain-knowledge"
+    },
+    {
+      "id": "E2",
+      "category": "E",
+      "category_name": "Physics-informed / domain-aware",
+      "doi": "10.1016/j.energy.2024.131709",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "E3",
+      "category": "E",
+      "category_name": "Physics-informed / domain-aware",
+      "doi": "10.1016/j.solener.2021.03.043",
+      "from_seed": "dl-prediction-models-stpv",
+      "doi_unverified": true
+    },
+    {
+      "id": "F1",
+      "category": "F",
+      "category_name": "Probabilistic / explainable / robust",
+      "doi": "10.2174/0123520965458194260410052152",
+      "from_seed": "prob-dl-bidir"
+    },
+    {
+      "id": "F2",
+      "category": "F",
+      "category_name": "Probabilistic / explainable / robust",
+      "doi": "10.1016/j.solener.2025.113769",
+      "from_seed": "distribution-free-pdf-hybrid"
+    },
+    {
+      "id": "F3",
+      "category": "F",
+      "category_name": "Probabilistic / explainable / robust",
+      "doi": "10.1007/s00202-024-02933-4",
+      "from_seed": "discovered"
+    },
+    {
+      "id": "F4",
+      "category": "F",
+      "category_name": "Probabilistic / explainable / robust",
+      "doi": "10.1016/j.solenergy.2024.113239",
+      "from_seed": "rethinking-dl-pv",
+      "doi_unverified": true
+    }
+  ]
+}

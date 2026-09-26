@@ -1,0 +1,196 @@
+{
+  "corpus_size": 30,
+  "category_counts": {
+    "A": 5,
+    "B": 4,
+    "C": 6,
+    "D": 5,
+    "E": 3,
+    "F": 4,
+    "G": 3
+  },
+  "boolean_evidence": {
+    "weather_regime_eval": {
+      "description": "Reports accuracy under named weather conditions",
+      "n_supporting": 5,
+      "n_total": 30,
+      "share": 0.1667,
+      "supporting_papers": [
+        "A2",
+        "B3",
+        "B4",
+        "C4",
+        "C6"
+      ]
+    },
+    "statistical_test": {
+      "description": "Applies a formal significance test for model comparison",
+      "n_supporting": 2,
+      "n_total": 30,
+      "share": 0.0667,
+      "supporting_papers": [
+        "A4",
+        "C6"
+      ]
+    },
+    "code_released": {
+      "description": "States that public code is available",
+      "n_supporting": 1,
+      "n_total": 30,
+      "share": 0.0333,
+      "supporting_papers": [
+        "B4"
+      ]
+    },
+    "dataset_public": {
+      "description": "States that the dataset is publicly available",
+      "n_supporting": 4,
+      "n_total": 30,
+      "share": 0.1333,
+      "supporting_papers": [
+        "C5",
+        "D2",
+        "E3",
+        "F4"
+      ]
+    },
+    "cost_reported": {
+      "description": "Reports training/inference cost, runtime or parameter count",
+      "n_supporting": 3,
+      "n_total": 30,
+      "share": 0.1,
+      "supporting_papers": [
+        "B2",
+        "B4",
+        "D3"
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "gap_id": "RG-01",
+      "cited_papers": [
+        "G1",
+        "G4",
+        "D1",
+        "B1",
+        "D5",
+        "D4",
+        "A4"
+      ],
+      "n_cited": 7
+    },
+    {
+      "gap_id": "RG-02",
+      "cited_papers": [
+        "B3",
+        "B4",
+        "C4",
+        "C6",
+        "A2",
+        "D2",
+        "G2"
+      ],
+      "n_cited": 7
+    },
+    {
+      "gap_id": "RG-03",
+      "cited_papers": [
+        "C6",
+        "A4",
+        "G4",
+        "D1",
+        "D4"
+      ],
+      "n_cited": 5
+    },
+    {
+      "gap_id": "RG-04",
+      "cited_papers": [
+        "A4",
+        "G4",
+        "D4",
+        "E3",
+        "A1",
+        "F3"
+      ],
+      "n_cited": 6
+    },
+    {
+      "gap_id": "RG-05",
+      "cited_papers": [
+        "F4",
+        "B3",
+        "D4",
+        "E2",
+        "B2",
+        "C1",
+        "A2"
+      ],
+      "n_cited": 7
+    },
+    {
+      "gap_id": "RG-06",
+      "cited_papers": [
+        "F1",
+        "F2",
+        "A4"
+      ],
+      "n_cited": 3
+    },
+    {
+      "gap_id": "RG-07",
+      "cited_papers": [
+        "F3",
+        "A3",
+        "D1",
+        "D2",
+        "C6",
+        "F4",
+        "D3"
+      ],
+      "n_cited": 7
+    },
+    {
+      "gap_id": "RG-08",
+      "cited_papers": [
+        "B2",
+        "B4",
+        "D3",
+        "F2",
+        "C2",
+        "D3"
+      ],
+      "n_cited": 6
+    },
+    {
+      "gap_id": "RG-09",
+      "cited_papers": [
+        "B4",
+        "C5",
+        "D2",
+        "E3",
+        "F4",
+        "A2",
+        "A3"
+      ],
+      "n_cited": 7
+    },
+    {
+      "gap_id": "RG-10",
+      "cited_papers": [
+        "C1",
+        "D2",
+        "D4",
+        "E3",
+        "A2"
+      ],
+      "n_cited": 5
+    }
+  ],
+  "dangling_evidence_references": {},
+  "notes": [
+    "A low count is evidence that a practice is rare in this corpus, not proof that it is absent from the entire literature. The corpus is a purposive 30-paper sample, not a systematic review of all PV forecasting literature.",
+    "Gaps whose claimed count cannot be derived from a boolean field are supported by qualitative coding of the main_limitation and research_gap columns instead, and are labelled as such in the gap's evidence_basis text."
+  ]
+}
