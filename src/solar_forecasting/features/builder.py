@@ -38,6 +38,9 @@ NON_FEATURE_COLUMNS = {
     "year", "month", "day", "hour", "minute", "dayofyear", "dayofweek",
     "is_weekend", "hours_since_midnight", "wind_direction",
     "wind_direction_sin", "wind_direction_cos", "imputed_flag",
+    # Collinear with solar elevation at this single site; see
+    # SOLAR_COLUMNS_EXCLUDED_FROM_INPUT.
+    "solar_azimuth", "cos_solar_elevation", "solar_zenith",
 }
 
 WEATHER_COLUMNS = [
@@ -48,6 +51,15 @@ WEATHER_COLUMNS = [
 SOLAR_COLUMNS = [
     "solar_elevation", "solar_azimuth", "sin_solar_elevation",
     "cos_solar_elevation", "solar_zenith",
+]
+
+#: Solar-geometry columns that are collinear with solar elevation and are therefore
+#: kept in the frame for inspection but excluded from the model inputs. Azimuth,
+#: the cosine of elevation and the zenith angle are all deterministic functions
+#: of elevation and time at this single site, so including them widens the
+#: flattened representation without adding information.
+SOLAR_COLUMNS_EXCLUDED_FROM_INPUT = [
+    "solar_azimuth", "cos_solar_elevation", "solar_zenith",
 ]
 
 CALENDAR_COLUMNS = ["hour_sin", "hour_cos", "doy_sin", "doy_cos"]
@@ -139,9 +151,18 @@ def add_target_lags(frame: pd.DataFrame, target_column: str,
     Because row ``t`` predicts row ``t + h``, the value at row ``t`` is known at
     forecast time, so every lag here is admissible under the strict historical
     setting.
+
+    ``lag = 0`` is included explicitly as ``pv_power_w_current``. It is the value
+    at the forecast origin itself, which is the single most informative input for
+    short-horizon PV forecasting and is exactly the quantity the persistence
+    baseline repeats. Omitting it and relying on ``lag_1`` alone would make every
+    learned model start from a systematically stale state.
     """
     out = frame.copy()
+    out[f"{LAG_PREFIX}0"] = out[target_column].astype(float)
     for lag in lags:
+        if lag == 0:
+            continue
         out[f"{LAG_PREFIX}{lag}"] = out[target_column].shift(lag)
     return out
 
@@ -194,7 +215,9 @@ def add_irradiance_derivatives(frame: pd.DataFrame, column: str = "ghi") -> pd.D
 
     Ramps are the operationally important quantity: a fast irradiance change is
     what makes short-term PV forecasting hard, and a trailing ramp at the
-    forecast origin is a strong indicator that it will continue.
+    forecast origin is a strong indicator that it will continue. Both the
+    difference and the per-step slope are included at two lags, so a model can
+    distinguish a fresh ramp from one that began several steps ago.
     """
     out = frame.copy()
     if column not in out.columns:
@@ -251,17 +274,18 @@ def build_features(frame: pd.DataFrame, config_features: dict[str, Any],
     out = add_clear_sky_features(out)
     out = add_daylight_features(out)
 
-    lags = list(config_features.get("pv_lags", []))
-    out = add_target_lags(out, target_column, lags)
+    out = add_target_lags(out, target_column, list(config_features.get("pv_lags", [])))
+    out = add_rolling_features(
+        out, target_column,
+        list(config_features.get("pv_rolling_windows", [])),
+        list(config_features.get("pv_rolling_stats", [])))
 
-    windows = list(config_features.get("pv_rolling_windows", []))
-    stats = list(config_features.get("pv_rolling_stats", []))
-    out = add_rolling_features(out, target_column, windows, stats)
-
-    if any(c in out.columns for c in WEATHER_COLUMNS):
-        out = add_weather_rolling_features(out, ["ghi", "temperature"], [4, 96])
+    allowed = set(config_features.get("weather_inputs") or [])
+    if any(c in out.columns for c in allowed):
+        out = add_weather_rolling_features(
+            out, [c for c in ("ghi", "temperature") if c in allowed],
+            list(config_features.get("weather_rolling_windows", [4, 24])))
     out = add_irradiance_derivatives(out, "ghi")
-
     return out
 
 

@@ -111,6 +111,11 @@ def chronological_split(frame: pd.DataFrame, boundaries: SplitBoundaries,
     in_window = (times >= boundaries.train_start) & (times <= boundaries.test_end)
     dropped_outside = int((~in_window).sum())
     frame = frame.loc[in_window].reset_index(drop=True)
+    # The mask above is positional with respect to the *unfiltered* frame, so the
+    # timestamps have to be recomputed after filtering. Reusing the original
+    # series would reindex it against the shortened frame and silently shift
+    # every split boundary, which is a leakage bug rather than a crash.
+    times = pd.to_datetime(frame[time_column])
 
     train = frame[(times >= boundaries.train_start) & (times <= boundaries.train_end)]
     val = frame[(times >= boundaries.val_start) & (times <= boundaries.val_end)]

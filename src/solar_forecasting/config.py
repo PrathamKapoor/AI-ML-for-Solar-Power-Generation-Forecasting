@@ -145,6 +145,22 @@ def path_for(*parts: str) -> Path:
 
 
 def results_dir(*parts: str) -> Path:
+    """Return a path under ``results/``, creating it as a directory.
+
+    ``parts`` must name directories only. Passing a filename here would make
+    this helper ``mkdir`` a directory named after the file, which is exactly
+    what once turned ``results/experiments.csv`` into a folder and broke the
+    registry with an opaque ``PermissionError``. Compose file paths as
+    ``results_dir("metrics") / "report.json"`` (or ``results_dir() / "f.csv"``
+    for a file directly under ``results``).
+    """
+    if parts and "." in parts[-1]:
+        raise ValueError(
+            f"results_dir() takes directory names, not a filename: {parts[-1]!r}. "
+            f"Use results_dir({', '.join(repr(p) for p in parts[:-1])}) / {parts[-1]!r}"
+            if len(parts) > 1 else
+            f"results_dir() takes directory names, not a filename: {parts[-1]!r}. "
+            f"Use results_dir() / {parts[-1]!r}")
     return ensure_dir(RESULTS_DIR.joinpath(*parts))
 
 
