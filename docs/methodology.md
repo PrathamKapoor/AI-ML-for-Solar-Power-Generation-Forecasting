@@ -16,13 +16,17 @@ restriction and it bounds what the results mean — see §13.
 
 | ID | Question | Answered by |
 | --- | --- | --- |
-| RQ1 | How do classical ML, recurrent DL and attention architectures compare under one controlled protocol? | Experiment B |
+| RQ1 | How do classical ML, recurrent DL and attention architectures compare under one controlled protocol, and how much of a neural model's score is initialisation? | Experiments B, M |
 | RQ2 | Does relative performance hold across four forecast horizons? | Experiment C |
-| RQ3 | How does accuracy and skill change across weather regimes? | Experiment D |
-| RQ4 | Do attention-based architectures beat well-tuned gradient boosting? | Experiments B, F |
-| RQ5 | Which input groups carry the forecasting signal? | Experiment E, H |
-| RQ6 | Does performance hold across seasons and across sites? | Experiment G (seasons), J (sites, not run) |
-| RQ7 | Can an accurate model also be interpretable and uncertainty-quantified? | Experiments H, K |
+| RQ3 | How does accuracy and skill change across weather regimes and seasons? | Experiments D, G |
+| RQ4 | Do advanced architectures and richer input sets beat strong classical baselines? | Experiments B, E, F, N |
+| RQ5 | Which input groups carry the forecasting signal, and which variables drive a fitted model? | Experiments E, N, H |
+| RQ6 | Does a model transfer to sites it has never seen? | Experiment J |
+| RQ7 | What is the accuracy-per-unit-cost profile, and can an accurate model also be uncertainty-quantified? | Experiments I, K |
+
+Every row of `results/tables/final_experiment_matrix.csv` carries the
+`research_question` it answers, so this mapping is a column in the data rather
+than a claim in prose. `tools/check_consistency.py` verifies it.
 
 ## 3. Hypotheses
 
@@ -184,21 +188,88 @@ beside it, because aggregating them lets 50% exact zeros dominate the statistics
 * Model and reference errors are resampled with the *same* block indices, since
   they forecast the same timestamps.
 
+### 11.1 Measuring the dependence rather than assuming it
+
+The block bootstrap and the small-sample correction both presuppose that the
+errors are serially dependent. That is measured, not asserted, and three
+diagnostics are reported for every evaluation:
+
+| Diagnostic | Result table | What it establishes |
+| --- | --- | --- |
+| Autocorrelation of the forecast error to 192 lags (32 h) | `error_autocorrelation.csv` | how long a cloud field persists in the error |
+| Integrated autocorrelation time and effective sample size | `evaluation_report.json` | by how much the nominal sample size overstates the information |
+| Bootstrap interval width against block length 1–384 steps | `block_length_sensitivity.csv` | that the chosen block length has passed the point where the width plateaus, and that a too-short block understates the uncertainty |
+
+The measured integrated autocorrelation time on this data is reported in
+`results/metrics/evaluation_report.json`. It is the quantitative reason a
+Diebold-Mariano test rejects nothing here while the block bootstrap separates the
+models, and it is reported rather than used to adjust any result towards
+significance. No p-value was sought by changing a method, a block length or a
+sample after the fact.
+
+## 11.2 Multi-seed replication
+
+Every neural model is trained under five seeds (42, 123, 456, 789, 2026) on the
+identical split and input set, because a single seed cannot separate an
+architecture from an initialisation. `results/tables/multi_seed_results.csv`
+reports the mean, standard deviation, a t-based 95% interval of the mean, and
+the best and worst single seed for every metric. The **best-of-seeds** number is
+never quoted: reporting the best run of five is a report of selection, not of
+performance.
+
 ## 12. Explainability and uncertainty
 
 * **SHAP** (`TreeExplainer`, mean |value|) for the tree ensemble, collapsed over
   the lookback so the reader sees which *variable* matters rather than which lag.
+  A beeswarm summary and per-variable dependence plots are written alongside the
+  collapsed ranking, because a distribution is what SHAP is actually for.
 * **Grouped permutation importance** for the neural models: a variable is
   scrambled across the whole window and the increase in daylight MAE is recorded.
+* **Regime-specific permutation importance**: the same permutation measured
+  separately inside clear, partly cloudy, cloudy and high-variability steps, so a
+  variable cannot be credited with a regime's performance. Regimes with fewer
+  than 500 windows are skipped rather than summarised.
 * **Attention weights are not used as explanations.** They are internal to the
   architecture and are not validated against any perturbation; treating them as
   explanations is a claim, not a measurement.
-* Both are *predictive* attributions. No causal reading is offered anywhere.
+* All importance is *predictive* attribution. No causal reading is offered
+  anywhere, and collinear inputs mean a permutation can destroy information that
+  a correlated input still supplies.
 * **Split conformal intervals** give distribution-free coverage. The calibration
   block is the first 31 days of the test period, and the cost of that choice is
   stated in the output: the coverage guarantee is *approximate*, because the
   calibration block precedes the evaluation block and the two are not exchangeable
   under seasonal drift.
+
+## 12.1 Cross-site generalisation
+
+The experiments above all evaluate at the station the model was trained on. That
+cannot distinguish "these models suit this array" from "these models suit PV
+forecasting", so four transfer protocols are run over a fixed seven-station panel
+(`configs/data.yaml: dataset.holdout_stations`, capacities 25.0–55.0 kW):
+
+| Protocol | Training sites | Test site |
+| --- | --- | --- |
+| `within_site` | the site itself | the same site — the reference ceiling |
+| `cross_site` | LSK North only | each of the six holdouts |
+| `multi_site` / `leave_one_site_out` | the pooled remainder | the held-out site |
+
+Leakage controls, each asserted in `tests/test_cross_site.py`:
+
+* every site is processed by the **same** pipeline, so only the PV target and the
+  rated capacity differ between them;
+* feature and target scalers are fitted on **training-site training rows only**;
+  the held-out site's feature distribution never enters a mean or a scale;
+* because standardisation is affine in watts, applying the training target scaler
+  on a held-out site and inverting it returns that site's true watts, so no
+  site-specific output rescaling is introduced;
+* early stopping monitors the training sites' validation rows only;
+* the held-out site is scored once, after fitting is complete;
+* nRMSE is normalised by **each site's own rated capacity**, read from the
+  dataset metadata rather than estimated from the data;
+* the site panel is fixed in configuration from capacity spread and record
+  coverage. It is never re-selected after seeing transfer errors, and an empty
+  explicit panel raises rather than falling back to the configured one.
 
 ## 13. Limitations
 

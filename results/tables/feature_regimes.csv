@@ -1,0 +1,16 @@
+experiment_id,model,feature_spec,n_features,mae,rmse,nrmse_capacity,r2,smape,skill_vs_persistence_rmse,seed,train_seconds
+N_feature_regimes__gradient_boosting__1h__pv_only,gradient_boosting,pv_only,15,4259.62,6560.07,0.119274,0.791849,49.0688,0.282402,42,36.4522
+N_feature_regimes__xgboost__1h__pv_only,xgboost,pv_only,15,4191.71,6598.11,0.119966,0.789428,47.5945,0.278241,42,42.3785
+N_feature_regimes__cnn_lstm__1h__pv_only,cnn_lstm,pv_only,15,4142.75,6724.06,0.122256,0.781313,50.8678,0.264463,42,1314.72
+N_feature_regimes__lstm__1h__pv_only,lstm,pv_only,15,7131.4,9670.52,0.175828,0.547665,68.1265,-0.0578466,42,1084.73
+N_feature_regimes__attention_lstm__1h__pv_only,attention_lstm,pv_only,15,6858.07,9621.23,0.174932,0.552263,66.5835,-0.0524556,42,1046.31
+N_feature_regimes__xgboost__1h__weather_only,xgboost,weather_only,12,7307.61,9753.17,0.17733,0.5399,66.1851,-0.0668876,42,31.7216
+N_feature_regimes__gradient_boosting__1h__weather_only,gradient_boosting,weather_only,12,7419.29,10004.8,0.181905,0.515854,66.3022,-0.0944115,42,26.4826
+N_feature_regimes__cnn_lstm__1h__weather_only,cnn_lstm,weather_only,12,6784.7,9636.88,0.175216,0.550806,64.5953,-0.0541668,42,621.864
+N_feature_regimes__lstm__1h__weather_only,lstm,weather_only,12,7329.45,10107.7,0.183777,0.505837,69.3137,-0.105675,42,930.252
+N_feature_regimes__gradient_boosting__1h__pv_weather,gradient_boosting,pv_weather,27,4490.74,6737.9,0.122507,0.780411,51.2645,0.262949,42,45.2416
+N_feature_regimes__xgboost__1h__pv_weather,xgboost,pv_weather,27,4516.23,6800.8,0.123651,0.776293,50.1025,0.256069,42,57.5055
+N_feature_regimes__gradient_boosting__1h__pv_weather_solar,gradient_boosting,pv_weather_solar,29,4420.23,6714.57,0.122083,0.781929,50.572,0.265501,42,46.3311
+N_feature_regimes__xgboost__1h__pv_weather_solar,xgboost,pv_weather_solar,29,4586.37,6854.86,0.124634,0.772722,50.1712,0.250155,42,60.2979
+N_feature_regimes__gradient_boosting__1h,gradient_boosting,full,33,4373.86,6664.26,0.121168,0.785185,49.7801,0.271004,42,47.5302
+N_feature_regimes__xgboost__1h,xgboost,full,33,4505.29,6835.32,0.124279,0.774016,48.575,0.252292,42,59.4821
