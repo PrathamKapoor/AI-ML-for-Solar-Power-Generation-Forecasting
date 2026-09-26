@@ -73,8 +73,17 @@ Selected because it has, simultaneously:
 makes every target horizon an exact integer number of steps (1, 4, 24, 96). No
 horizon requires interpolation or resampling.
 
-After cleaning, the case-study record used in the experiments contains **90 528
-15-minute steps** with these measured properties:
+**Raw versus processed coverage.** The archived station file begins on
+**2021-06-01**, but the usable record begins on **2021-06-02 00:00**: the trailing
+irradiance means, the power lags and the rolling power statistics all need a full
+window before they are defined, and the pipeline drops the warm-up rows rather
+than padding them, because padding would bias the first rows of the training
+split. Every duration and split size quoted in this project refers to the
+**processed** record.
+
+After cleaning and warm-up, the case-study record used in the experiments
+contains **90 528** 15-minute steps with these measured properties
+(`results/tables/dataset_statistics.csv`):
 
 | Statistic | Value |
 | --- | --- |
@@ -99,9 +108,15 @@ paper and cannot drift when the code changes:
 
 | Split | Period | Role |
 | --- | --- | --- |
-| Train | 2021-06-01 → 2022-08-31 (15 months, 55%) | fitting and hyperparameter selection |
+| Train | 2021-06-02 → 2022-08-31 (15 months, 55%) | fitting and hyperparameter selection |
 | Validation | 2022-09-01 → 2022-12-31 (4 months, 15%) | early stopping, tuning, model selection |
 | Test | 2023-01-01 → 2023-12-31 (12 months, 30%) | scored once, after training |
+
+The processed split sizes are 43 776 / 11 712 / 35 040 rows, and the 1-hour
+1-step lookback horizon yields 43 745 / 11 681 / 35 009 usable windows (the
+difference is the lookback warm-up inside each split). Every one of these numbers
+is reproduced by `tools/audit_dataset_claims.py`, which checks them against the
+parquet artefacts rather than against the documentation.
 
 The test period is a full calendar year, so every season appears exactly once and
 seasonal generalisation is not confounded with the split. The validation period

@@ -1,0 +1,204 @@
+{
+  "spec": {
+    "experiment_id": "N_feature_regimes__xgboost__1h__pv_only",
+    "model": "xgboost",
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "features": "pv_only",
+    "seed": 42,
+    "ablation": "Additive input regimes: PV only, weather only, both, both plus geometry, full.",
+    "concurrent_weather": false,
+    "label": "N_feature_regimes / xgboost / 1h / pv_only / seed 42",
+    "notes": "Additive input regimes: PV only, weather only, both, both plus geometry, full."
+  },
+  "metrics_daylight": {
+    "mae": 4191.710048302676,
+    "rmse": 6598.107377678144,
+    "mse": 43535020.967370756,
+    "smape": 47.59447363058476,
+    "r2": 0.7894284041038737,
+    "bias": -23.692452870708603,
+    "peak_error": 43323.28151267441,
+    "n": 17679.0,
+    "nrmse_capacity": 0.11996558868505716,
+    "nrmse_mean": 0.4236316686424155,
+    "skill_vs_persistence_rmse": 0.2782407283726337,
+    "skill_vs_persistence_mae": 0.3664167867701207,
+    "persistence_rmse": 9141.700892599894,
+    "persistence_mae": 6615.879273275225,
+    "skill_vs_smart_persistence_rmse": 0.17034101735974128,
+    "skill_vs_smart_persistence_mae": 0.15916377147751748,
+    "smart_persistence_rmse": 7952.794480306486,
+    "smart_persistence_mae": 4985.168224338227
+  },
+  "metrics_all_steps": {
+    "mae": 2169.357356228461,
+    "rmse": 4692.000772552686,
+    "mse": 22014871.249635004,
+    "smape": 122.76958050304371,
+    "r2": 0.8666053871067423,
+    "bias": 19.24017713909611,
+    "peak_error": 43323.28151267441,
+    "n": 35009.0,
+    "nrmse_capacity": 0.08530910495550338,
+    "nrmse_mean": 0.596512990578415,
+    "skill_vs_persistence_rmse": 0.2783219059711207,
+    "skill_vs_persistence_mae": 0.356780201699902,
+    "persistence_rmse": 6501.514749268427,
+    "persistence_mae": 3372.6532702532495,
+    "skill_vs_smart_persistence_rmse": 0.1699008031494752,
+    "skill_vs_smart_persistence_mae": 0.14172455670016704,
+    "smart_persistence_rmse": 5652.3374439519785,
+    "smart_persistence_mae": 2527.577100292977
+  },
+  "metadata": {
+    "model_family": "classical_ml",
+    "model_kind": "sklearn",
+    "model_description": "Second-order boosted trees with explicit regularisation.",
+    "feature_spec": "pv_only",
+    "n_features": 15,
+    "feature_columns": [
+      "pv_power_w_lag_0",
+      "pv_power_w_lag_1",
+      "pv_power_w_lag_2",
+      "pv_power_w_lag_4",
+      "pv_power_w_lag_8",
+      "pv_power_w_lag_12",
+      "pv_power_w_lag_24",
+      "pv_power_w_lag_48",
+      "pv_power_w_lag_96",
+      "pv_rolling_mean_4",
+      "pv_rolling_std_4",
+      "pv_rolling_mean_12",
+      "pv_rolling_std_12",
+      "pv_rolling_mean_24",
+      "pv_rolling_std_24"
+    ],
+    "lookback_steps": 24,
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "seed": 42,
+    "split_sizes": {
+      "train": 43745,
+      "val": 11681,
+      "test": 35009
+    },
+    "split_date_ranges": {
+      "train": [
+        "2021-06-02 05:45:00",
+        "2022-08-31 21:45:00"
+      ],
+      "val": [
+        "2022-09-01 05:45:00",
+        "2022-12-31 21:45:00"
+      ],
+      "test": [
+        "2023-01-01 05:45:00",
+        "2023-12-31 21:45:00"
+      ]
+    },
+    "target_split_dates": {
+      "train": [
+        "2021-06-02 06:45:00",
+        "2022-08-31 22:45:00"
+      ],
+      "val": [
+        "2022-09-01 06:45:00",
+        "2022-12-31 22:45:00"
+      ],
+      "test": [
+        "2023-01-01 06:45:00",
+        "2023-12-31 22:45:00"
+      ]
+    },
+    "concurrent_weather": false,
+    "information_set": "weather observed at or before the forecast origin (strict historical setting)",
+    "training": {
+      "requires_training": true,
+      "train_seconds": 42.3784971999994,
+      "tuning": {
+        "tuned": false,
+        "reason": "no grid configured"
+      },
+      "describe": {
+        "family": "classical_ml",
+        "name": "xgboost",
+        "estimator": "XGBRegressor",
+        "requires_training": true,
+        "substitution_note": null,
+        "best_params": null,
+        "random_state": 42
+      }
+    },
+    "cost": {
+      "train_seconds": 42.3784971999994,
+      "inference_ms_per_window": 0.0030692107738389267,
+      "n_parameters": 400
+    },
+    "environment": {
+      "timestamp_utc": "2026-09-26T20:58:10+00:00",
+      "seed": 42,
+      "git_revision": "199345f",
+      "platform": {
+        "python": "3.13.14",
+        "implementation": "CPython",
+        "system": "Windows",
+        "release": "11",
+        "machine": "AMD64",
+        "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD"
+      },
+      "torch": {
+        "version": "2.13.0+cpu",
+        "cuda_available": false,
+        "device_count": 0,
+        "device_name": "cpu",
+        "num_threads": 8
+      },
+      "packages": {
+        "numpy": "2.5.2",
+        "pandas": "2.3.3",
+        "scipy": "1.17.1",
+        "scikit-learn": "not installed",
+        "torch": "2.13.0+cpu",
+        "xgboost": "3.4.1",
+        "shap": "0.52.0",
+        "matplotlib": "3.10.3",
+        "seaborn": "0.13.2",
+        "pvlib": "0.15.2",
+        "statsmodels": "not installed",
+        "openpyxl": "3.1.5",
+        "pyyaml": "not installed",
+        "requests": "2.33.1",
+        "tqdm": "4.70.0",
+        "joblib": "1.5.3"
+      }
+    },
+    "dataset": {
+      "name": "hong_kong_rooftop_pv_60_stations",
+      "primary_station": "LSK North",
+      "rated_w": 55000.0
+    },
+    "experiment_label": "N_feature_regimes / xgboost / 1h / pv_only / seed 42",
+    "notes": "Additive input regimes: PV only, weather only, both, both plus geometry, full.",
+    "ablation": "Additive input regimes: PV only, weather only, both, both plus geometry, full.",
+    "regime_distribution_test": {
+      "scope": "daylight",
+      "n": 17679,
+      "counts": {
+        "Cloudy": 6012,
+        "Clear": 5824,
+        "High-variability": 3432,
+        "Partly cloudy": 2411
+      },
+      "shares": {
+        "Cloudy": 0.340064,
+        "Clear": 0.32943,
+        "High-variability": 0.194129,
+        "Partly cloudy": 0.136376
+      }
+    },
+    "wall_seconds_including_setup": 59.98845030000666
+  },
+  "training_history": [],
+  "feature_importance": null
+}

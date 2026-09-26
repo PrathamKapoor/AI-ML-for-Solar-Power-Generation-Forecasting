@@ -1,10 +1,11 @@
 {
-  "n_experiments": 32,
+  "n_experiments": 76,
   "groups": [
     "A_baselines",
     "B_ml_vs_dl",
     "C_horizons",
-    "E_feature_ablation"
+    "E_feature_ablation",
+    "N_feature_regimes"
   ],
   "models": [
     "attention_lstm",
@@ -26,7 +27,16 @@
     "6h"
   ],
   "feature_specs": [
-    "full"
+    "full",
+    "minimal",
+    "no_calendar",
+    "no_pv_history",
+    "no_solar_geometry",
+    "no_weather",
+    "pv_only",
+    "pv_weather",
+    "pv_weather_solar",
+    "weather_only"
   ],
   "n_errors_recorded": 0,
   "best_rmse_run": {
@@ -34,6 +44,6 @@
     "model": "gradient_boosting",
     "horizon": "15min",
     "feature_spec": "full",
-    "rmse": 4817.067914112094
+    "rmse": 4817.07
   }
 }
