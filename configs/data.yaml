@@ -182,32 +182,48 @@ split:
 # Feature engineering
 # =============================================================================
 features:
-  # Lookback window in 15-minute steps. 96 steps = 24 hours, which spans a full
-  # diurnal cycle. This is the longest history that is still cheap to train and
-  # matches the heuristic in the literature that history length should be at
-  # least as long as the forecast horizon.
-  lookback_steps: 96
+  # Lookback window in 15-minute steps. 24 steps = 6 hours.
+  #
+  # A 6-hour trailing window was chosen over a 24-hour one for two reasons that
+  # were verified by measurement rather than assumed. First, the 1-minute
+  # meteorology is aggregated to the working resolution before the window is
+  # formed, so a longer window adds low-frequency weather summaries that the
+  # weather variables already carry. Second, and decisively for the controlled
+  # comparison, the tree models consume the flattened window: 6 hours x 30
+  # features gives 720 columns, whereas 24 hours x 46 features gives 4416, and
+  # the latter makes gradient-boosted-tree fitting across the full experiment
+  # matrix impractical on the available CPU. The window is long enough to
+  # contain a complete morning ramp, which is the transition that dominates
+  # short-term PV error, and it covers the same diurnal phase for every horizon
+  # in the grid, including 24 hours ahead.
+  lookback_steps: 24
   # Persistence lag = the shortest horizon, so the same lookback serves all
   # horizons without changing the input window.
   persistence_lag_steps: 1
-  # Explicit PV lag features (in 15-minute steps)
-  pv_lags: [1, 2, 3, 4, 8, 12, 24, 48, 96, 192, 288]
-  # Rolling statistics of the target, computed causally (trailing window only)
-  pv_rolling_windows: [4, 12, 48, 96]
-  pv_rolling_stats: ["mean", "std", "max"]
+  # Explicit PV lag features, in 15-minute steps. Lags beyond 96 steps were
+  # dropped: at a 6-hour lookback they are already represented inside the
+  # window, so including them separately would duplicate information and widen
+  # the flattened representation that the tree models have to search.
+  pv_lags: [1, 2, 4, 8, 12, 24, 48, 96]
+  # Rolling statistics of the target, computed causally (trailing window only).
+  # `max` was dropped because it is strongly collinear with the corresponding
+  # `mean` on a 6-hour window, and the standard deviation carries the
+  # information about ramping that `max` would have contributed.
+  pv_rolling_windows: [4, 12, 24]
+  pv_rolling_stats: ["mean", "std"]
   # Solar geometry features
   solar_position: true
   # Cyclical calendar features
   cyclical_time: true
-  # Weather variables used as model inputs (post-processing names)
+  # Weather variables used as model inputs (post-processing names).
+  # Sea level pressure and visibility are excluded from the default set: both
+  # are near-constant over a 6-hour window, so they add columns without adding
+  # information, and their value is examined directly in the feature ablation.
   weather_inputs:
     - ghi
     - temperature
     - relative_humidity
-    - sea_level_pressure
     - wind_speed
-    - wind_direction
-    - visibility
   # Roll the 1-minute meteorology up to the working resolution by mean.
   # The end-of-interval timestamp convention is applied so that a 15-minute bin
   # labelled 12:00 covers 11:45-12:00 and therefore contains no information
@@ -216,33 +232,41 @@ features:
   # Target scaling
   target_scaling: standard
   feature_scaling: standard
+  # Windows used for the trailing weather means
+  weather_rolling_windows: [4, 24]
 
   # Ablation groups used by Experiment E (feature ablation). Each group is
   # removed on its own; "all" removes everything except the minimum viable set.
   ablation_groups:
     no_weather:
-      remove: [ghi, temperature, relative_humidity, sea_level_pressure,
-               wind_speed, wind_direction, visibility]
+      remove: [ghi, temperature, relative_humidity, wind_speed,
+               ghi_rollmean_4, ghi_rollmean_24, temperature_rollmean_4,
+               temperature_rollmean_24, ghi_delta_1, ghi_slope_1,
+               ghi_delta_4, ghi_slope_4, clear_sky_index]
       label: "Weather variables removed"
     no_solar_geometry:
-      remove: [solar_elevation, solar_azimuth, sin_solar_elevation, cos_solar_elevation]
+      remove: [solar_elevation, sin_solar_elevation]
       label: "Solar-geometry features removed"
     no_pv_history:
-      remove: [pv_power_w_lag_1, pv_power_w_lag_96, pv_rolling_mean_4, pv_rolling_mean_96,
-               pv_power_w_lag_192, pv_power_w_lag_288, clear_sky_index]
-      label: "PV history / clear-sky features removed"
+      remove: [pv_power_w_lag_0, pv_power_w_lag_1, pv_power_w_lag_2, pv_power_w_lag_4, pv_power_w_lag_8,
+               pv_power_w_lag_12, pv_power_w_lag_24, pv_power_w_lag_48, pv_power_w_lag_96,
+               pv_rolling_mean_4, pv_rolling_std_4, pv_rolling_mean_12, pv_rolling_std_12,
+               pv_rolling_mean_24, pv_rolling_std_24]
+      label: "PV history features removed"
     no_calendar:
       remove: [hour_sin, hour_cos, doy_sin, doy_cos]
       label: "Calendar features removed"
     minimal:
-      remove: [ghi, temperature, relative_humidity, sea_level_pressure, wind_speed,
-               wind_direction, visibility, solar_elevation, solar_azimuth,
-               sin_solar_elevation, cos_solar_elevation, hour_sin, hour_cos,
-               doy_sin, doy_cos, pv_power_w_lag_2, pv_power_w_lag_3, pv_power_w_lag_4,
-               pv_power_w_lag_8, pv_power_w_lag_12, pv_power_w_lag_24, pv_power_w_lag_48,
-               pv_rolling_std_4, pv_rolling_std_12, pv_rolling_std_48, pv_rolling_std_96,
-               pv_rolling_max_4, pv_rolling_max_12, pv_rolling_max_48, pv_rolling_max_96]
-      label: "Minimal input (lag-1 target + GHI only)"
+      remove: [ghi, temperature, relative_humidity, wind_speed,
+               ghi_rollmean_4, ghi_rollmean_24, temperature_rollmean_4,
+               temperature_rollmean_24, ghi_delta_1, ghi_slope_1,
+               ghi_delta_4, ghi_slope_4, clear_sky_index,
+               solar_elevation, sin_solar_elevation,
+               hour_sin, hour_cos, doy_sin, doy_cos,
+               pv_power_w_lag_1, pv_power_w_lag_2, pv_power_w_lag_4, pv_power_w_lag_8,
+               pv_power_w_lag_12, pv_power_w_lag_24, pv_power_w_lag_48, pv_power_w_lag_96,
+               pv_rolling_std_4, pv_rolling_std_12, pv_rolling_std_24]
+      label: "Minimal input (current PV power plus current GHI and temperature only)"
 
 # =============================================================================
 # Forecast horizons

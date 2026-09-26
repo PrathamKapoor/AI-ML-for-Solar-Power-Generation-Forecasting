@@ -1,0 +1,227 @@
+# =============================================================================
+# Experiment definitions
+# =============================================================================
+# Each entry maps to one ExperimentSpec. The runner iterates this file, so the
+# experiment set is declared rather than hard-coded, and --only / --skip select
+# subsets without editing Python.
+experiments:
+  defaults:
+    seed: 42
+    horizons: ["1h"]
+    models:
+      - persistence
+      - smart_persistence
+      - linear_regression
+      - random_forest
+      - gradient_boosting
+      - xgboost
+      - lstm
+      - gru
+      - cnn_lstm
+      - attention_lstm
+      - transformer
+
+  # ---------------------------------------------------------------------------
+  # Experiment A - Baseline comparison
+  # ---------------------------------------------------------------------------
+  # Question: do the two persistence references behave differently, and by how
+  # much does a learned model improve on them?
+  A_baselines:
+    description: "Persistence and smart persistence references against a linear fit."
+    models: [persistence, smart_persistence, linear_regression]
+    horizons: ["1h"]
+
+  # ---------------------------------------------------------------------------
+  # Experiment B - Machine learning versus deep learning
+  # ---------------------------------------------------------------------------
+  # Question: does a recurrent or attention architecture beat well-tuned gradient
+  # boosting when both see identical inputs on an identical split? This is the
+  # headline experiment; every other experiment is read relative to it.
+  B_ml_vs_dl:
+    description: "Full model set at the default horizon, identical inputs and split."
+    models:
+      - persistence
+      - smart_persistence
+      - linear_regression
+      - random_forest
+      - gradient_boosting
+      - xgboost
+      - lstm
+      - gru
+      - cnn_lstm
+      - attention_lstm
+      - transformer
+    horizons: ["1h"]
+
+  # ---------------------------------------------------------------------------
+  # Experiment C - Forecast horizon comparison
+  # ---------------------------------------------------------------------------
+  # Question: is model performance consistent across horizons, and does any
+  # advantage of an advanced architecture shrink as the horizon grows?
+  C_horizons:
+    description: "Every model at 15 minutes, 1 hour, 6 hours and 24 hours ahead."
+    models:
+      - persistence
+      - smart_persistence
+      - linear_regression
+      - random_forest
+      - gradient_boosting
+      - xgboost
+      - lstm
+      - gru
+      - cnn_lstm
+      - attention_lstm
+      - transformer
+    horizons: ["15min", "1h", "6h", "24h"]
+
+  # ---------------------------------------------------------------------------
+  # Experiment D - Weather-regime comparison
+  # ---------------------------------------------------------------------------
+  # Question: does the ranking of models change across weather regimes?
+  # The regime labels are attached to the stored test predictions by the
+  # evaluation stage, so this is a post-hoc stratification of Experiment B
+  # rather than an independent training run. It is therefore not built as a
+  # training plan; scripts/evaluate.py performs it.
+  D_regimes:
+    description: "Regime-stratified metrics from the Experiment B predictions."
+    reuse_predictions_from: B_ml_vs_dl
+    horizons: ["1h"]
+
+  # ---------------------------------------------------------------------------
+  # Experiment E - Feature ablation
+  # ---------------------------------------------------------------------------
+  # Question: which input groups carry the forecasting signal?
+  # Groups are defined in configs/data.yaml under features.ablation_groups.
+  #
+  # Run for one tree-ensemble model and one recurrent model: these are the two
+  # families whose inputs are consumed in structurally different ways (flattened
+  # window versus ordered sequence), so removing an input group tests both
+  # access patterns. The attention and transformer models are covered by the
+  # permutation-importance analysis in Experiment H rather than by retraining
+  # them six times, which would multiply the training budget without changing
+  # the answer to which input groups matter.
+  E_feature_ablation:
+    description: "One tree model and one recurrent model, with each input group removed in turn."
+    models: [xgboost, lstm]
+    horizons: ["1h"]
+    feature_specs:
+      - full
+      - no_weather
+      - no_solar_geometry
+      - no_pv_history
+      - no_calendar
+      - minimal
+
+  # ---------------------------------------------------------------------------
+  # Experiment F - Model ablation
+  # ---------------------------------------------------------------------------
+  # Question: what does each architectural component contribute?
+  # The composite architectures (CNN-LSTM, attention-LSTM, Transformer) and
+  # their backbones (LSTM, GRU) were all trained in Experiment B under an
+  # identical seed, split and input set, so retraining them under their own
+  # group id would reproduce byte-identical runs. The ablation is therefore an
+  # analysis of the Experiment B records, performed by scripts/evaluate.py.
+  F_model_ablation:
+    description: "Composite architectures against their backbones (analysis of Experiment B)."
+    analysis_only: true
+    reuse_predictions_from: B_ml_vs_dl
+    backbones: [lstm, gru]
+    composites: [cnn_lstm, attention_lstm, transformer]
+    horizons: ["1h"]
+
+  # ---------------------------------------------------------------------------
+  # Experiment G - Seasonal and year-over-year generalisation
+  # ---------------------------------------------------------------------------
+  # Question: does performance hold across seasons, and does it degrade when the
+  # test year follows the training period?
+  # The test split is a full calendar year, so every season is present exactly
+  # once; the analysis is a post-hoc stratification of the Experiment B
+  # predictions and is performed by scripts/evaluate.py.
+  G_seasonal:
+    description: "Season-stratified metrics from the Experiment B predictions."
+    reuse_predictions_from: B_ml_vs_dl
+    horizons: ["1h"]
+
+  # ---------------------------------------------------------------------------
+  # Experiment H - Explainability
+  # ---------------------------------------------------------------------------
+  # Question: which variables dominate the error, and do tree and sequence
+  # models agree about that?
+  # SHAP is computed for the tree models and permutation importance for both
+  # tree and sequence models, so the two method families can be compared
+  # directly. Performed by scripts/evaluate.py.
+  H_explainability:
+    description: "SHAP and permutation importance for the headline model set."
+    analysis_only: true
+    reuse_predictions_from: B_ml_vs_dl
+    models: [xgboost, lstm, attention_lstm, transformer]
+    horizons: ["1h"]
+    n_permutation_repeats: 10
+    n_shap_samples: 2000
+
+  # ---------------------------------------------------------------------------
+  # Experiment I - Inference and computational cost
+  # ---------------------------------------------------------------------------
+  # Question: what is the accuracy-per-unit-cost profile of each family, and
+  # which models are Pareto-optimal for deployment?
+  # Cost is captured during every training run, so this experiment is assembled
+  # from the registry by scripts/evaluate.py.
+  I_cost:
+    description: "Training duration, inference latency and parameter count."
+    analysis_only: true
+    models:
+      - persistence
+      - smart_persistence
+      - linear_regression
+      - random_forest
+      - gradient_boosting
+      - xgboost
+      - lstm
+      - gru
+      - cnn_lstm
+      - attention_lstm
+      - transformer
+    horizons: ["1h", "6h"]
+
+  # ---------------------------------------------------------------------------
+  # Experiment J - Cross-site generalisation
+  # ---------------------------------------------------------------------------
+  # Question: does a model fitted on one site transfer to sites it has never
+  # seen? The holdout panel is defined in configs/data.yaml under
+  # dataset.holdout_stations and is never used for fitting or tuning.
+  J_cross_site:
+    description: "Train on LSK North, evaluate on six unseen sites."
+    horizons: ["1h", "6h"]
+    models: [xgboost, lstm, attention_lstm, transformer]
+    holdout_stations: true
+
+  # ---------------------------------------------------------------------------
+  # Experiment K - Uncertainty
+  # ---------------------------------------------------------------------------
+  # Question: can an accurate deterministic model be given well-calibrated
+  # prediction intervals at acceptable cost? Split conformal prediction is used
+  # because it offers a finite-sample marginal coverage guarantee under
+  # exchangeability and requires no distributional assumption about PV power.
+  K_uncertainty:
+    description: "Conformal prediction intervals around the deterministic models."
+    analysis_only: true
+    reuse_predictions_from: B_ml_vs_dl
+    models: [xgboost, lstm, transformer]
+    horizons: ["1h", "6h"]
+    alphas: [0.1, 0.2]
+
+  # ---------------------------------------------------------------------------
+  # Evaluation settings consumed by scripts/evaluate.py
+  # ---------------------------------------------------------------------------
+  analysis:
+    bootstrap_resamples: 2000
+    bootstrap_block_length: 96
+    bootstrap_confidence: 0.95
+    dm_loss_functions: [mae, rmse]
+    dm_small_sample_correction: harvey_leybourne_newbold
+    prediction_horizon_for_dm: 1
+    n_shap_samples: 2000
+    n_permutation_repeats: 10
+    conformal_alphas: [0.1, 0.2]
+    n_boot_samples_daylight: 4000
+    residual_lags_for_acf: 96
