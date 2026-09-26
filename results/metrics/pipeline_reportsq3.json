@@ -12,7 +12,7 @@
       "metadata_present": true
     },
     "04_timestamps": {
-      "station": "SQ1",
+      "station": "SQ3",
       "n_rows": 90624,
       "format_detected": "YYYY/M/D H:MM (meteorology) and YYYY-MM-DD HH:MM:SS (PV)",
       "timezone": "naive local standard time (UTC+08:00, no daylight saving in Hong Kong)",
@@ -30,45 +30,45 @@
       "issues": [
         {
           "severity": "info",
-          "stage": "schema/pv/SQ1",
+          "stage": "schema/pv/SQ3",
           "check": "missing_target",
-          "message": "0.0177% of target values are NaN",
+          "message": "0.0254% of target values are NaN",
           "detail": {
-            "n_missing": 16,
+            "n_missing": 23,
             "n_rows": 90624
           }
         },
         {
           "severity": "info",
-          "stage": "schema/pv/SQ1",
+          "stage": "schema/pv/SQ3",
           "check": "zero_fraction",
-          "message": "51.92% of readings are exactly zero (expected: night-time)",
+          "message": "51.29% of readings are exactly zero (expected: night-time)",
           "detail": {
-            "fraction": 0.5192002118644068
+            "fraction": 0.5128553142655368
           }
         }
       ]
     },
     "02b_capacity": {
-      "station": "SQ1",
-      "brick_name": "SQ1",
-      "location": "Staff_Quarter_Tower_1",
-      "latitude": 22.33,
-      "longitude": 114.18,
-      "altitude_m": 94.0,
-      "rated_kw": 27.6,
-      "rated_w": 27600.0,
-      "connection_date": "2021-04-30T00:00:00",
+      "station": "SQ3",
+      "brick_name": "SQ3",
+      "location": "Staff_Quarter_Tower_3",
+      "latitude": 22.41,
+      "longitude": 114.21,
+      "altitude_m": 79.0,
+      "rated_kw": 33.3,
+      "rated_w": 33300.0,
+      "connection_date": "2021-06-01T00:00:00",
       "metadata_found": true
     },
     "09_daylight": {
-      "daylight_fraction_of_steps": 0.505075918079096,
-      "mean_daylight_steps_per_day": 48.48728813559322,
-      "solar_elevation_min_deg": -89.90945755754028,
-      "solar_elevation_max_deg": 89.67681817507504,
-      "mean_elevation_daylight_deg": 37.96522341635197,
-      "first_sunrise_hour": 6.093220338983051,
-      "last_sunset_hour": 17.930084745762713
+      "daylight_fraction_of_steps": 0.5050538488700564,
+      "mean_daylight_steps_per_day": 48.485169491525426,
+      "solar_elevation_min_deg": -89.84818464662945,
+      "solar_elevation_max_deg": 89.6264124764724,
+      "mean_elevation_daylight_deg": 37.94266441183997,
+      "first_sunrise_hour": 6.091101694915254,
+      "last_sunset_hour": 17.926906779661017
     },
     "08_outliers": {
       "irradiance": {
@@ -83,7 +83,7 @@
         "n_local_spikes": 4355,
         "n_clipped_by_final_envelope": 8302,
         "n_raised_by_final_envelope": 0,
-        "n_night_offset_zeroed": 728671,
+        "n_night_offset_zeroed": 728667,
         "spike_window_steps": 15,
         "spike_ratio_threshold": 1.8,
         "night_offset_threshold_wm2": 5.0,
@@ -92,8 +92,8 @@
         "original_max": 3608.6,
         "cleaned_max": 1200.0,
         "original_mean": 150.5697162343091,
-        "cleaned_mean": 144.23757943813337,
-        "night_bias_before_wm2": 9.88977084866358,
+        "cleaned_mean": 144.23823925079986,
+        "night_bias_before_wm2": 9.8884896177002,
         "night_bias_after_wm2": 0.0
       }
     },
@@ -123,18 +123,18 @@
     "06_07_missing": {
       "missingness_before": {
         "total_cells": 724992,
-        "total_missing": 24739,
-        "overall_missing_fraction": 0.03412313515183616,
+        "total_missing": 24746,
+        "overall_missing_fraction": 0.03413279043079096,
         "columns": {
           "pv_power_w": {
-            "n_missing": 16,
-            "missing_fraction": 0.00017655367231638418,
-            "n_gaps": 13,
-            "longest_gap": 4,
-            "mean_gap_length": 1.2307692307692308,
+            "n_missing": 23,
+            "missing_fraction": 0.00025379590395480225,
+            "n_gaps": 21,
+            "longest_gap": 2,
+            "mean_gap_length": 1.0952380952380953,
             "gap_length_histogram": {
-              "1": 12,
-              "4": 1
+              "1": 19,
+              "2": 2
             }
           },
           "ghi": {
@@ -302,25 +302,25 @@
       }
     },
     "09b_clearsky_calibration": {
-      "scale": 0.995452423498259,
+      "scale": 0.9935191315129284,
       "quantile": 0.99,
-      "n_usable": 20187,
+      "n_usable": 20190,
       "raw_kt_quantiles": {
-        "p50": 0.4339928870040029,
-        "p90": 0.8343326914866293,
-        "p99": 0.995452423498259,
-        "max": 1.6541010373004967
+        "p50": 0.43395128314378906,
+        "p90": 0.8345739224083855,
+        "p99": 0.9935191315129284,
+        "max": 1.649371853386354
       },
-      "fraction_raw_kt_above_1p2": 0.0018823995640758905,
+      "fraction_raw_kt_above_1p2": 0.0017830609212481426,
       "calibrated": true,
-      "interpretation": "The 99th percentile of the raw clearness index is 0.995. A value close to 1.0 means the clear-sky reference is already consistent with the irradiance instrument, so the applied scale factor is 0.995 and no meaningful correction is implied. A value far from 1.0 would indicate either an unsuitable clear-sky turbidity or a multiplicative instrument scale error."
+      "interpretation": "The 99th percentile of the raw clearness index is 0.994. A value close to 1.0 means the clear-sky reference is already consistent with the irradiance instrument, so the applied scale factor is 0.994 and no meaningful correction is implied. A value far from 1.0 would indicate either an unsuitable clear-sky turbidity or a multiplicative instrument scale error."
     },
     "08b_target": {
       "n_negative_clipped": 0,
       "fraction_negative": 0.0,
-      "observed_max_w": 27734.666,
-      "rated_w": 27600.0,
-      "max_to_rated_ratio": 1.0048792028985507,
+      "observed_max_w": 33291.715,
+      "rated_w": 33300.0,
+      "max_to_rated_ratio": 0.9997512012012011,
       "policy": "negative values clipped to zero; no other target modification"
     },
     "12b_warmup": {
@@ -332,42 +332,42 @@
     "09c_regimes": {
       "distribution_daylight": {
         "scope": "daylight",
-        "n": 45718,
+        "n": 45716,
         "counts": {
-          "Cloudy": 18307,
-          "Clear": 12271,
-          "High-variability": 8681,
-          "Partly cloudy": 6459
+          "Cloudy": 18279,
+          "Clear": 12296,
+          "High-variability": 8690,
+          "Partly cloudy": 6451
         },
         "shares": {
-          "Cloudy": 0.400433,
-          "Clear": 0.268406,
-          "High-variability": 0.189881,
-          "Partly cloudy": 0.141279
+          "Cloudy": 0.399838,
+          "Clear": 0.268965,
+          "High-variability": 0.190087,
+          "Partly cloudy": 0.14111
         }
       },
       "distribution_all_steps": {
         "scope": "all_steps",
         "n": 90528,
         "counts": {
-          "Night": 44810,
-          "Cloudy": 18307,
-          "Clear": 12271,
-          "High-variability": 8681,
-          "Partly cloudy": 6459
+          "Night": 44812,
+          "Cloudy": 18279,
+          "Clear": 12296,
+          "High-variability": 8690,
+          "Partly cloudy": 6451
         },
         "shares": {
-          "Night": 0.494985,
-          "Cloudy": 0.202225,
-          "Clear": 0.135549,
-          "High-variability": 0.095893,
-          "Partly cloudy": 0.071348
+          "Night": 0.495007,
+          "Cloudy": 0.201915,
+          "Clear": 0.135825,
+          "High-variability": 0.095992,
+          "Partly cloudy": 0.07126
         }
       },
       "rules": {
         "definition": {
           "kt": "clip(GHI_obs / (alpha * GHI_clear(turbidity=4.00)), 0, 1.20)",
-          "alpha_clear_sky_scale": 0.995452,
+          "alpha_clear_sky_scale": 0.993519,
           "alpha_fit_on": "training split only",
           "sigma_cv": "coefficient of variation of GHI over a trailing window of 16 steps, undefined when the trailing mean is below 20.0 W/m2"
         },
@@ -481,8 +481,8 @@
           "doy_cos"
         ]
       },
-      "target_mean_w": 4254.595704929396,
-      "target_scale_w": 6849.067747809254,
+      "target_mean_w": 4019.4904329911164,
+      "target_scale_w": 6761.995925770363,
       "fitted_on": {
         "n_train_rows": 43776,
         "train_start": "2021-06-02 00:00:00",
@@ -502,22 +502,22 @@
     },
     "17_dataset": {
       "station": {
-        "station": "SQ1",
-        "brick_name": "SQ1",
-        "location": "Staff_Quarter_Tower_1",
-        "latitude": 22.33,
-        "longitude": 114.18,
-        "altitude_m": 94.0,
-        "rated_kw": 27.6,
-        "rated_w": 27600.0,
-        "connection_date": "2021-04-30T00:00:00",
+        "station": "SQ3",
+        "brick_name": "SQ3",
+        "location": "Staff_Quarter_Tower_3",
+        "latitude": 22.41,
+        "longitude": 114.21,
+        "altitude_m": 79.0,
+        "rated_kw": 33.3,
+        "rated_w": 33300.0,
+        "connection_date": "2021-06-01T00:00:00",
         "metadata_found": true
       },
-      "rated_w": 27600.0,
+      "rated_w": 33300.0,
       "frequency": "15min",
       "n_rows_total": 90528,
-      "n_rows_daylight": 45718,
-      "fraction_daylight": 0.5050150229763167,
+      "n_rows_daylight": 45716,
+      "fraction_daylight": 0.5049929303640862,
       "date_range": [
         "2021-06-02 00:00:00",
         "2023-12-31 23:45:00"
@@ -581,70 +581,70 @@
       ],
       "target_all": {
         "n": 90528,
-        "mean": 4045.9347424976436,
-        "std": 6604.615061432991,
+        "mean": 4153.064059986117,
+        "std": 6900.447665393159,
         "min": 0.0,
         "p01": 0.0,
         "p05": 0.0,
         "p25": 0.0,
         "median": 0.0,
-        "p75": 5853.6665,
-        "p95": 19292.315999999995,
-        "p99": 25567.666,
-        "max": 27734.666,
-        "n_zero": 47012,
-        "fraction_zero": 0.5193089430894309,
+        "p75": 5814.176875,
+        "p95": 20630.03089999999,
+        "p99": 26719.75496999999,
+        "max": 33291.715,
+        "n_zero": 46448,
+        "fraction_zero": 0.5130788264404383,
         "n_negative": 0
       },
       "target_daylight": {
-        "n": 45718,
-        "mean": 8011.371007090875,
-        "std": 7389.705881334709,
+        "n": 45716,
+        "mean": 8223.639793196215,
+        "std": 7798.563275108992,
         "min": 0.0,
         "p01": 0.0,
-        "p05": 0.0,
-        "p25": 1549.4167,
-        "median": 5750.1665,
-        "p75": 13480.5835,
-        "p95": 22554.183900000007,
-        "p99": 26689.22044,
-        "max": 27734.666,
-        "n_zero": 2343,
-        "fraction_zero": 0.05124896102191697,
+        "p05": 25.245798,
+        "p25": 1589.7355499999999,
+        "median": 5703.2776,
+        "p75": 13471.1085,
+        "p95": 24105.62375,
+        "p99": 27862.51575,
+        "max": 33291.715,
+        "n_zero": 1886,
+        "fraction_zero": 0.04125470294863943,
         "n_negative": 0
       },
       "target_train_daylight": {
         "n": 22477,
-        "mean": 8286.068110171722,
-        "std": 7613.086408810344,
+        "mean": 7827.936285156566,
+        "std": 7697.055257655137,
         "min": 0.0,
         "p01": 0.0,
-        "p05": 31.0,
-        "p25": 1722.3334,
-        "median": 5921.3335,
-        "p75": 13767.667,
-        "p95": 23612.466800000017,
-        "p99": 27111.639840000003,
-        "max": 27654.0,
-        "n_zero": 889,
-        "fraction_zero": 0.03955154157583307,
+        "p05": 23.30010219999999,
+        "p25": 1481.8589,
+        "median": 5284.4146,
+        "p75": 12279.508,
+        "p95": 24274.333600000005,
+        "p99": 28347.688840000003,
+        "max": 33291.715,
+        "n_zero": 926,
+        "fraction_zero": 0.0411976687280331,
         "n_negative": 0
       },
       "ghi": {
         "n": 90528,
-        "mean": 154.02575809133901,
-        "std": 253.88376694609266,
+        "mean": 154.02674129491507,
+        "std": 253.88322971307463,
         "min": 0.0,
         "p01": 0.0,
         "p05": 0.0,
         "p25": 0.0,
-        "median": 5.702576666666666,
+        "median": 5.760933333333333,
         "p75": 209.8263333333333,
         "p95": 717.1071999999998,
         "p99": 1077.931733333333,
         "max": 1200.0,
-        "n_zero": 43609,
-        "fraction_zero": 0.481718363379286,
+        "n_zero": 43606,
+        "fraction_zero": 0.48168522446094025,
         "n_negative": 0
       },
       "temperature": {
@@ -699,20 +699,20 @@
         "n_negative": 0
       },
       "clear_sky_index_daylight": {
-        "n": 45718,
-        "mean": 0.5131079290437532,
-        "std": 0.3755004228495833,
+        "n": 45716,
+        "mean": 0.5141156510061159,
+        "std": 0.3759387907361311,
         "min": 0.0,
         "p01": 0.0,
         "p05": 0.0,
-        "p25": 0.17758652254354948,
-        "median": 0.47363475381536946,
-        "p75": 0.808630305360045,
+        "p25": 0.17802678000949707,
+        "median": 0.47461782801281394,
+        "p75": 0.8106211144778499,
         "p95": 1.2,
         "p99": 1.2,
         "max": 1.2,
-        "n_zero": 4833,
-        "fraction_zero": 0.10571328579552912,
+        "n_zero": 4825,
+        "fraction_zero": 0.10554291714060722,
         "n_negative": 0
       },
       "outlier_profiles": [
@@ -722,22 +722,22 @@
           "min": 0.0,
           "q1": 0.0,
           "median": 0.0,
-          "q3": 5853.6665,
-          "max": 27734.666,
-          "iqr": 5853.6665,
-          "tukey_upper_fence": 14634.166250000002,
-          "tukey_lower_fence": -8780.49975,
-          "n_above_upper_fence": 9992,
+          "q3": 5814.176875,
+          "max": 33291.715,
+          "iqr": 5814.176875,
+          "tukey_upper_fence": 14535.4421875,
+          "tukey_lower_fence": -8721.2653125,
+          "n_above_upper_fence": 10333,
           "n_below_lower_fence": 0,
-          "skewness": 1.695730820810566,
-          "kurtosis": 1.8712984481847328
+          "skewness": 1.7867286775882811,
+          "kurtosis": 2.2544524799135295
         },
         {
           "variable": "ghi",
           "n": 90528,
           "min": 0.0,
           "q1": 0.0,
-          "median": 5.702576666666666,
+          "median": 5.760933333333333,
           "q3": 209.8263333333333,
           "max": 1200.0,
           "iqr": 209.8263333333333,
@@ -745,8 +745,8 @@
           "tukey_lower_fence": -314.73949999999996,
           "n_above_upper_fence": 10433,
           "n_below_lower_fence": 0,
-          "skewness": 1.8861032160934381,
-          "kurtosis": 2.987571512605044
+          "skewness": 1.886107079044006,
+          "kurtosis": 2.987590365825205
         },
         {
           "variable": "temperature",
@@ -804,7 +804,7 @@
       }
     }
   },
-  "station": "SQ1",
+  "station": "SQ3",
   "irradiance_cleaning": {
     "n_input": 1567792,
     "n_input_missing": 0,
@@ -817,7 +817,7 @@
     "n_local_spikes": 4355,
     "n_clipped_by_final_envelope": 8302,
     "n_raised_by_final_envelope": 0,
-    "n_night_offset_zeroed": 728671,
+    "n_night_offset_zeroed": 728667,
     "spike_window_steps": 15,
     "spike_ratio_threshold": 1.8,
     "night_offset_threshold_wm2": 5.0,
@@ -826,16 +826,16 @@
     "original_max": 3608.6,
     "cleaned_max": 1200.0,
     "original_mean": 150.5697162343091,
-    "cleaned_mean": 144.23757943813337,
-    "night_bias_before_wm2": 9.88977084866358,
+    "cleaned_mean": 144.23823925079986,
+    "night_bias_before_wm2": 9.8884896177002,
     "night_bias_after_wm2": 0.0
   },
   "target_sanity": {
     "n_negative_clipped": 0,
     "fraction_negative": 0.0,
-    "observed_max_w": 27734.666,
-    "rated_w": 27600.0,
-    "max_to_rated_ratio": 1.0048792028985507,
+    "observed_max_w": 33291.715,
+    "rated_w": 33300.0,
+    "max_to_rated_ratio": 0.9997512012012011,
     "policy": "negative values clipped to zero; no other target modification"
   },
   "validation": {
@@ -845,39 +845,39 @@
     "issues": [
       {
         "severity": "info",
-        "stage": "schema/pv/SQ1",
+        "stage": "schema/pv/SQ3",
         "check": "missing_target",
-        "message": "0.0177% of target values are NaN",
+        "message": "0.0254% of target values are NaN",
         "detail": {
-          "n_missing": 16,
+          "n_missing": 23,
           "n_rows": 90624
         }
       },
       {
         "severity": "info",
-        "stage": "schema/pv/SQ1",
+        "stage": "schema/pv/SQ3",
         "check": "zero_fraction",
-        "message": "51.92% of readings are exactly zero (expected: night-time)",
+        "message": "51.29% of readings are exactly zero (expected: night-time)",
         "detail": {
-          "fraction": 0.5192002118644068
+          "fraction": 0.5128553142655368
         }
       },
       {
         "severity": "info",
         "stage": "target/plausibility",
         "check": "observed_max",
-        "message": "SQ1: observed maximum 27.73 kW",
+        "message": "SQ3: observed maximum 33.29 kW",
         "detail": {
-          "observed_max_w": 27734.666
+          "observed_max_w": 33291.715
         }
       },
       {
         "severity": "info",
         "stage": "target/plausibility",
         "check": "capacity_check",
-        "message": "SQ1: observed maximum is 1.005 x rated capacity (27.60 kW)",
+        "message": "SQ3: observed maximum is 1.000 x rated capacity (33.30 kW)",
         "detail": {
-          "ratio": 1.0048792028985507
+          "ratio": 0.9997512012012011
         }
       },
       {
@@ -1138,22 +1138,22 @@
   },
   "target": {
     "station": {
-      "station": "SQ1",
-      "brick_name": "SQ1",
-      "location": "Staff_Quarter_Tower_1",
-      "latitude": 22.33,
-      "longitude": 114.18,
-      "altitude_m": 94.0,
-      "rated_kw": 27.6,
-      "rated_w": 27600.0,
-      "connection_date": "2021-04-30T00:00:00",
+      "station": "SQ3",
+      "brick_name": "SQ3",
+      "location": "Staff_Quarter_Tower_3",
+      "latitude": 22.41,
+      "longitude": 114.21,
+      "altitude_m": 79.0,
+      "rated_kw": 33.3,
+      "rated_w": 33300.0,
+      "connection_date": "2021-06-01T00:00:00",
       "metadata_found": true
     },
-    "rated_w": 27600.0,
+    "rated_w": 33300.0,
     "frequency": "15min",
     "n_rows_total": 90528,
-    "n_rows_daylight": 45718,
-    "fraction_daylight": 0.5050150229763167,
+    "n_rows_daylight": 45716,
+    "fraction_daylight": 0.5049929303640862,
     "date_range": [
       "2021-06-02 00:00:00",
       "2023-12-31 23:45:00"
@@ -1217,70 +1217,70 @@
     ],
     "target_all": {
       "n": 90528,
-      "mean": 4045.9347424976436,
-      "std": 6604.615061432991,
+      "mean": 4153.064059986117,
+      "std": 6900.447665393159,
       "min": 0.0,
       "p01": 0.0,
       "p05": 0.0,
       "p25": 0.0,
       "median": 0.0,
-      "p75": 5853.6665,
-      "p95": 19292.315999999995,
-      "p99": 25567.666,
-      "max": 27734.666,
-      "n_zero": 47012,
-      "fraction_zero": 0.5193089430894309,
+      "p75": 5814.176875,
+      "p95": 20630.03089999999,
+      "p99": 26719.75496999999,
+      "max": 33291.715,
+      "n_zero": 46448,
+      "fraction_zero": 0.5130788264404383,
       "n_negative": 0
     },
     "target_daylight": {
-      "n": 45718,
-      "mean": 8011.371007090875,
-      "std": 7389.705881334709,
+      "n": 45716,
+      "mean": 8223.639793196215,
+      "std": 7798.563275108992,
       "min": 0.0,
       "p01": 0.0,
-      "p05": 0.0,
-      "p25": 1549.4167,
-      "median": 5750.1665,
-      "p75": 13480.5835,
-      "p95": 22554.183900000007,
-      "p99": 26689.22044,
-      "max": 27734.666,
-      "n_zero": 2343,
-      "fraction_zero": 0.05124896102191697,
+      "p05": 25.245798,
+      "p25": 1589.7355499999999,
+      "median": 5703.2776,
+      "p75": 13471.1085,
+      "p95": 24105.62375,
+      "p99": 27862.51575,
+      "max": 33291.715,
+      "n_zero": 1886,
+      "fraction_zero": 0.04125470294863943,
       "n_negative": 0
     },
     "target_train_daylight": {
       "n": 22477,
-      "mean": 8286.068110171722,
-      "std": 7613.086408810344,
+      "mean": 7827.936285156566,
+      "std": 7697.055257655137,
       "min": 0.0,
       "p01": 0.0,
-      "p05": 31.0,
-      "p25": 1722.3334,
-      "median": 5921.3335,
-      "p75": 13767.667,
-      "p95": 23612.466800000017,
-      "p99": 27111.639840000003,
-      "max": 27654.0,
-      "n_zero": 889,
-      "fraction_zero": 0.03955154157583307,
+      "p05": 23.30010219999999,
+      "p25": 1481.8589,
+      "median": 5284.4146,
+      "p75": 12279.508,
+      "p95": 24274.333600000005,
+      "p99": 28347.688840000003,
+      "max": 33291.715,
+      "n_zero": 926,
+      "fraction_zero": 0.0411976687280331,
       "n_negative": 0
     },
     "ghi": {
       "n": 90528,
-      "mean": 154.02575809133901,
-      "std": 253.88376694609266,
+      "mean": 154.02674129491507,
+      "std": 253.88322971307463,
       "min": 0.0,
       "p01": 0.0,
       "p05": 0.0,
       "p25": 0.0,
-      "median": 5.702576666666666,
+      "median": 5.760933333333333,
       "p75": 209.8263333333333,
       "p95": 717.1071999999998,
       "p99": 1077.931733333333,
       "max": 1200.0,
-      "n_zero": 43609,
-      "fraction_zero": 0.481718363379286,
+      "n_zero": 43606,
+      "fraction_zero": 0.48168522446094025,
       "n_negative": 0
     },
     "temperature": {
@@ -1335,20 +1335,20 @@
       "n_negative": 0
     },
     "clear_sky_index_daylight": {
-      "n": 45718,
-      "mean": 0.5131079290437532,
-      "std": 0.3755004228495833,
+      "n": 45716,
+      "mean": 0.5141156510061159,
+      "std": 0.3759387907361311,
       "min": 0.0,
       "p01": 0.0,
       "p05": 0.0,
-      "p25": 0.17758652254354948,
-      "median": 0.47363475381536946,
-      "p75": 0.808630305360045,
+      "p25": 0.17802678000949707,
+      "median": 0.47461782801281394,
+      "p75": 0.8106211144778499,
       "p95": 1.2,
       "p99": 1.2,
       "max": 1.2,
-      "n_zero": 4833,
-      "fraction_zero": 0.10571328579552912,
+      "n_zero": 4825,
+      "fraction_zero": 0.10554291714060722,
       "n_negative": 0
     },
     "outlier_profiles": [
@@ -1358,22 +1358,22 @@
         "min": 0.0,
         "q1": 0.0,
         "median": 0.0,
-        "q3": 5853.6665,
-        "max": 27734.666,
-        "iqr": 5853.6665,
-        "tukey_upper_fence": 14634.166250000002,
-        "tukey_lower_fence": -8780.49975,
-        "n_above_upper_fence": 9992,
+        "q3": 5814.176875,
+        "max": 33291.715,
+        "iqr": 5814.176875,
+        "tukey_upper_fence": 14535.4421875,
+        "tukey_lower_fence": -8721.2653125,
+        "n_above_upper_fence": 10333,
         "n_below_lower_fence": 0,
-        "skewness": 1.695730820810566,
-        "kurtosis": 1.8712984481847328
+        "skewness": 1.7867286775882811,
+        "kurtosis": 2.2544524799135295
       },
       {
         "variable": "ghi",
         "n": 90528,
         "min": 0.0,
         "q1": 0.0,
-        "median": 5.702576666666666,
+        "median": 5.760933333333333,
         "q3": 209.8263333333333,
         "max": 1200.0,
         "iqr": 209.8263333333333,
@@ -1381,8 +1381,8 @@
         "tukey_lower_fence": -314.73949999999996,
         "n_above_upper_fence": 10433,
         "n_below_lower_fence": 0,
-        "skewness": 1.8861032160934381,
-        "kurtosis": 2.987571512605044
+        "skewness": 1.886107079044006,
+        "kurtosis": 2.987590365825205
       },
       {
         "variable": "temperature",

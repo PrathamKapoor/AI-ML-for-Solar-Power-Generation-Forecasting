@@ -270,9 +270,13 @@ def run_cross_site(config: Config, models: Sequence[str], horizons: Sequence[str
     Returns a record with the per-run score tables and the site panel actually
     used, which is written to ``results/metrics/cross_site_report.json``.
     """
-    panel_names = list(holdout or config.section("dataset").get("holdout_stations", []))
+    panel_names = list(config.section("dataset").get("holdout_stations", [])
+                       if holdout is None else holdout)
     if not panel_names:
-        raise ValueError("no cross-site panel configured; set dataset.holdout_stations")
+        raise ValueError(
+            "no cross-site panel available: pass holdout explicitly or set "
+            "dataset.holdout_stations in configs/data.yaml. An empty list is a "
+            "caller error, not a reason to fall back to the configured panel.")
     train_name = config.section("dataset")["primary_station"]
 
     sites = {train_name: prepare_site(config, train_name, quiet=quiet)}
