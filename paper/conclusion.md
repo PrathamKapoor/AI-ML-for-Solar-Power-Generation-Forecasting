@@ -13,14 +13,16 @@ statistical dependence in the errors.
 
 1. **A clear-sky-corrected persistence forecast is a strong reference, and its
    strength depends entirely on the horizon.** At 15 minutes it is competitive
-   with the best learned model and four of eleven models are catastrophically
-   worse than it (skill −0.53 to −0.67). At one hour three models fail to beat it.
-   At 6 hours it collapses and every learned model reaches skill 0.53–0.59. A
-   single-horizon benchmark cannot know whether its reference is strong, and most
-   published comparisons are made at one hour.
+   with the best learned model and four of eleven models fail to beat it, three
+   of them catastrophically (skill −0.53 to −0.67 for attention-LSTM, LSTM and
+   GRU) and the Transformer marginally (−0.03). At one hour three models fail to
+   beat it. At 6 hours it collapses and every learned model reaches skill
+   0.53–0.59. A single-horizon benchmark cannot know whether its reference is
+   strong, and most published comparisons are made at one hour.
 2. **Model capacity did not pay for itself on this record.** Gradient boosting
-   attains the lowest capacity-normalised error and is simultaneously the cheapest
-   model to train; the Transformer costs 118× more for a worse result. The
+   attains the lowest capacity-normalised error and is also among the cheapest
+   models to train at 9.5 s, against 2.0 s for the linear fit that is 11% worse and
+   1 122 s for the Transformer that is 18% worse. The
    explanation is a combination of single-site data volume, a signal dominated by
    the deterministic diurnal shape, and a fixed protocol that gave the tree arm a
    validation grid and the neural arm a single setting. The claim is about this
@@ -43,10 +45,13 @@ statistical dependence in the errors.
    persists on the largest array. Published single-site PV results should be read
    as local skill.
 7. **Statistical treatment has to match the data.** Errors are strongly
-   autocorrelated, and a Diebold-Mariano test therefore rejects nothing while a
-   serial-correlation-aware moving-block bootstrap separates eight of the eleven
-   models. Both are reported, with the diagnostics that explain the gap, and no
-   result was adjusted towards significance.
+   autocorrelated, so a naive test on fifteen-minute intervals would overstate the
+   information in the series. With the Harvey-Leybourne-Newbold correction and a
+   moving-block bootstrap, the Diebold-Mariano test rejects 18 of 20 comparisons
+   against persistence after Holm correction, and the block-bootstrap interval
+   excludes zero for eight of the eleven models. The two agree on direction, and
+   the interval is the more informative statistic because it reports the size of
+   the effect rather than only whether one exists.
 8. **Seed spread does not change the conclusions.** Across three to five seeds the
    RMSE standard deviation is 44–253 W against a 2 900 W gap between the best and
    worst model, so the ranking is not an artefact of one initialisation.
@@ -79,6 +84,6 @@ hyperparameters, durations, git revision and package versions; a registry
 rebuildable from those records; an evaluation report that distinguishes "not run"
 from "no result"; a machine-generated manuscript whose every table is rendered
 from a results file; a checker that fails the build if the prose and the results
-disagree; and 146 tests that assert the leakage controls at the point where they
+disagree; and 191 tests that assert the leakage controls at the point where they
 would otherwise be silent — two of which found real defects, a stale-index mask in
 the chronological split and a sign error in the persistence reference.

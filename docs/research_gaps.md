@@ -1,230 +1,233 @@
 # Research gaps
 
 Derived from the 30 verified papers in `literature/literature_review.xlsx`
-(sheets `Literature Review`, `Literature Analysis` and `Research Gaps`) and the
-corpus assembled by `tools/literature/`. The machine-readable form of this
-analysis is `tools/literature/research_gaps.json`, with per-gap evidence in
+(sheets `Literature Review`, `Literature Analysis`, `Research Gaps`, `Exclusion
+Log`) and the corpus assembled by `tools/literature/`. The machine-readable form
+is `tools/literature/research_gaps.json`, with per-gap evidence in
 `literature/verification/gap_evidence.json`.
 
-A gap is only listed here if the reviewed papers give evidence for it. Where the
-evidence is mixed, the disagreement is preserved rather than resolved. Paper
-numbers below are the serial numbers in the `Research Gaps` sheet of the workbook.
+An earlier pass of this document listed ten gaps. The triage is recorded rather
+than applied silently: all twelve candidates stay in the JSON, each marked
+`retained` with a reason, and `tools/literature/triage_gaps.py` reproduces the
+decision. **Seven are retained** — one umbrella and six themes — and five are not.
+A gap is retained only where the reviewed papers either demonstrate the absence
+or are themselves evidence of the problem, *and* the project does not already
+answer it.
+
+| Retained | Theme | Section |
+| --- | --- | --- |
+| RG-01 | No shared, leakage-audited benchmark across the three model families | umbrella, see below |
+| RG-02 | Aggregate-only evaluation; condition-dependence unreported | G1 |
+| RG-05 | Horizon sensitivity asserted rather than measured | G2 |
+| RG-08 | Classical arm reported untuned; cost not reported with accuracy | G3 |
+| RG-11 | The strong reference is under-used; skill is flattered by naive persistence | G4 |
+| RG-07 | Feature importance from one method, or from attention weights | G5 |
+| RG-12 | Cross-site transfer claimed far more often than it is validated | G6 |
+
+Evidence strength is stated per gap:
+
+* **Demonstrated** — the reviewed papers contain a result that shows the gap.
+* **Absent from the corpus** — no reviewed paper addresses it. Weaker: absence of
+  evidence in a 30-paper convenience sample is not evidence of absence in the
+  field, and is labelled as such.
+
+RG-01 is the umbrella rather than a theme: every section below is an instance of
+it, and it is stated here so the six themes are not read as six unrelated
+criticisms.
 
 ---
 
-## G1 — Aggregate-only evaluation dominates the literature
+## G1 — Aggregate-only evaluation dominates; condition-dependence is unreported
 
-**Evidence.** A majority of the reviewed papers report a single test-period
-aggregate (RMSE and/or MAE, often with R²) and stop there. Regime-, season- and
-time-of-day-stratified evaluation appears in a small minority, and the number that
-report it is smaller still for models whose *ranking* changes between conditions.
+**Evidence strength:** Absent from the corpus (19 of 30 papers report a single
+test-period aggregate and nothing conditional).
 
-**Why it matters.** A single aggregate hides exactly the conditions that decide
-whether a forecast is usable. Two models with identical annual nRMSE can behave
-completely differently at the morning ramp or under broken cloud, and the aggregate
-is blind to both. Reporting R² without also reporting a skill score against a
-persistence reference compounds the problem: on a diurnally dominated target, a
-model that has learned only the time of day can post a high R² while being unable
-to predict a single cloud transition.
+Most of the corpus reports one aggregate number per model and stops. Stratified
+evaluation by weather, season or time of day appears in a minority, and reporting
+a *ranking change* between conditions is rarer still.
 
-**What the literature does.** Aggregate nRMSE/MAE/R², frequently against
-persistence or a linear fit, sometimes with a per-horizon breakdown.
+**Why it matters.** Absolute error is confounded with signal amplitude: under
+broken cloud, irradiance and therefore power are low, so absolute errors are small
+for reasons that have nothing to do with forecastability. This project measures
+the effect directly — persistence nRMSE is **0.104 under cloudy conditions
+against 0.185 in clear sky**, while the *skill* against persistence is lowest
+under cloud (+0.024 against +0.358). A reader given only the error table would
+conclude the opposite of the truth.
 
-**Limitation.** Condition-dependence of the error and of the *ranking* is largely
-unreported, so a reader cannot tell whether a model that looks best on average
-would be the one to deploy on a cloudy morning.
+**Opportunity.** Stratify every model by regime, season, time of day, generation
+level and ramping, with the reference rescored inside each stratum.
 
-**Opportunity for this project.** Report every model against both persistence
-references, stratified by weather regime, season, time-of-day band, generation
-level and a ramping flag, with the persistence reference rescored inside each
-stratum.
+**Answer in this study.** Experiments D, G and the full error analysis. The
+ranking is stable across regimes for the tree family, which is itself worth
+knowing, and the skill of every model collapses under broken cloud.
 
 **Testable question.** Does the ranking of model families change across weather
-regimes, and is skill against persistence more stable across regimes than absolute
-error?
+regimes, and is skill against a strong reference more stable than absolute error?
+**Answered: no on the first, no on the second — skill is the *less* stable of the
+two.**
 
 ---
 
-## G2 — Horizon sensitivity is asserted more often than measured
+## G2 — Horizon sensitivity is asserted rather than measured
 
-**Evidence.** Papers that cover a single horizon dominate. Where several horizons
-are studied, the horizon is usually fixed in the data description and the
-comparison is between models at that one horizon, rather than a model's behaviour
-as the horizon grows. Multi-horizon studies are present but are a clear minority of
-the corpus, and few of them reuse the same inputs and the same split across
-horizons.
+**Evidence strength:** Absent from the corpus (single-horizon studies dominate;
+few multi-horizon studies hold inputs and split fixed across horizons).
 
-**Why it matters.** Horizon changes the information content of the input: a
-one-hour forecast can lean on persistence, a 24-hour forecast must lean on
-irradiance and calendar structure. A model that wins at one hour can lose at six
-without that being visible from the one-hour result.
+Where a horizon is fixed in the data description, a comparison at that single
+horizon cannot distinguish a model that is genuinely better from a reference
+that happens to be weak at that horizon.
 
-**Opportunity.** One protocol, one split, one input set, four horizons
-(15 minutes, 1 hour, 6 hours, 24 hours), all exact integer multiples of the working
-resolution so that no interpolation enters the comparison.
+**Why it matters — and this is the study's sharpest finding.** The reference's
+competence is a function of the horizon. Persistence is the **strongest** model
+in the table at 15 minutes (skill −0.65 for LSTM, −0.67 for GRU) and the
+**weakest** at 6 hours, where its nRMSE is 0.407 against 0.166 at one hour and
+every learned model reaches skill 0.53–0.59. The models did not change; the
+reference did.
+
+**Opportunity.** One protocol, one split, one input set, four horizons.
+
+**Answer in this study.** Experiment C, complete: 11 models × 4 horizons = 44
+runs. At 15 minutes four models are catastrophically worse than persistence; at 6
+hours none is.
 
 **Testable question.** Is any architectural advantage preserved as the horizon
 grows, and does skill against persistence decay monotonically?
+**Answered: no. Skill *grows* from 15 minutes to 6 hours, because the reference
+degrades faster than the models do.** This refuted the pre-registered hypothesis
+H3.
 
 ---
 
-## G3 — Attention and transformer architectures are rarely compared against well-tuned tabular baselines
+## G3 — Classical baselines are reported untuned
 
-**Evidence.** The recurrent and attention-based papers compare most often against
-each other and against persistence, and much less often against a tuned
-gradient-boosted tree model on the same inputs. Where tree models do appear, they
-are commonly at default settings. The feature-importance papers go further and
-argue that tree ensembles remain competitive for tabular structured time series.
+**Evidence strength:** Demonstrated across the corpus.
 
-**Why it matters.** The common framing "deep learning versus classical machine
-learning" is answered with a weak classical baseline and generalised as a finding
-about methods. If the classical arm is under-tuned, the comparison measures the
-baseline, not the method.
+The classical arm of most comparisons is a default-configuration linear model, a
+default random forest or a default gradient booster. The feature-importability
+papers go further and argue that tree ensembles remain competitive for structured
+tabular time series.
 
-**Opportunity.** Give every family a small validation-only grid search, and report
-the tree arm at its tuned operating point. The cost of doing this is bounded and
-it makes the headline comparison defensible.
+**Why it matters.** A comparison with an untuned baseline measures the baseline.
+The direction of the finding depends on which arm received the effort.
 
-**Testable question.** Under a single protocol with a tuned classical arm, do
+**Opportunity.** Give every family a small validation-only grid, and report the
+tree arm at its tuned operating point.
+
+**Answer in this study.** Gradient boosting is the best model at one hour
+(nRMSE 0.121) and trains in 9.5 s, which is 118x less than the Transformer and
+4.8x more than the linear fit that is 11% worse, while the untuned-at-effort
+neural models include the two worst performers. The classical arm was tuned on
+validation; the neural arm received one learning rate. That asymmetry is
+disclosed as a threat to internal validity rather than hidden.
+
+**Testable question.** Under one protocol with a tuned classical arm, do
 attention-based architectures improve on gradient boosting at short horizons?
+**Answered: at one hour no; at 6 hours the gap closes entirely, because the
+reference has collapsed.**
 
 ---
 
 ## G4 — Persistence is under-used as a *strong* reference
 
-**Evidence.** Persistence appears in most of the corpus, but usually as the
-simplest of several baselines, and the clear-sky-ratio variant — which corrects
-persistence for the deterministic diurnal shape of the solar resource and is far
-harder to beat — appears in only a few papers. A skill score is often reported
-against the weakest available reference, or not at all.
+**Evidence strength:** Absent from the corpus (naive persistence is ubiquitous;
+the clear-sky-ratio variant is rare).
 
-**Why it matters.** A model that beats naive persistence by a wide margin may still
-be beaten by a clear-sky persistence on the same day, so the practical conclusion
-drawn from the first comparison overstates the model's value.
+Most papers compare against naive persistence. The clear-sky-corrected variant,
+which accounts for the deterministic diurnal shape of the resource, appears in
+only a few, and skill against it is rarely reported.
+
+**Why it matters.** Skill against naive persistence flatters every model. On this
+data naive persistence has skill +0.028 at 15 minutes against smart persistence's
++0.028 at the same horizon but +0.194 at 6 hours, and the two references separate
+by 16% in RMSE at one hour.
 
 **Opportunity.** Two references, both reported per model per stratum, with skill
-defined explicitly and evaluated on exactly the timestamps used for the model.
+defined explicitly and evaluated on identical timestamps.
 
-**Testable question.** Which models retain positive skill against *smart*
-persistence, not merely against naive persistence?
-
----
-
-## G5 — Uncertainty quantification is largely absent, and rarely calibrated
-
-**Evidence.** Probabilistic PV forecasting is a visible but small strand of the
-corpus. Most of those papers are evaluated with a proper scoring rule or a
-pinball loss, and interval papers report empirical coverage. The gap is on the
-benchmark side: the deterministic studies that dominate the corpus report no
-interval at all, so the accuracy-versus-calibration trade-off is rarely measured.
-
-**Why it matters.** A point forecast without an interval cannot be used for
-reserve planning, and an interval that is too narrow is worse than no interval
-because it is trusted. Accuracy alone does not answer whether the model knows what
-it does not know.
-
-**Opportunity.** Distribution-free split conformal intervals around the
-deterministic models, with empirical coverage reported per model, per level and
-per month, and the exchangeability caveat of the calibration choice stated rather
-than glossed over.
-
-**Testable question.** What interval width is needed to reach nominal coverage, and
-does coverage degrade seasonally?
+**Answer in this study.** Both references are reported everywhere. Four of eleven
+models fail to beat the stronger of them at one hour.
 
 ---
 
-## G6 — Explainability is often asserted from attention weights or single-method rankings
+## G5 — Feature importance is reported from one method, or from attention weights
 
-**Evidence.** A minority of the corpus includes any interpretability analysis. Of
-those, tree-model work uses SHAP or impurity importances, while the recurrent and
-attention papers more often present attention maps as explanations. Direct
-cross-family comparison of importance methods on one dataset and one split is
-close to absent.
+**Evidence strength:** Demonstrated — attention maps are presented as explanations
+in several papers, and cross-family importance comparison on one split is close to
+absent.
 
 **Why it matters.** Attention weights are internal activations, not validated
-attributions; reading them as explanations is a claim that has not been measured.
-A single ranking method on a single model also cannot be checked against anything.
+attributions. And a single ranking cannot be checked against anything. The
+substantive question is not *which variable ranks first* but *whether the ranking
+is the same for different models and different conditions*.
 
-**Opportunity.** SHAP for the tree ensemble, grouped permutation importance for
-the sequence models, on one split with one input set, reported side by side, with
-an explicit statement that both are predictive rather than causal attributions.
+**Answer in this study.** Two problems with a single global ranking were measured
+rather than asserted:
 
-**Testable question.** Do the two importance families agree on which variables
-matter, and where do they disagree?
+* **Across model families.** For the tree models the weather variables add
+  nothing — 15 PV-history features reach nRMSE 0.119 against 0.121 for all 33 —
+  while for the recurrent models the same variables are decisive (LSTM 0.176 →
+  0.165, skill −0.058 → +0.008). The value of a feature group is relative to the
+  architecture reading it.
+* **Across conditions.** Under clear sky the trailing power *variability*
+  dominates the permutation importance; under broken cloud the current power
+  reading does. One global table hides both.
 
----
-
-## G7 — Reproducibility is uneven, and comparison across studies is not possible
-
-**Evidence.** Code availability is stated in a minority of papers and dataset
-availability in fewer still. Split boundaries, random seeds, preprocessing details,
-feature lists and package versions are reported inconsistently: several papers give
-neither the split dates nor the horizon resolution, so their numbers cannot be
-placed on the same axis as anyone else's. Reported metrics are not accompanied by
-uncertainty in most cases, so a 1% difference between two papers may be noise.
-
-**Why it matters.** Without seeds, splits and versions, a ranking in one paper
-cannot be compared with a ranking in another, and the field's aggregate picture
-stays qualitative. Without intervals or tests, small differences are read as
-findings.
-
-**Opportunity.** Per-run machine-readable records (split dates, seed, feature list,
-hyperparameters, durations, package versions, git revision, configuration
-fingerprint), a registry rebuildable from those records, and statistical comparison
-of the models that were actually run.
-
-**Testable question.** How much of the apparent difference between two models
-survives a paired test with a serial-correlation-aware variance estimate?
+**Testable question.** Do tree and sequence models agree on which variables
+matter, and does the answer change with weather regime and generation level?
+**Answered: no, and yes.**
 
 ---
 
-## G8 — Deployment cost is rarely measured alongside accuracy
+## G6 — Cross-site transfer is claimed far more often than it is validated
 
-**Evidence.** Accuracy is reported almost universally; training cost, inference
-latency, parameter count and memory footprint are reported in only a few papers, and
-almost never together with the accuracy figure that would justify the cost.
+**Evidence strength:** Demonstrated — the corpus contains many multi-site and
+spatiotemporal claims and very few cross-site *transfer* evaluations.
 
-**Why it matters.** A benchmark that reports only accuracy implicitly recommends
-the most expensive model. On the CPU-only hardware typical of small rooftop
-operators, a model that is 3% worse in nRMSE and ten times cheaper may be the
-correct choice, and that trade-off is invisible without the cost axis.
+**Why it matters, and what this study found.** A model fitted at one installation
+was worse than persistence at every other installation in a seven-station panel
+(skill −0.10 to −1.07). Pooling six training sites repaired transfer for five of
+the six holdouts but not for the largest array. The practical consequence is that
+single-site results are *local skill*, and the gap in the literature is real
+rather than pedantic.
 
-**Opportunity.** Training duration, per-window inference latency and parameter
-count recorded with every run, thread counts pinned for comparability, and a
-Pareto frontier of accuracy against cost.
+**Opportunity.** Fixed panel, three protocols, per-site capacity normalisation,
+scalers fitted on training sites only.
 
-**Testable question.** Which models are Pareto-optimal for deployment, and does the
-best model by error differ from the best model by cost?
+**Answer in this study.** Experiment J, 60 records. This is the study's most
+consequential negative result, and it could not have been obtained from a
+single-site benchmark.
 
 ---
 
-## What this project does *not* claim as a gap
+## Gaps deliberately **not** claimed
 
-Two candidate gaps were considered and **not** claimed, because the evidence does
-not support them:
+Five of the twelve candidates were removed, with reasons. All five remain in
+`research_gaps.json` marked `retained: false`, so the decision is auditable.
 
-* **"Deep learning is always better for PV forecasting."** The corpus contains
-  both systematic reviews reporting that deep architectures dominate and studies
-  reporting that tree ensembles match or beat them on tabular structured data. That
-  disagreement is preserved in the review rather than resolved, so it is not used
-  as evidence for a gap.
-* **"Weather variables are under-used."** The evidence points the other way: the
-  reviewed literature uses irradiance, temperature and calendar features nearly
-  universally. The interesting question is not whether they are used but which
-  *subset* carries the signal, which is G-level feature ablation territory rather
-  than a gap in the literature.
+| Dropped | Role | Why |
+| --- | --- | --- |
+| RG-03 statistical testing absent | answered by this work | A real reporting weakness, but this project answers it rather than documenting a gap: every comparison is formally tested with a block bootstrap and a Diebold-Mariano procedure. |
+| RG-04 temporal leakage | answered by this work | A genuine defect in the literature, and one this project is careful about, with chronological splits and explicit leakage tests. It is a requirement of the work, not a gap the work leaves open. |
+| RG-06 uncertainty calibration | narrower than first stated | The initial claim was that calibration is rarely reported. The probabilistic PV literature is methodologically careful and does report it; the real gap is narrower — the deterministic majority reports no interval at all — and it is not this paper's contribution. |
+| RG-09 reproducibility artefacts | answered by this work | The observation is correct and unusual, but it is a virtue of this repository rather than a gap in the literature that the paper sets out to close. |
+| RG-10 metric inconsistency | answered by this work | Real, and this project documents every metric, but it is a matter of hygiene rather than a research gap. |
 
-## Where this project's evidence is weakest
+An earlier version of this list also contained "deep learning is always better for
+PV forecasting" and "weather variables are under-used". Neither was ever given an
+id, and both were removed outright: the corpus contains reviews concluding that
+deep models dominate *and* studies concluding that tuned tree ensembles match or
+beat them, so the disagreement is evidence about the literature rather than a gap
+in it; and the evidence on weather points the other way, since irradiance,
+temperature and calendar features are near-universal. The open question is *which
+subset* matters, which is G5.
 
-Stated so the gap list is not read as stronger than it is:
+## Where this study's evidence is weakest
 
-* The corpus is 30 papers, not a systematic review of the field. It is a
-  convenience sample of the accessible, verifiable literature, collected through
-  DOI-verified sources; it is not a PRISMA search and is not claimed to be
-  exhaustive.
-* A single paper can support or weaken a gap, and several gaps above rest on
-  "absence of evidence in the reviewed set" rather than on a paper that
-  demonstrates the absence. Those are marked as such in the `Research Gaps` sheet.
+* The corpus is 30 papers, not a systematic review. It is a convenience sample of
+  the accessible, verifiable literature, collected through DOI-verified sources;
+  it is not a PRISMA search and is not claimed to be exhaustive.
+* Four of the six retained gaps rest on **absence from the corpus** rather than on
+  a paper demonstrating the absence. Those are labelled individually above.
 * The gap list is therefore best read as a *motivation for a protocol* — a
-  controlled, leakage-audited, stratified, statistically tested benchmark — rather
-  than as a claim that no such benchmark exists in the literature.
+  controlled, leakage-audited, stratified, statistically tested, cross-site
+  benchmark — rather than as a claim that no such benchmark exists.

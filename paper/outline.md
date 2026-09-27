@@ -15,7 +15,7 @@ Benchmark Across Forecast Horizons and Weather Conditions
 Problem, gap, contribution, protocol, headline result, the persistence result, the
 statistical caveat, limitations. Numbers come from
 `results/tables/overall_model_comparison.csv` and
-`results/tables/statistical_significance.csv`. The abstract must state the
+`results/tables/statistical_tests.csv`. The abstract must state the
 information set (strictly historical, no NWP) and the single-station scope.
 
 ## 1. Introduction
@@ -55,15 +55,18 @@ each was handled.
 
 From `docs/experiments.md`. The 11 models, the fixed protocol, the experiment
 matrix with per-group status, seeds, thread pinning, and the compute environment.
-**State the partial groups (C, E) and the unimplemented group (J) here**, in the
-setup, not in a footnote.
+**State per-group execution status here**, in the setup, not in a footnote: every
+group in the declared matrix was executed, and where a group is narrower than the
+design -- the horizon group runs the eleven models at all four horizons, but the
+feature ablation and the cross-site protocols run a documented subset -- say which
+models and sites were in it rather than implying the whole grid was filled.
 
 ## 6. Results
 
 `paper/results.md`, generated from the tables. Subsections: headline comparison;
 horizon analysis; weather-regime and seasonal analysis; error analysis; feature
-and model ablation; statistical comparison; explainability (marked pending);
-uncertainty; computational cost. Every number cited to a CSV.
+and model ablation; statistical comparison; explainability; uncertainty;
+computational cost. Every number cited to a CSV.
 
 ## 7. Discussion
 

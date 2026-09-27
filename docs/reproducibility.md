@@ -16,7 +16,7 @@ python scripts/preprocess.py                  # run the data pipeline
 python scripts/run_experiments.py             # run the declared experiment matrix
 python scripts/evaluate.py --report           # tables, stratified analysis, statistics, figures
 python scripts/generate_report.py             # assemble docs/RESULTS_REPORT.md
-python -m pytest -q                           # 108 tests
+python -m pytest -q                           # 191 tests
 ```
 
 Full experiment detail: `docs/experiments.md`. Installation notes: `README.md`.
@@ -119,7 +119,7 @@ with the `pv_power_w_lag_k` features).
 ## Verification performed
 
 ```bash
-python -m pytest -q                                   # 108 passed
+python -m pytest -q                                   # 191 passed
 python -m compileall -q src/solar_forecasting scripts  # no syntax errors
 python scripts/run_experiments.py --list              # matrix resolves from config
 python scripts/evaluate.py --report --uncertainty     # tables, statistics, figures
@@ -129,3 +129,30 @@ python scripts/generate_report.py                     # docs/RESULTS_REPORT.md
 `results/metrics/evaluation_report.json` records, for every evaluation stage,
 whether it ran, what it wrote, and — for any stage that was skipped — the reason.
 This is what distinguishes "no result" from "not attempted".
+
+The claims in the prose are checked against the generated artefacts rather than
+trusted, because documentation drifts silently:
+
+```bash
+python tools/check_consistency.py            # prose vs results/tables/
+python tools/audit_dataset_claims.py         # dataset claims vs the archive
+python tools/literature/audit_workbook_formatting.py   # workbook formatting
+python tools/literature/build_gap_evidence.py          # gap evidence integrity
+python tools/check_integrated_gradients.py   # IG completeness, numerically
+```
+
+`check_consistency.py` verifies every metric quoted in the README's results
+tables against the CSVs, the per-group execution status against the registry, the
+literature count against the workbook, the stated test count against what pytest
+collects, and scans the documentation for phrases that still describe a completed
+experiment as outstanding. It is the check that catches a stale README, so it
+belongs in the same command as the test suite rather than in a manual pass.
+
+Two measurements are expensive enough to be deliberate rather than part of every
+invocation, and both are what the cost table and the integrated-gradients figure
+rest on:
+
+```bash
+python tools/measure_footprint.py            # refits every model: size and peak memory
+python tools/literature/build_workbook.py    # rebuilds and formats the workbook
+```
