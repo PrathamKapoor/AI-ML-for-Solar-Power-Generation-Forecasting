@@ -1,0 +1,240 @@
+{
+  "figures": {
+    "fig01_actual_vs_predicted.png": {
+      "source": "results/predictions/*.parquet",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ1",
+      "caption": "Observed and forecast power over the first week of the test year, daylight steps, with the persistence reference."
+    },
+    "fig02_forecast_error_over_time.png": {
+      "source": "results/predictions/*.parquet",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ3",
+      "caption": "Daily mean absolute error and signed error over the first three weeks, showing when the models fail."
+    },
+    "fig04_mae_comparison.png": {
+      "source": "results/tables/overall_model_comparison.csv",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ1",
+      "caption": "Mean absolute error by model."
+    },
+    "fig05_rmse_comparison.png": {
+      "source": "results/tables/overall_model_comparison.csv",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ1",
+      "caption": "Root mean squared error by model."
+    },
+    "fig06_r2_comparison.png": {
+      "source": "results/tables/overall_model_comparison.csv",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ1",
+      "caption": "Coefficient of determination by model."
+    },
+    "fig07_horizon_comparison.png": {
+      "source": "results/tables/horizon_comparison.csv",
+      "experiment_groups": "C_horizons",
+      "research_question": "RQ2",
+      "caption": "RMSE, capacity-normalised error and skill against the four horizons."
+    },
+    "fig07b_horizon_mae.png": {
+      "source": "results/tables/horizon_comparison.csv",
+      "experiment_groups": "C_horizons",
+      "research_question": "RQ2",
+      "caption": "MAE against forecast horizon for every model."
+    },
+    "fig07c_horizon_ranking.png": {
+      "source": "results/tables/horizon_comparison.csv",
+      "experiment_groups": "C_horizons",
+      "research_question": "RQ2",
+      "caption": "Model rank by horizon, showing where the ranking changes."
+    },
+    "fig07d_horizon_cost.png": {
+      "source": "results/tables/horizon_comparison.csv",
+      "experiment_groups": "C_horizons",
+      "research_question": "RQ2",
+      "caption": "Training time and inference latency against horizon."
+    },
+    "fig08_weather_regime_comparison.png": {
+      "source": "results/tables/weather_regime_comparison.csv",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ3",
+      "caption": "Capacity-normalised error and skill inside each weather regime."
+    },
+    "fig09_seasonal_comparison.png": {
+      "source": "results/tables/seasonal_comparison.csv",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ3",
+      "caption": "Generalisation across the four seasons of the test year."
+    },
+    "fig10_importance_xgboost.png": {
+      "source": "results/tables/importance_xgboost.csv",
+      "experiment_groups": "H_explainability",
+      "research_question": "RQ5",
+      "caption": "SHAP mean absolute attribution per input variable, collapsed over the lookback window."
+    },
+    "fig10_importance_attention_lstm.png": {
+      "source": "results/tables/importance_attention_lstm.csv",
+      "experiment_groups": "H_explainability",
+      "research_question": "RQ5",
+      "caption": "Grouped permutation importance for the attention-recurrent model."
+    },
+    "fig11_residual_distribution.png": {
+      "source": "results/predictions/*.parquet",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ1",
+      "caption": "Distribution of normalised daylight residuals against the normal density."
+    },
+    "fig12_predicted_vs_actual_scatter.png": {
+      "source": "results/predictions/*.parquet",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ1",
+      "caption": "Parity plots coloured by observation density."
+    },
+    "fig13_persistence_skill.png": {
+      "source": "results/tables/overall_model_comparison.csv",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ1",
+      "caption": "Skill against the persistence reference, with bootstrap intervals."
+    },
+    "fig15_error_distribution_by_model.png": {
+      "source": "results/predictions/*.parquet",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ3",
+      "caption": "Absolute-error box plots and exceedance curves."
+    },
+    "fig16_intraday_error_profile.png": {
+      "source": "results/tables/error_analysis.csv",
+      "experiment_groups": "D_regimes",
+      "research_question": "RQ3",
+      "caption": "Error by time-of-day band, locating the morning and evening ramps."
+    },
+    "fig17_cost_accuracy.png": {
+      "source": "results/tables/computational_cost.csv",
+      "experiment_groups": "I_cost",
+      "research_question": "RQ7",
+      "caption": "Accuracy against training cost with the Pareto frontier."
+    },
+    "fig18_conformal_intervals.png": {
+      "source": "results/tables/uncertainty_coverage.csv",
+      "experiment_groups": "K_uncertainty",
+      "research_question": "RQ7",
+      "caption": "Split-conformal prediction intervals and their coverage."
+    },
+    "fig19_dataset_overview.png": {
+      "source": "results/tables/dataset_statistics.csv",
+      "experiment_groups": "-",
+      "research_question": "RQ0",
+      "caption": "The case-study record: power, irradiance and a sample week."
+    },
+    "fig19b_temporal_coverage.png": {
+      "source": "results/tables/dataset_statistics.csv",
+      "experiment_groups": "-",
+      "research_question": "RQ0",
+      "caption": "Temporal coverage and the chronological split boundaries."
+    },
+    "fig19c_generation_distribution.png": {
+      "source": "results/tables/dataset_statistics.csv",
+      "experiment_groups": "-",
+      "research_question": "RQ0",
+      "caption": "Distribution of generated power, with the night-time mass shown."
+    },
+    "fig19d_weather_distribution.png": {
+      "source": "results/metrics/pipeline_report.json",
+      "experiment_groups": "-",
+      "research_question": "RQ0",
+      "caption": "Distribution of the weather-regime taxonomy over the record."
+    },
+    "fig20_feature_ablation.png": {
+      "source": "results/tables/feature_ablation.csv",
+      "experiment_groups": "E_feature_ablation",
+      "research_question": "RQ4",
+      "caption": "Change in error when each input group is removed."
+    },
+    "fig21_multiseed_spread.png": {
+      "source": "results/tables/multi_seed_results.csv",
+      "experiment_groups": "M_multiseed",
+      "research_question": "RQ1",
+      "caption": "Across-seed spread for each neural model."
+    },
+    "fig21b_multiseed_mae.png": {
+      "source": "results/tables/multi_seed_results.csv",
+      "experiment_groups": "M_multiseed",
+      "research_question": "RQ1",
+      "caption": "Across-seed spread in MAE for each neural model."
+    },
+    "fig22_cross_site_transfer.png": {
+      "source": "results/tables/cross_site_comparison.csv",
+      "experiment_groups": "J_cross_site",
+      "research_question": "RQ6",
+      "caption": "Within-site against cross-site performance per held-out site."
+    },
+    "fig23_feature_regimes.png": {
+      "source": "results/tables/feature_regimes.csv",
+      "experiment_groups": "N_feature_regimes",
+      "research_question": "RQ4",
+      "caption": "Additive input regimes: what each information type is worth alone."
+    },
+    "fig24_error_autocorrelation.png": {
+      "source": "results/tables/error_autocorrelation.csv",
+      "experiment_groups": "-",
+      "research_question": "RQ0",
+      "caption": "Autocorrelation of the forecast error."
+    },
+    "fig25_block_length_sensitivity.png": {
+      "source": "results/tables/block_length_sensitivity.csv",
+      "experiment_groups": "-",
+      "research_question": "RQ0",
+      "caption": "Bootstrap interval width against block length."
+    },
+    "fig26_residual_vs_generation.png": {
+      "source": "results/predictions/*.parquet",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ3",
+      "caption": "Residual against generated power, showing where the error grows."
+    },
+    "fig26b_residual_vs_irradiance.png": {
+      "source": "results/predictions/*.parquet",
+      "experiment_groups": "B_ml_vs_dl",
+      "research_question": "RQ3",
+      "caption": "Residual against irradiance at the forecast origin."
+    },
+    "fig27_regime_importance_attention_lstm.png": {
+      "source": "results/tables/importance_regime_attention_lstm.csv",
+      "experiment_groups": "H_explainability",
+      "research_question": "RQ5",
+      "caption": "Permutation importance computed separately inside each regime."
+    },
+    "fig28_cost_memory.png": {
+      "source": "results/tables/computational_cost.csv",
+      "experiment_groups": "I_cost",
+      "research_question": "RQ7",
+      "caption": "Training time, inference latency, parameter count and model size."
+    },
+    "fig29_error_by_horizon.png": {
+      "source": "results/tables/horizon_comparison.csv",
+      "experiment_groups": "C_horizons",
+      "research_question": "RQ2",
+      "caption": "Error by forecast horizon, with the reference alongside."
+    },
+    "fig10c_integrated_gradients_attention_lstm.png": {
+      "source": "results/explainability/integrated_gradients_attention_lstm.csv",
+      "experiment_groups": "H_explainability",
+      "research_question": "RQ5",
+      "caption": "Mean absolute integrated gradient per input variable, with a completeness check against the baseline prediction. Shown for attention_lstm.",
+      "model": "attention_lstm",
+      "inherits_template": "fig10c_integrated_gradients"
+    },
+    "fig27b_condition_importance_attention_lstm.png": {
+      "source": "results/explainability/importance_condition_attention_lstm.csv",
+      "experiment_groups": "H_explainability",
+      "research_question": "RQ5",
+      "caption": "Permutation importance inside each weather regime and generation level. Shown for attention_lstm.",
+      "model": "attention_lstm",
+      "inherits_template": "fig27b_condition_importance"
+    }
+  },
+  "unmatched": [],
+  "note": "Figures whose name embeds a model, such as fig10_importance_<model> or fig26_dependence_<model>_<feature>, inherit the provenance of the corresponding template and differ only in the model named in the filename.",
+  "n_figures": 38,
+  "n_documented": 38
+}

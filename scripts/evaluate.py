@@ -35,6 +35,7 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 from solar_forecasting.config import Config, load_config, set_thread_env  # noqa: E402
+from solar_forecasting.evaluation import metrics as metrics_mod  # noqa: E402
 from solar_forecasting.evaluation import reporting  # noqa: E402
 from solar_forecasting.evaluation import stratified as strat_mod  # noqa: E402
 from solar_forecasting.evaluation import uncertainty as unc_mod  # noqa: E402
@@ -62,6 +63,19 @@ def predictions_dir(config: Config) -> Path:
     return config.project_root_for("results") / "predictions"
 
 
+def explainability_dir(config: Config) -> Path:
+    """Dedicated directory for explainability outputs.
+
+    Explainability writes more artefacts than the other stages - per-model
+    importance, per-regime importance, per-condition importance, integrated
+    gradients, dependence frames and a provenance record - so they are kept apart
+    from the general result tables rather than mixed in with them.
+    """
+    path = config.project_root_for("results") / "explainability"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
 def read_table(path: Path) -> pd.DataFrame | None:
     """Read a results table, returning None when it does not exist yet."""
     if not path.exists():
@@ -70,6 +84,21 @@ def read_table(path: Path) -> pd.DataFrame | None:
         return pd.read_csv(path)
     except Exception:  # pragma: no cover - unreadable artefact
         return None
+
+
+def _split_ranges(config: Config) -> dict[str, list[str]] | None:
+    """Chronological split boundaries, for the coverage figure."""
+    report = metrics_dir(config) / "pipeline_report.json"
+    if not report.exists():
+        return None
+    try:
+        stages = json.loads(report.read_text(encoding="utf-8")).get("stages", {})
+    except json.JSONDecodeError:
+        return None
+    audit = stages.get("14_split", {}).get("date_ranges")
+    if not audit:
+        return None
+    return {name: bounds for name, bounds in audit.items() if bounds}
 
 
 def rated_power(config: Config) -> float | None:
@@ -286,6 +315,9 @@ def stage_statistics(config: Config, predictions: dict[str, pd.DataFrame],
         write_table(table, tables_dir(config) / "statistical_significance.csv")
     assumptions = stat_mod.ASSUMPTIONS
     write_json(assumptions, tables_dir(config) / "statistical_assumptions.json")
+    if not table.empty:
+        # The canonical file name used by the paper and the report generator.
+        write_table(table, tables_dir(config) / "statistical_tests.csv")
 
     # --- temporal dependence diagnostics ---------------------------------- #
     # The choice of block length and the power of every test above rest on how
@@ -389,6 +421,7 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
         # there would be both redundant and a serialisation hazard.
         importance_frames[model] = importance
         value_column = "importance" if "importance" in importance.columns else "mean_mae_increase_w"
+        write_table(importance, explainability_dir(config) / f"importance_{model}.csv")
         write_table(importance, tables_dir(config) / f"importance_{model}.csv")
         try:
             path = fig_mod.plot_feature_importance(
@@ -416,7 +449,7 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
 
         dependence = entry.get("dependence")
         if dependence is not None and not dependence.empty:
-            write_table(dependence, tables_dir(config) / f"dependence_{model}.csv")
+            write_table(dependence, explainability_dir(config) / f"dependence_{model}.csv")
             for feature in [c for c in dependence.columns if c.startswith("shap_")]:
                 try:
                     made.append(Path(fig_mod.plot_dependence(
@@ -430,7 +463,7 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
         regime_importance = entry.get("regime_importance")
         if regime_importance is not None and not regime_importance.empty:
             write_table(regime_importance,
-                        tables_dir(config) / f"importance_regime_{model}.csv")
+                        explainability_dir(config) / f"importance_regime_{model}.csv")
             try:
                 made.append(Path(fig_mod.plot_regime_importance(
                     regime_importance, name=f"fig27_regime_importance_{model}",
@@ -438,6 +471,73 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
             except Exception as exc:
                 report.setdefault("notes", []).append(
                     f"regime importance plot for {model} failed: {exc}")
+
+        # --- importance by weather regime AND generation level -------------- #
+        condition_importance = entry.get("condition_importance")
+        if condition_importance is not None and not condition_importance.empty:
+            write_table(condition_importance,
+                        explainability_dir(config) / f"importance_condition_{model}.csv")
+            try:
+                made.append(Path(fig_mod.plot_regime_importance(
+                    condition_importance.assign(
+                        regime=condition_importance["regime"] + " / "
+                               + condition_importance["generation_level"]),
+                    name=f"fig27b_condition_importance_{model}",
+                    directory=directory)).name)
+            except Exception as exc:
+                report.setdefault("notes", []).append(
+                    f"condition importance plot for {model} failed: {exc}")
+
+        # --- integrated gradients ------------------------------------------- #
+        gradients = entry.get("integrated_gradients")
+        if gradients is not None and not gradients.empty:
+            completeness = gradients.attrs.get("completeness", [])
+            residuals = [abs(row.get("residual_w", float("nan")))
+                         for row in completeness]
+            write_table(gradients, explainability_dir(config) /
+                        f"integrated_gradients_{model}.csv")
+            write_table(pd.DataFrame(completeness), explainability_dir(config) /
+                        f"integrated_gradients_completeness_{model}.csv")
+            relative = [abs(row["relative_error"]) for row in
+                        gradients.attrs.get("completeness", [])]
+            changes = [abs(row["prediction_change_w"]) for row in
+                       gradients.attrs.get("completeness", [])]
+            entry["integrated_gradients_meta"] = {
+                "n_samples": int(gradients.attrs.get("n_samples", 0)),
+                "n_steps": int(gradients.attrs.get("n_steps", 0)),
+                "baseline": gradients.attrs.get("baseline"),
+                "quadrature": "composite Simpson",
+                "units": "watts",
+                "max_completeness_residual_w": (max(residuals) if residuals else None),
+                "median_completeness_residual_w": (float(np.median(residuals))
+                                                   if residuals else None),
+                "median_prediction_change_w": (float(np.median(changes))
+                                               if changes else None),
+                "median_relative_error": (float(np.median(relative))
+                                          if relative else None),
+                "max_relative_error": (max(relative) if relative else None),
+                "converged": (bool(np.median(relative) <= 0.02) if relative else None),
+                "tolerance": 0.02,
+                "note": ("Completeness: the attributions must sum to the prediction "
+                         "change from the baseline window. The residual is that "
+                         "difference and is the check on the property, not a "
+                         "measure of model error. It is the accuracy of the path "
+                         "integral, so it falls as the quadrature is refined; the "
+                         "relative error is the meaningful figure, because a sample "
+                         "whose prediction barely moves has a small residual and a "
+                         "large relative one. 'converged' states whether the median "
+                         "relative error met the 2% tolerance, so a number produced "
+                         "by an insufficient path budget cannot be read as if it had."),
+            }
+            try:
+                made.append(Path(fig_mod.plot_feature_importance(
+                    gradients, top_n=15, value_column="mean_absolute",
+                    title=f"{model}: mean |integrated gradient| per input variable",
+                    name=f"fig10c_integrated_gradients_{model}",
+                    directory=directory)).name)
+            except Exception as exc:
+                report.setdefault("notes", []).append(
+                    f"integrated gradient plot for {model} failed: {exc}")
 
         results[model] = {k: v for k, v in entry.items() if k != "importance"}
         results[model]["figure"] = f"fig10_importance_{model}.png"
@@ -495,6 +595,7 @@ def stage_uncertainty(config: Config, predictions: dict[str, pd.DataFrame],
     table = pd.DataFrame(rows)
     if not table.empty:
         write_table(table, tables_dir(config) / "uncertainty_coverage.csv")
+        write_table(table, tables_dir(config) / "uncertainty_results.csv")
     report["uncertainty"] = {
         "status": "ok" if not table.empty else "skipped",
         "models": [r for r in models if r in predictions],
@@ -504,6 +605,137 @@ def stage_uncertainty(config: Config, predictions: dict[str, pd.DataFrame],
                  "test period and evaluated on the remainder. The coverage guarantee "
                  "is approximate because the calibration block is not exchangeable "
                  "with the evaluation block under seasonal drift."),
+    }
+    return table
+
+
+# ---------------------------------------------------------------------------
+# Stage 8: ablation significance
+# ---------------------------------------------------------------------------
+REGIME_ORDER = ("pv_only", "weather_only", "pv_weather", "pv_weather_solar", "full")
+
+
+def _regime_key(stem: str) -> tuple[str | None, str | None]:
+    """Split a regime prediction filename into its model and horizon.
+
+    The convention is the one the experiment runner writes, and the one
+    ``load_predictions`` reads: the parts after the group are the model name and
+    the horizon, so ``cnn_lstm`` is never mistaken for a horizon of ``lstm``.
+    """
+    from solar_forecasting.models import registry as model_registry
+
+    parts = stem.split("__")
+    if len(parts) < 3 or parts[0] != "N_feature_regimes":
+        return None, None
+    model, horizon = parts[1], parts[2]
+    if model not in set(model_registry.all_model_names()):
+        return None, None
+    return model, horizon
+
+
+def stage_ablation_statistics(config: Config, predictions: dict[str, pd.DataFrame],
+                             report: dict[str, Any]) -> pd.DataFrame:
+    """Paired comparison of each input regime against the full input set.
+
+    The regime question is whether a *drop* in accuracy from removing a family of
+    variables is real or noise, which is a paired question on the same
+    timestamps. The reference is therefore the same model fitted on the full input
+    set, not the persistence forecast: a regime drop of 40% and a model that is
+    simply 40% worse than persistence are different statements, and comparing
+    every regime to persistence would have reported the second while claiming to
+    answer the first.
+
+    The comparison uses the same block bootstrap and Diebold-Mariano procedure as
+    the model comparison, so a regime difference is judged with the same
+    yardstick as a model difference. Skill is reported against the full-input run
+    of the same model, so zero means "this variable family adds nothing".
+    """
+    analysis = config.section("experiments").get("analysis", {}) or {}
+    n_resamples = int(analysis.get("bootstrap_resamples", 2000))
+    block_length = int(analysis.get("bootstrap_block_length", 96))
+    directory = config.project_root_for("results") / "predictions"
+    if not directory.exists():
+        report["ablation_statistics"] = {
+            "status": "skipped", "reason": f"no prediction directory at {directory}"}
+        return pd.DataFrame()
+
+    pairs: list[tuple[str, str, str, pd.DataFrame, pd.DataFrame]] = []
+    for full_path in sorted(directory.glob("N_feature_regimes__*.parquet")):
+        if full_path.stem.endswith(tuple(f"__{r}" for r in REGIME_ORDER if r != "full")):
+            continue
+        model, horizon = _regime_key(full_path.stem)
+        if model is None:
+            continue
+        for regime in REGIME_ORDER:
+            if regime == "full":
+                continue
+            regime_path = directory / f"{full_path.stem}__{regime}.parquet"
+            if regime_path.exists():
+                pairs.append((model, horizon, regime,
+                              pd.read_parquet(full_path), pd.read_parquet(regime_path)))
+    if not pairs:
+        report["ablation_statistics"] = {
+            "status": "skipped",
+            "reason": "no full and reduced input runs found to pair"}
+        return pd.DataFrame()
+
+    rows: list[dict[str, Any]] = []
+    for model, horizon, regime, full_frame, regime_frame in pairs:
+        merged = (full_frame[["Time", "actual", "daylight", "predicted"]]
+                  .rename(columns={"predicted": "full"})
+                  .merge(regime_frame[["Time", "predicted"]].rename(
+                      columns={"predicted": "regime"}), on="Time", how="inner"))
+        merged = merged[merged["daylight"].astype(bool)].sort_values("Time")
+        if merged.empty:
+            continue
+        actual = merged["actual"].to_numpy(dtype=float)
+        regime_errors = actual - merged["regime"].to_numpy(dtype=float)
+        full_errors = actual - merged["full"].to_numpy(dtype=float)
+        skill = stat_mod.block_bootstrap_skill(
+            regime_errors, full_errors, metric="rmse", n_resamples=n_resamples,
+            block_length=block_length)
+        dm = stat_mod.diebold_mariano(
+            regime_errors, full_errors, model_a=f"{model} [{regime}]",
+            model_b=f"{model} [full]", loss="mae", horizon=1)
+        rows.append({
+            "model": model,
+            "horizon": horizon,
+            "removed_regime": regime,
+            "rmse_w": float(np.sqrt(np.mean(regime_errors ** 2))),
+            "full_rmse_w": float(np.sqrt(np.mean(full_errors ** 2))),
+            "rmse_increase_pct": float(
+                100.0 * (np.sqrt(np.mean(regime_errors ** 2))
+                         / max(np.sqrt(np.mean(full_errors ** 2)), 1e-9) - 1.0)),
+            "n_daylight": int(len(merged)),
+            "skill_point": skill["point_estimate"],
+            "skill_ci_low": skill["ci_low"],
+            "skill_ci_high": skill["ci_high"],
+            "dm_p_value": dm.p_value,
+            "dm_statistic": dm.statistic,
+            "dm_lag1_autocorrelation": dm.lag_1_autocorrelation,
+            "comparison": f"{model} with {regime} against {model} with the full "
+                          f"input set, on the same daylight timestamps",
+        })
+    table = pd.DataFrame(rows)
+    if table.empty:
+        report["ablation_statistics"] = {
+            "status": "skipped", "reason": "no comparable daylight rows"}
+        return table
+    table = table.sort_values(["model", "horizon", "rmse_increase_pct"],
+                              ascending=[True, True, False]).reset_index(drop=True)
+    table["dm_p_value_holm"] = stat_mod.holm_bonferroni(
+        table["dm_p_value"].to_numpy(dtype=float))
+    write_table(table, tables_dir(config) / "ablation_statistics.csv")
+    report["ablation_statistics"] = {
+        "status": "ok",
+        "written": ["ablation_statistics.csv"],
+        "n_comparisons": int(len(table)),
+        "reference": "the same model fitted on the full input set",
+        "n_significant_at_0_05": int((table["dm_p_value_holm"] < 0.05).sum()),
+        "note": ("Skill is measured against the full-input run of the same model, so "
+                 "a value of zero means the removed variable family changed nothing. "
+                 "A negative value means the reduced model was better, which is "
+                 "possible and is reported rather than suppressed."),
     }
     return table
 
@@ -588,6 +820,13 @@ def stage_figures(config: Config, tables: dict[str, pd.DataFrame],
     horizon = tables.get("horizon_comparison", pd.DataFrame())
     if not horizon.empty:
         attempt("horizons", fig_mod.plot_horizon_comparison, horizon, directory=directory)
+        attempt("horizon_mae", fig_mod.plot_horizon_metric, horizon, "mae",
+                directory=directory)
+        attempt("horizon_ranking", fig_mod.plot_horizon_ranking, horizon,
+                directory=directory)
+        attempt("horizon_cost", fig_mod.plot_horizon_cost, horizon, directory=directory)
+        attempt("error_by_horizon", fig_mod.plot_error_by_horizon, horizon,
+                directory=directory)
 
     regime = tables.get("weather_regime_comparison", pd.DataFrame())
     if not regime.empty:
@@ -662,11 +901,69 @@ def stage_figures(config: Config, tables: dict[str, pd.DataFrame],
 
     featured = config.project_root_for("data") / "processed" / "featured_primary_station.parquet"
     if featured.exists():
-        attempt("dataset", fig_mod.plot_dataset_overview,
-                pd.read_parquet(featured), rated_w, directory=directory)
+        frame = pd.read_parquet(featured)
+        attempt("dataset", fig_mod.plot_dataset_overview, frame, rated_w, directory=directory)
+        attempt("temporal_coverage", fig_mod.plot_temporal_coverage, frame,
+                split_ranges=_split_ranges(config), directory=directory)
+        attempt("generation_distribution", fig_mod.plot_generation_distribution, frame,
+                rated_w, directory=directory)
+        if "regime" in frame.columns:
+            attempt("weather_distribution", fig_mod.plot_weather_distribution, frame,
+                    directory=directory)
 
+    # --- residual against generation and irradiance ------------------------ #
+    if predictions:
+        lead = sorted(predictions, key=lambda m: float(
+            metrics_mod.rmse(predictions[m]["actual"].to_numpy(dtype=float)[
+                predictions[m]["daylight"].to_numpy(dtype=bool)],
+                predictions[m]["predicted"].to_numpy(dtype=float)[
+                    predictions[m]["daylight"].to_numpy(dtype=bool)])))
+        best = lead[0] if lead else next(iter(predictions))
+        attempt("residual_vs_generation", fig_mod.plot_residual_against, predictions[best],
+                "actual", best, "fig26_residual_vs_generation", "Generated power (W)",
+                directory=directory)
+        if "ghi" not in predictions[best].columns and featured.exists():
+            # The stored predictions carry the target and the reference but not
+            # the weather at the origin, so it is joined back from the processed
+            # frame. The join is on the *forecast origin* timestamp, not the
+            # target, so the plotted value is the one the model could actually
+            # see.
+            origin_frame = pd.read_parquet(featured, columns=["Time", "ghi"])
+            origin_frame["Time"] = pd.to_datetime(origin_frame["Time"])
+            # Both keys are coerced to datetime explicitly: the prediction file
+            # stores the origin as a timestamp, and a silent dtype mismatch here
+            # would produce an empty join rather than an error.
+            lookup = (origin_frame.rename(columns={"ghi": "ghi_at_origin"})
+                      .assign(Time=lambda f: pd.to_datetime(f["Time"]))
+                      .loc[:, ["Time", "ghi_at_origin"]])
+            joined = predictions[best].assign(
+                forecast_origin=lambda f: pd.to_datetime(f["forecast_origin"])).merge(
+                lookup, left_on="forecast_origin", right_on="Time", how="left")
+            if joined["ghi_at_origin"].notna().any():
+                # The join key collides with the prediction frame's own Time
+                # column (the target time), so pandas suffixes it; drop whichever
+                # spelling appeared rather than assuming one.
+                predictions[best] = joined.drop(
+                    columns=[c for c in ("Time_y", "Time_x", "Time")
+                             if c in joined.columns])
+                attempt("residual_vs_irradiance", fig_mod.plot_residual_against,
+                        predictions[best], "ghi_at_origin", best,
+                        "fig26b_residual_vs_irradiance",
+                        "Irradiance at the forecast origin (W/m2)", directory=directory)
+
+    from solar_forecasting.visualization import provenance as provenance_mod
+    provenance = provenance_mod.write(
+        directory, metrics_dir(config) / "figure_provenance.json")
+    provenance_mod.write_paper_index(
+        provenance, config.project_root_for("paper") / "figures" / "README.md")
     report["figures"] = {"status": "ok" if made else "nothing_to_plot",
-                         "written": sorted(made), "failed": failed}
+                         "written": sorted(made), "failed": failed,
+                         "provenance": {
+                             "file": "results/metrics/figure_provenance.json",
+                             "paper_index": "paper/figures/README.md",
+                             "n_figures": provenance["n_figures"],
+                             "n_documented": provenance["n_documented"],
+                             "unmatched": provenance["unmatched"]}}
 
 
 # ---------------------------------------------------------------------------
@@ -769,20 +1066,52 @@ def main() -> int:
         print(f"stratified: {len(stratified_tables)} tables")
         stage_statistics(config, predictions, report)
         print("statistics: complete")
+        stage_ablation_statistics(config, predictions, report)
+        print("ablation statistics: complete")
         if args.uncertainty:
             stage_uncertainty(config, predictions, report)
             print("uncertainty: complete")
+        elif not args.tables_only:
+            # Same reasoning as explainability below: the conformal stage is
+            # opt-in and is run in its own invocation, so a later invocation must
+            # not report the coverage table as outstanding when it is on disk.
+            coverage = tables_dir(config) / "uncertainty_coverage.csv"
+            if coverage.exists():
+                report["uncertainty"] = {
+                    "status": "outputs_present_from_earlier_run",
+                    "reason": ("not recomputed by this invocation; the stage is opt-in "
+                               "and was run separately with --uncertainty"),
+                    "existing_outputs": [coverage.name],
+                }
+            else:
+                report["uncertainty"] = {
+                    "status": "not_run",
+                    "reason": "re-run with --uncertainty",
+                }
         if args.explainability:
             stage_explainability(config, report)
             print("explainability: complete")
         elif not args.tables_only:
             # SHAP and permutation importance need a fitted estimator, so the stage
             # is opt-in. Recording it as not attempted keeps "not run" visibly
-            # distinct from "run and found nothing".
-            report["explainability"] = {
-                "status": "not_run",
-                "reason": "requires refitting the models; re-run with --explainability",
-            }
+            # distinct from "run and found nothing". It is not enough to describe
+            # the current invocation, though: the stage refits models and is run
+            # separately from the tables and figures, so a report written by a
+            # later invocation would claim the analysis is outstanding while its
+            # outputs sit in results/explainability/ and the paper cites them.
+            existing = sorted(p.name for p in explainability_dir(config).glob("*.csv"))
+            if existing:
+                report["explainability"] = {
+                    "status": "outputs_present_from_earlier_run",
+                    "reason": ("not recomputed by this invocation; the stage is opt-in "
+                               "and was run separately with --explainability"),
+                    "existing_outputs": existing,
+                }
+            else:
+                report["explainability"] = {
+                    "status": "not_run",
+                    "reason": "requires refitting the models; re-run with --explainability",
+                }
 
     all_tables = {**tables, **stratified_tables}
     if not args.tables_only:
@@ -808,5 +1137,8 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+
 
 
