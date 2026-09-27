@@ -193,16 +193,20 @@ def explain_model(config: Config, model_name: str, state: dict[str, Any],
     if kind == "sklearn":
         predicted = np.asarray(fitted.predict(flatten_windows(X)), dtype=float)
         out["baseline_metrics"] = metrics_mod.compute_all(y_true, predicted)
-        shap = shap_importance(fitted, X, selected, lookback, n_samples=n_shap_samples,
-                               seed=seed)
+        # SHAP must see the fitted tree ensemble itself, not the project's
+        # uniform adapter wrapper, which TreeExplainer does not recognise.
+        shap_target = getattr(fitted, "estimator", fitted)
+        shap = shap_importance(shap_target, X, selected, lookback,
+                               n_samples=n_shap_samples, seed=seed)
         out["shap"] = {k: v for k, v in shap.items() if k != "importance"}
-        out["importance"] = shap["importance"].rename("importance").to_frame()
+        out["importance"] = shap["importance"].rename("importance").reset_index()
         out["method"] = "SHAP TreeExplainer (mean |shap|), collapsed over the lookback"
         built_in = getattr(fitted, "feature_importances_", None)
         if built_in is not None:
             out["built_in_importance"] = collapse_over_lookback(
                 built_in, selected, lookback).rename("importance").to_frame()
-        out["shap_values"] = _shap_values(fitted, X, seed=seed, n_samples=600)
+        out["top_features"] = list(out["importance"]["feature"].head(10))
+        out["shap_values"] = _shap_values(shap_target, X, seed=seed, n_samples=600)
         out["dependence"] = _shap_dependence(X, out["shap_values"], selected,
                                              top_features=out["top_features"][:3])
         built = out.get("shap_values")
@@ -234,6 +238,13 @@ def explain_model(config: Config, model_name: str, state: dict[str, Any],
         out["method"] = ("grouped permutation importance over the lookback window "
                          "(increase in daylight MAE); attention weights are not "
                          "treated as explanations")
+        # The ranking must be known before the regime and dependence analyses
+        # select which variables to look at, so it is resolved here rather than
+        # at the end of the function.
+        total = float(permutation["mean_mae_increase_w"].clip(lower=0).sum()) or 1.0
+        out["importance"] = permutation.assign(
+            relative_importance=permutation["mean_mae_increase_w"].clip(lower=0) / total)
+        out["top_features"] = list(out["importance"]["feature"].head(10))
         out["regime_importance"] = permutation_importance_by_regime(
             predict_fn, X, y_true, selected, lookback, np.asarray(sequence.regime)[
                 evaluation_index], n_repeats=max(3, int(n_permutation_repeats) // 2),
@@ -244,10 +255,16 @@ def explain_model(config: Config, model_name: str, state: dict[str, Any],
             seed=seed)
 
     importance = out["importance"].copy()
-    total = float(importance["relative_importance"].sum()) or 1.0
-    importance["relative_importance"] = importance["relative_importance"] / total
+    if "relative_importance" not in importance.columns:
+        # The SHAP branch arrives already normalised by collapse_over_lookback;
+        # the permutation branch is normalised here. Both are expressed on the
+        # same scale so the two methods can be compared directly.
+        total = float(pd.to_numeric(importance[importance.columns[-1]],
+                                    errors="coerce").abs().sum()) or 1.0
+        importance["relative_importance"] = (pd.to_numeric(
+            importance[importance.columns[-1]], errors="coerce").abs() / total)
     out["importance"] = importance.reset_index(drop=True)
-    out["top_features"] = list(importance["feature"].head(10))
+    out["top_features"] = list(out["importance"]["feature"].head(10))
     return out
 
 

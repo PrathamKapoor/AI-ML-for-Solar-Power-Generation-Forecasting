@@ -23,6 +23,13 @@ class _NumpyEncoder(json.JSONEncoder):
             return bool(o)
         if isinstance(o, np.ndarray):
             return o.tolist()
+        if isinstance(o, pd.DataFrame):
+            # A frame inside a report is written as its records, so a stage cannot
+            # fail at the final serialisation after every result is already
+            # computed. The full table is always written to its own CSV as well.
+            return json.loads(o.to_json(orient="records", date_format="iso"))
+        if isinstance(o, pd.Series):
+            return o.where(pd.notna(o), None).to_dict()
         if isinstance(o, (pd.Timestamp, pd.Timedelta)):
             return str(o)
         if isinstance(o, Path):

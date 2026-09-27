@@ -1,10 +1,11 @@
 {
-  "n_experiments": 78,
+  "n_experiments": 103,
   "groups": [
     "A_baselines",
     "B_ml_vs_dl",
     "C_horizons",
     "E_feature_ablation",
+    "M_multiseed",
     "N_feature_regimes"
   ],
   "models": [

@@ -1,0 +1,13 @@
+experiment_id,model,feature_spec,n_features,rmse,mae,nrmse_capacity,r2,smape,rmse_vs_full_pct,mae_vs_full_pct,nrmse_capacity_vs_full_pct,skill_vs_persistence_rmse,seed,train_seconds
+E_feature_ablation__xgboost__1h,xgboost,full,33,6835.32,4505.29,0.124279,0.774016,48.575,0,0,0,0.252292,42,619.12
+E_feature_ablation__xgboost__1h__minimal,xgboost,minimal,4,6708.82,4319.71,0.121979,0.782303,49.1149,-1.85065,-4.11912,-1.85065,0.26613,42,12.7139
+E_feature_ablation__xgboost__1h__no_calendar,xgboost,no_calendar,29,6854.86,4586.37,0.124634,0.772722,50.1712,0.285898,1.79979,0.285898,0.250155,42,52.8583
+E_feature_ablation__xgboost__1h__no_pv_history,xgboost,no_pv_history,18,8437.45,5955.6,0.153408,0.655663,58.0919,23.439,32.1914,23.439,0.0770371,42,32.668
+E_feature_ablation__xgboost__1h__no_solar_geometry,xgboost,no_solar_geometry,31,6788.44,4479.38,0.123426,0.777104,49.0977,-0.68578,-0.574991,-0.68578,0.25742,42,101.76
+E_feature_ablation__xgboost__1h__no_weather,xgboost,no_weather,21,6512.4,4076.11,0.118407,0.794863,44.4967,-4.72425,-9.52601,-4.72425,0.287616,42,87.9964
+E_feature_ablation__lstm__1h,lstm,full,33,9263.78,6745.83,0.168432,0.584915,65.7897,0,0,0,-0.0133541,42,821.389
+E_feature_ablation__lstm__1h__minimal,lstm,minimal,4,8724.45,6073.16,0.158626,0.63184,62.0897,-5.82194,-9.97167,-5.82194,0.0456428,42,376.259
+E_feature_ablation__lstm__1h__no_calendar,lstm,no_calendar,29,9193.12,6646.45,0.167148,0.591222,67.9724,-0.762705,-1.47323,-0.762705,-0.00562517,42,320.749
+E_feature_ablation__lstm__1h__no_pv_history,lstm,no_pv_history,18,8806.82,6078.43,0.160124,0.624855,56.5704,-4.93277,-9.89358,-4.93277,0.0366323,42,1076.59
+E_feature_ablation__lstm__1h__no_solar_geometry,lstm,no_solar_geometry,31,9177.92,6599.48,0.166871,0.592573,67.908,-0.926798,-2.16956,-0.926798,-0.00396232,42,552.616
+E_feature_ablation__lstm__1h__no_weather,lstm,no_weather,21,9658.07,6861.36,0.175601,0.548828,70.1922,4.25628,1.71255,4.25628,-0.0564853,42,414.451

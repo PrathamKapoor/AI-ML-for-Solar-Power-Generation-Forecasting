@@ -1,0 +1,83 @@
+{
+  "xgboost": {
+    "model": "xgboost",
+    "model_kind": "sklearn",
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "lookback_steps": 24,
+    "n_features": 33,
+    "n_evaluation_samples": 4000,
+    "scope": "daylight test windows",
+    "baseline_metrics": {
+      "mae": 15384.50223768564,
+      "rmse": 20699.216175156012,
+      "mse": 428457550.26584023,
+      "smape": 199.98977507614887,
+      "r2": -1.2338837548904094,
+      "bias": -15384.50223768564,
+      "peak_error": 49736.38491368294,
+      "n": 4000.0,
+      "nrmse_capacity": NaN,
+      "nrmse_mean": 1.3454153649378753
+    },
+    "shap": {
+      "method": "SHAP TreeExplainer, mean |shap|, tree_path_dependent",
+      "n_samples": 1000,
+      "n_background": 0
+    },
+    "method": "SHAP TreeExplainer (mean |shap|), collapsed over the lookback",
+    "top_features": [
+      "ghi",
+      "temperature",
+      "relative_humidity",
+      "wind_speed",
+      "solar_elevation",
+      "sin_solar_elevation",
+      "hour_sin",
+      "hour_cos",
+      "doy_sin",
+      "doy_cos"
+    ],
+    "figure": "fig10_importance_xgboost.png"
+  },
+  "attention_lstm": {
+    "model": "attention_lstm",
+    "model_kind": "torch",
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "lookback_steps": 24,
+    "n_features": 33,
+    "n_evaluation_samples": 4000,
+    "scope": "daylight test windows",
+    "baseline_metrics": {
+      "mae": 5097.1959763128525,
+      "rmse": 7468.7435310989085,
+      "mse": 55782129.93333179,
+      "smape": 54.6514283976576,
+      "r2": 0.7091642012284762,
+      "bias": 1565.128639245446,
+      "peak_error": 35394.8017890625,
+      "n": 4000.0,
+      "nrmse_capacity": NaN,
+      "nrmse_mean": 0.48545617469232966
+    },
+    "permutation": {
+      "n_repeats": 5,
+      "baseline_mae_w": 5097.1959763128525
+    },
+    "method": "grouped permutation importance over the lookback window (increase in daylight MAE); attention weights are not treated as explanations",
+    "top_features": [
+      "pv_power_w_lag_0",
+      "pv_power_w_lag_1",
+      "pv_power_w_lag_2",
+      "pv_power_w_lag_8",
+      "pv_rolling_mean_4",
+      "pv_rolling_mean_24",
+      "pv_rolling_mean_12",
+      "pv_power_w_lag_4",
+      "pv_power_w_lag_12",
+      "ghi"
+    ],
+    "figure": "fig10_importance_attention_lstm.png"
+  }
+}

@@ -212,7 +212,10 @@ def build(registry: pd.DataFrame, stratified: pd.DataFrame | None = None,
           coverage: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Assemble the canonical matrix. Returns ``(matrix, multiseed_summary)``."""
     per_seed, seed_summary = multiseed_summary(registry)
-    frames = [from_registry(registry), from_stratified(stratified or _empty()),
+    # `stratified or _empty()` would raise, because a DataFrame's truth value is
+    # ambiguous. An explicit None check is the only correct form here.
+    strata = _empty() if stratified is None else stratified
+    frames = [from_registry(registry), from_stratified(strata),
               per_seed, from_cross_site(cross_site), from_uncertainty(coverage)]
     frames = [f for f in frames if not f.empty]
     if not frames:

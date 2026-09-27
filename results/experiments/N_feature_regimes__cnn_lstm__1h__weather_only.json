@@ -115,7 +115,7 @@
       "best_epoch": 19,
       "best_val_mae_w": 1837.0147528118107,
       "stopped_early": true,
-      "train_seconds": 621.864,
+      "train_seconds": 158.875,
       "n_parameters": 59185,
       "device": "cpu",
       "config": {
@@ -132,14 +132,14 @@
       }
     },
     "cost": {
-      "train_seconds": 621.8644203000003,
-      "inference_ms_per_window": 0.07705303207771266,
+      "train_seconds": 158.87505740000051,
+      "inference_ms_per_window": 0.02710263646483643,
       "n_parameters": 59185
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T21:39:03+00:00",
+      "timestamp_utc": "2026-09-26T23:31:03+00:00",
       "seed": 42,
-      "git_revision": "94ac682",
+      "git_revision": "c4d8931",
       "platform": {
         "python": "3.13.14",
         "implementation": "CPython",
@@ -198,7 +198,7 @@
         "Partly cloudy": 0.136376
       }
     },
-    "wall_seconds_including_setup": 626.3843831999984
+    "wall_seconds_including_setup": 160.91471209999872
   },
   "training_history": [
     {

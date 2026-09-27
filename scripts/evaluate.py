@@ -370,6 +370,7 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
     rated_w = state["station"].get("rated_w")
 
     results: dict[str, Any] = {}
+    importance_frames: dict[str, pd.DataFrame] = {}
     skipped: list[str] = []
     made: list[str] = []
     for model in models:
@@ -383,6 +384,10 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
             print(f"    skipped {model}: {exc}")
             continue
         importance = entry["importance"]
+        # The frame is kept in a parallel dictionary rather than in ``results``,
+        # because ``results`` is what the JSON summary is built from and a frame
+        # there would be both redundant and a serialisation hazard.
+        importance_frames[model] = importance
         value_column = "importance" if "importance" in importance.columns else "mean_mae_increase_w"
         write_table(importance, tables_dir(config) / f"importance_{model}.csv")
         try:
@@ -439,10 +444,22 @@ def stage_explainability(config: Config, report: dict[str, Any]) -> dict[str, An
         print(f"  explainability: {model} done")
 
     if results:
-        combined = analysis_mod.importance_frame(results)
+        combined = analysis_mod.importance_frame(
+            {model: {"importance": frame} for model, frame in importance_frames.items()})
         if not combined.empty:
             write_table(combined, tables_dir(config) / "feature_importance.csv")
-        write_json(results, metrics_dir(config) / "explainability_summary.json")
+        # DataFrames are written as their own CSV tables above; the JSON summary
+        # keeps only the scalar findings, because a frame is not serialisable and
+        # would otherwise abort the stage after it has already succeeded.
+        scalar_summary = {model: {k: v for k, v in entry.items()
+                                  if not hasattr(v, "to_dict") or isinstance(v, str)}
+                          for model, entry in results.items()}
+        for entry in scalar_summary.values():
+            for key in ("baseline_metrics", "shap", "permutation"):
+                if isinstance(entry.get(key), dict):
+                    entry[key] = {k: v for k, v in entry[key].items()
+                                  if not isinstance(v, (dict, list))}
+        write_json(scalar_summary, metrics_dir(config) / "explainability_summary.json")
 
     report["explainability"] = {
         "status": "ok" if results else "nothing_computed",
@@ -791,3 +808,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+

@@ -1,0 +1,51 @@
+{
+  "rows": 436,
+  "executed_rows": 436,
+  "research_questions_covered": [
+    "RQ1",
+    "RQ2",
+    "RQ3",
+    "RQ4",
+    "RQ6",
+    "RQ7"
+  ],
+  "experiments_covered": [
+    "A_baselines",
+    "B_ml_vs_dl",
+    "C_horizons",
+    "D_regimes/G_seasonal",
+    "E_feature_ablation",
+    "J_cross_site",
+    "K_uncertainty",
+    "M_multiseed",
+    "N_feature_regimes"
+  ],
+  "horizons_covered": [
+    "15min",
+    "1h",
+    "24h",
+    "6h"
+  ],
+  "models_covered": [
+    "attention_lstm",
+    "cnn_lstm",
+    "gradient_boosting",
+    "gru",
+    "linear_regression",
+    "lstm",
+    "persistence",
+    "random_forest",
+    "smart_persistence",
+    "transformer",
+    "xgboost"
+  ],
+  "sites_covered": [
+    "LSK North",
+    "SQ1",
+    "SQ2",
+    "SQ3",
+    "SQ4",
+    "UG Hall6",
+    "UG Hall7"
+  ]
+}

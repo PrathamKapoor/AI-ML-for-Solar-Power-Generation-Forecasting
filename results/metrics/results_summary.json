@@ -1,10 +1,12 @@
 {
-  "n_experiments": 32,
+  "n_experiments": 103,
   "groups": [
     "A_baselines",
     "B_ml_vs_dl",
     "C_horizons",
-    "E_feature_ablation"
+    "E_feature_ablation",
+    "M_multiseed",
+    "N_feature_regimes"
   ],
   "models": [
     "attention_lstm",
@@ -26,7 +28,16 @@
     "6h"
   ],
   "feature_specs": [
-    "full"
+    "full",
+    "minimal",
+    "no_calendar",
+    "no_pv_history",
+    "no_solar_geometry",
+    "no_weather",
+    "pv_only",
+    "pv_weather",
+    "pv_weather_solar",
+    "weather_only"
   ],
   "best_nrmse_run": {
     "experiment_id": "C_horizons__gradient_boosting__15min",

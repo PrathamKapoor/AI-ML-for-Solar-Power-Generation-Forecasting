@@ -151,13 +151,17 @@ experiments:
   # tree and sequence models, so the two method families can be compared
   # directly. Performed by scripts/evaluate.py.
   H_explainability:
-    description: "SHAP and permutation importance for the headline model set."
+    description: "SHAP for the tree ensemble, permutation importance for an attention-recurrent model."
     analysis_only: true
     reuse_predictions_from: B_ml_vs_dl
-    models: [xgboost, lstm, attention_lstm, transformer]
+    # One model from each access pattern is enough to establish the ranking and to
+    # compare the two methods on the same split. Adding the LSTM and Transformer
+    # here would double the cost of the stage for the same conclusion, so the
+    # scope is deliberately one tree model and one neural model.
+    models: [xgboost, attention_lstm]
     horizons: ["1h"]
-    n_permutation_repeats: 10
-    n_shap_samples: 2000
+    n_permutation_repeats: 5
+    n_shap_samples: 1000
 
   # ---------------------------------------------------------------------------
   # Experiment I - Inference and computational cost
@@ -271,3 +275,4 @@ experiments:
     conformal_alphas: [0.1, 0.2]
     n_boot_samples_daylight: 4000
     residual_lags_for_acf: 96
+

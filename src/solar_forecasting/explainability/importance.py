@@ -48,6 +48,9 @@ def collapse_over_lookback(importance: np.ndarray, feature_columns: Sequence[str
     else:
         collapsed = values
     series = pd.Series(collapsed, index=list(feature_columns)[:len(collapsed)])
+    # The index is named so that ``reset_index()`` produces a column called
+    # "feature", which is the column every importance table and figure expects.
+    series.index.name = "feature"
     total = float(series.abs().sum()) or 1.0
     return series.abs() / total
 
@@ -67,9 +70,12 @@ def shap_importance(predictor, X: np.ndarray, feature_columns: Sequence[str],
     idx = rng.choice(len(X), size=n, replace=False) if n < len(X) else np.arange(len(X))
     subset = X[idx]
     flat = flatten_windows(subset) if subset.ndim == 3 else subset
-    background = flat[: min(256, len(flat))]
 
-    explainer = shap.TreeExplainer(predictor, data=background, feature_perturbation="tree_path_dependent")
+    # No background dataset is passed. Supplying ``data=`` switches SHAP to the
+    # interventional masker, which does not support gradient-boosted trees
+    # containing categorical splits; ``tree_path_dependent`` is the supported mode
+    # for this estimator and needs no background.
+    explainer = shap.TreeExplainer(predictor, feature_perturbation="tree_path_dependent")
     values = explainer.shap_values(flat)
     if isinstance(values, list):
         values = values[-1]
@@ -78,9 +84,9 @@ def shap_importance(predictor, X: np.ndarray, feature_columns: Sequence[str],
         values = values[:, :, 0]
     absolute = np.abs(values).mean(axis=0)
     return {
-        "method": "SHAP TreeExplainer, mean |shap|",
+        "method": "SHAP TreeExplainer, mean |shap|, tree_path_dependent",
         "n_samples": int(n),
-        "n_background": int(len(background)),
+        "n_background": 0,
         "importance": collapse_over_lookback(absolute, feature_columns, lookback),
     }
 
