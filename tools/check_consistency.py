@@ -19,7 +19,9 @@ What it checks:
 * every persisted status claim in the README experiment table against the
   experiment registry;
 * the count of recorded runs against the registry row count;
-* the literature paper count against the workbook.
+* the literature paper count against the workbook;
+* the test count stated in the prose against what pytest collects;
+* prose that still describes a completed experiment as outstanding.
 """
 
 from __future__ import annotations
@@ -179,11 +181,24 @@ def check_literature_count() -> None:
 def check_stale_status_phrases() -> None:
     """No prose may still claim a completed experiment is outstanding."""
     global checks
+    # The phrases are ordered from the most direct claim of an unfinished
+    # experiment to the loosest euphemism. "pending a run" and "unimplemented" were
+    # added after a hand-maintained figure index and an outline were found still
+    # describing explainability and cross-site validation as outstanding months
+    # after both had been executed: the earlier list did not contain them, and the
+    # documents that carried them were not in the scanned set.
     stale = ["not yet run", "not_run", "has not been run", "is not implemented",
-             "partially executed", "not implemented"]
+             "partially executed", "not implemented", "pending a run",
+             "unimplemented", "marked pending", "not executed", "to be run",
+             "awaiting a run", "has not been executed"]
     targets = [README, ROOT / "docs" / "methodology.md", ROOT / "docs" / "experiments.md",
+               ROOT / "docs" / "dataset.md", ROOT / "docs" / "research_gaps.md",
+               ROOT / "docs" / "reproducibility.md",
                ROOT / "paper" / "results.md", ROOT / "paper" / "conclusion.md",
-               ROOT / "paper" / "discussion.md", ROOT / "docs" / "reproducibility.md"]
+               ROOT / "paper" / "discussion.md", ROOT / "paper" / "outline.md",
+               ROOT / "paper" / "manuscript.md", ROOT / "paper" / "literature_review.md",
+               ROOT / "paper" / "figures" / "README.md",
+               ROOT / "results" / "tables" / "RESULTS.md"]
     # Phrases that are legitimate when they describe a *documented limitation* are
     # still reported, so a human decides; a hard failure is reserved for the
     # README, which is the document a reader trusts most.
@@ -201,6 +216,43 @@ def check_stale_status_phrases() -> None:
                     print(f"WARN  {message}")
 
 
+def check_test_count_claims() -> None:
+    """The stated test count must equal the number of tests pytest collects.
+
+    The count was written into three documents and went stale in all three
+    (108, then 146, against an actual 174), because a hand-written number has
+    nothing to keep it in step with the suite. It is checked here instead, so
+    adding a test without updating the prose is a failure rather than a drift.
+    """
+    global checks
+    import subprocess
+
+    try:
+        out = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q"],
+                             cwd=str(ROOT), capture_output=True, text=True,
+                             timeout=600, check=False)
+    except Exception as exc:  # noqa: BLE001
+        print(f"WARN  could not collect tests to check the stated count: {exc}")
+        return
+    match = re.search(r"(\d+)\s+tests?\s+collected", out.stdout)
+    if not match:
+        print("WARN  pytest did not report a collected-test count")
+        return
+    collected = int(match.group(1))
+
+    pattern = re.compile(r"(\d+)\s+tests\b")
+    for relative in ("README.md", "docs/reproducibility.md", "paper/conclusion.md"):
+        path = ROOT / relative
+        if not path.exists():
+            continue
+        for number in pattern.findall(path.read_text(encoding="utf-8")):
+            checks += 1
+            if int(number) == collected:
+                ok(f"{relative}: stated test count {number} matches pytest")
+            else:
+                fail(f"{relative} states {number} tests but pytest collects {collected}")
+
+
 def main() -> int:
     verbose = "--verbose" in sys.argv
     print("consistency check: prose against computed results\n")
@@ -208,6 +260,7 @@ def main() -> int:
     check_status_claims()
     check_literature_count()
     check_stale_status_phrases()
+    check_test_count_claims()
     print(f"\n{checks} checks, {len(failures)} failures")
     return 1 if failures else 0
 
