@@ -3,8 +3,11 @@
 This is the experiment that separates "these models suit this array" from "these
 models suit PV forecasting", and it is the one the previous pass left out.
 
-Four protocols, all scored with capacity-normalised metrics so that sites of
-different size are comparable:
+Three protocol keys, covering the four situations in the design and scored with
+capacity-normalised metrics, so that sites of different size are comparable. The
+fourth situation -- train on several sites pooled, hold one out, test on the
+held-out site -- is the per-site case of ``leave_one_site_out`` rather than a key
+of its own, so it is not counted twice:
 
 ``within_site``
     Train and test inside one site. This is the reference every transfer number
@@ -13,13 +16,12 @@ different size are comparable:
 ``cross_site``
     Train on site A, test on site B. B is never seen during fitting, feature
     scaling, early stopping or hyperparameter selection.
-``multi_site``
+``leave_one_site_out``
     Train on several sites pooled, hold one out, test on the held-out site.
     This is the deployment scenario that matters in practice, where an operator
-    has a fleet and wants a model that works on a new array.
-``leave_one_site_out``
-    ``multi_site`` repeated for every site in the panel, giving one transfer
-    number per site instead of a single number.
+    has a fleet and wants a model that works on a new array, and it is repeated
+    for every site in the panel so the result is one transfer number per site
+    rather than a single number.
 
 Leakage controls, each of which is asserted rather than assumed:
 
@@ -40,6 +42,7 @@ Leakage controls, each of which is asserted rather than assumed:
 from __future__ import annotations
 
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Sequence
 
@@ -140,8 +143,12 @@ def _train(config: Config, model_name: str, train_sites: Sequence[SiteFrame],
         settings = (config.get("classical", {}) or {}).get(model_name, {})
         estimator = model_registry.build_model(model_name, n_features=n_features,
                                                random_state=seed, **settings)
+        # Timed on the same clock as the neural branch. A fitted tree ensemble has
+        # no single parameter count, so ``n_parameters`` stays None rather than 0:
+        # zero is a claim about the model, None is a statement about the schema.
+        start = time.perf_counter()
         estimator.fit(flatten_windows(train_seq.X), train_seq.y)
-        return estimator, info["kind"], None, 0.0, 0
+        return estimator, info["kind"], None, time.perf_counter() - start, None
 
     if info["kind"] == "torch":
         from ..training.experiment import _build
@@ -232,7 +239,8 @@ def run_transfer(config: Config, train_sites: Sequence[SiteFrame],
         "test_site": test_site.station,
         "model": model_name, "horizon": horizon, "seed": seed,
         "rated_w": test_site.rated_w,
-        "train_seconds": float(train_seconds), "n_parameters": int(n_parameters),
+        "train_seconds": float(train_seconds),
+        "n_parameters": int(n_parameters) if n_parameters is not None else None,
         "n_features": len(feature_columns),
     })
     return {"scores": scores, "predictions": pd.DataFrame({
@@ -260,6 +268,38 @@ def json_columns(config: Config) -> list[str]:
     from ..features.builder import feature_columns as _columns
     return _columns(pd.read_parquet(
         config.project_root_for("data") / "processed" / "featured_primary_station.parquet"))
+
+
+def _provenance(config: Config, models: Sequence[str], horizons: Sequence[str],
+                seeds: Sequence[int]) -> dict[str, Any]:
+    """Provenance for the cross-site report.
+
+    The transfer protocols are the evidence behind the generalisation question,
+    so their numbers have to be as traceable as the main result set: the archive
+    checksum for the input bytes, the configuration fingerprint for the settings,
+    and the git revision for the code that produced them.
+    """
+    from ..training.experiment import _source_archive, _source_checksum
+    from ..utils.seeding import run_metadata
+
+    environment = run_metadata()
+    return {
+        "recorded_at_utc": environment.get("timestamp_utc"),
+        "source_archive": _source_archive(config),
+        "source_archive_sha256": _source_checksum(config),
+        "dataset": config.section("dataset")["name"],
+        "primary_station": config.section("dataset")["primary_station"],
+        "holdout_stations": list(config.section("dataset").get("holdout_stations", [])),
+        "config_fingerprint": config.fingerprint(),
+        "git_revision": environment.get("git_revision"),
+        "models": list(models), "horizons": list(horizons), "seeds": list(seeds),
+        "experiment_group": "J_cross_site",
+        "note": ("Cross-site runs are reported in results/metrics/cross_site_report.json "
+                 "and flattened to results/tables/cross_site_comparison.csv. Unlike the "
+                 "main result set they are pooled across protocols into one record "
+                 "rather than written as one file per run, because a single fit serves "
+                 "the within-site, cross-site and leave-one-site-out protocols at once."),
+    }
 
 
 def run_cross_site(config: Config, models: Sequence[str], horizons: Sequence[str],
@@ -319,6 +359,7 @@ def run_cross_site(config: Config, models: Sequence[str], horizons: Sequence[str
                     loso.append({"protocol": "leave_one_site_out", **outcome["scores"]})
 
     report = {
+        "provenance": _provenance(config, models, horizons, seeds),
         "panel": {name: {"rated_w": site.rated_w, **site.coverage, **site.sizes()}
                   for name, site in sites.items()},
         "train_site": train_name,
