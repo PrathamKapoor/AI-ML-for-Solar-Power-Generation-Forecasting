@@ -1,0 +1,461 @@
+{
+  "spec": {
+    "experiment_id": "M_multiseed__lstm__1h__seed456",
+    "model": "lstm",
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "features": "full",
+    "seed": 456,
+    "ablation": null,
+    "concurrent_weather": false,
+    "label": "M_multiseed / lstm / 1h / full / seed 456",
+    "notes": "Neural models repeated over five seeds at the default horizon."
+  },
+  "metrics_daylight": {
+    "mae": 6480.994425401962,
+    "rmse": 9363.3848784375,
+    "mse": 87672976.38175203,
+    "smape": 66.5248759927215,
+    "r2": 0.5759405153955099,
+    "bias": -1324.8804450323387,
+    "peak_error": 44390.94091796875,
+    "n": 17679.0,
+    "nrmse_capacity": 0.17024336142613636,
+    "nrmse_mean": 0.6011763878855643,
+    "skill_vs_persistence_rmse": -0.024249752692855786,
+    "skill_vs_persistence_mae": 0.020388045534344812,
+    "persistence_rmse": 9141.700892599894,
+    "persistence_mae": 6615.879273275225,
+    "skill_vs_smart_persistence_rmse": -0.17737040754970623,
+    "skill_vs_smart_persistence_mae": -0.30005531082399983,
+    "smart_persistence_rmse": 7952.794480306486,
+    "smart_persistence_mae": 4985.168224338227
+  },
+  "metrics_all_steps": {
+    "mae": 3383.2957174867047,
+    "rmse": 6659.432768764207,
+    "mse": 44348044.80169051,
+    "smape": 132.29531498058677,
+    "r2": 0.7312820864672358,
+    "bias": -678.188436078011,
+    "peak_error": 44390.94091796875,
+    "n": 35009.0,
+    "nrmse_capacity": 0.12108059579571286,
+    "nrmse_mean": 0.8466405589038776,
+    "skill_vs_persistence_rmse": -0.024289419556196457,
+    "skill_vs_persistence_mae": -0.0031555118124122483,
+    "persistence_rmse": 6501.514749268427,
+    "persistence_mae": 3372.6532702532495,
+    "skill_vs_smart_persistence_rmse": -0.17817324864243989,
+    "skill_vs_smart_persistence_mae": -0.338552923704895,
+    "smart_persistence_rmse": 5652.3374439519785,
+    "smart_persistence_mae": 2527.577100292977
+  },
+  "metadata": {
+    "model_family": "recurrent",
+    "model_kind": "torch",
+    "model_description": "Single-layer LSTM, the field's reference architecture.",
+    "feature_spec": "full",
+    "n_features": 33,
+    "feature_columns": [
+      "ghi",
+      "temperature",
+      "relative_humidity",
+      "wind_speed",
+      "solar_elevation",
+      "sin_solar_elevation",
+      "hour_sin",
+      "hour_cos",
+      "doy_sin",
+      "doy_cos",
+      "pv_power_w_lag_0",
+      "pv_power_w_lag_1",
+      "pv_power_w_lag_2",
+      "pv_power_w_lag_4",
+      "pv_power_w_lag_8",
+      "pv_power_w_lag_12",
+      "pv_power_w_lag_24",
+      "pv_power_w_lag_48",
+      "pv_power_w_lag_96",
+      "pv_rolling_mean_4",
+      "pv_rolling_std_4",
+      "pv_rolling_mean_12",
+      "pv_rolling_std_12",
+      "pv_rolling_mean_24",
+      "pv_rolling_std_24",
+      "ghi_rollmean_4",
+      "ghi_rollmean_24",
+      "temperature_rollmean_4",
+      "temperature_rollmean_24",
+      "ghi_delta_1",
+      "ghi_slope_1",
+      "ghi_delta_4",
+      "ghi_slope_4"
+    ],
+    "lookback_steps": 24,
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "seed": 456,
+    "split_sizes": {
+      "train": 43745,
+      "val": 11681,
+      "test": 35009
+    },
+    "split_date_ranges": {
+      "train": [
+        "2021-06-02 05:45:00",
+        "2022-08-31 21:45:00"
+      ],
+      "val": [
+        "2022-09-01 05:45:00",
+        "2022-12-31 21:45:00"
+      ],
+      "test": [
+        "2023-01-01 05:45:00",
+        "2023-12-31 21:45:00"
+      ]
+    },
+    "target_split_dates": {
+      "train": [
+        "2021-06-02 06:45:00",
+        "2022-08-31 22:45:00"
+      ],
+      "val": [
+        "2022-09-01 06:45:00",
+        "2022-12-31 22:45:00"
+      ],
+      "test": [
+        "2023-01-01 06:45:00",
+        "2023-12-31 22:45:00"
+      ]
+    },
+    "concurrent_weather": false,
+    "information_set": "weather observed at or before the forecast origin (strict historical setting)",
+    "training": {
+      "epochs_run": 39,
+      "best_epoch": 24,
+      "best_val_mae_w": 2771.461541089036,
+      "stopped_early": true,
+      "train_seconds": 274.995,
+      "n_parameters": 50401,
+      "device": "cpu",
+      "config": {
+        "epochs": 70,
+        "batch_size": 256,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "patience": 14,
+        "min_delta": 0.0,
+        "grad_clip": 1.0,
+        "device": "cpu",
+        "verbose": false,
+        "shuffle": true
+      }
+    },
+    "cost": {
+      "train_seconds": 274.99498859999585,
+      "inference_ms_per_window": 0.039497337827304475,
+      "n_parameters": 50401
+    },
+    "environment": {
+      "timestamp_utc": "2026-09-27T01:57:38+00:00",
+      "seed": 456,
+      "git_revision": "c53fd4f",
+      "platform": {
+        "python": "3.13.14",
+        "implementation": "CPython",
+        "system": "Windows",
+        "release": "11",
+        "machine": "AMD64",
+        "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD"
+      },
+      "torch": {
+        "version": "2.13.0+cpu",
+        "cuda_available": false,
+        "device_count": 0,
+        "device_name": "cpu",
+        "num_threads": 8
+      },
+      "packages": {
+        "numpy": "2.5.2",
+        "pandas": "2.3.3",
+        "scipy": "1.17.1",
+        "scikit-learn": "not installed",
+        "torch": "2.13.0+cpu",
+        "xgboost": "3.4.1",
+        "shap": "0.52.0",
+        "matplotlib": "3.10.3",
+        "seaborn": "0.13.2",
+        "pvlib": "0.15.2",
+        "statsmodels": "not installed",
+        "openpyxl": "3.1.5",
+        "pyyaml": "not installed",
+        "requests": "2.33.1",
+        "tqdm": "4.70.0",
+        "joblib": "1.5.3"
+      }
+    },
+    "dataset": {
+      "name": "hong_kong_rooftop_pv_60_stations",
+      "primary_station": "LSK North",
+      "rated_w": 55000.0
+    },
+    "experiment_label": "M_multiseed / lstm / 1h / full / seed 456",
+    "notes": "Neural models repeated over five seeds at the default horizon.",
+    "ablation": null,
+    "regime_distribution_test": {
+      "scope": "daylight",
+      "n": 17679,
+      "counts": {
+        "Cloudy": 6012,
+        "Clear": 5824,
+        "High-variability": 3432,
+        "Partly cloudy": 2411
+      },
+      "shares": {
+        "Cloudy": 0.340064,
+        "Clear": 0.32943,
+        "High-variability": 0.194129,
+        "Partly cloudy": 0.136376
+      }
+    },
+    "wall_seconds_including_setup": 277.95075489999726
+  },
+  "training_history": [
+    {
+      "epoch": 0,
+      "train_loss_scaled": 99.89870422189696,
+      "train_mae_w": 5395.244269366053,
+      "val_mae_w": 3357.9279412987785
+    },
+    {
+      "epoch": 1,
+      "train_loss_scaled": 84.3971774543238,
+      "train_mae_w": 4558.050993331131,
+      "val_mae_w": 3364.589282434684
+    },
+    {
+      "epoch": 2,
+      "train_loss_scaled": 81.73087092972638,
+      "train_mae_w": 4414.051377828067,
+      "val_mae_w": 3121.600621554256
+    },
+    {
+      "epoch": 3,
+      "train_loss_scaled": 82.65354282099601,
+      "train_mae_w": 4463.882256743376,
+      "val_mae_w": 3129.2391149116056
+    },
+    {
+      "epoch": 4,
+      "train_loss_scaled": 84.3336407779253,
+      "train_mae_w": 4554.619558540225,
+      "val_mae_w": 3337.0571780138716
+    },
+    {
+      "epoch": 5,
+      "train_loss_scaled": 83.2421090540133,
+      "train_mae_w": 4495.669041372489,
+      "val_mae_w": 3181.2740079851146
+    },
+    {
+      "epoch": 6,
+      "train_loss_scaled": 81.23804159750019,
+      "train_mae_w": 4387.435070327593,
+      "val_mae_w": 2987.8678338638624
+    },
+    {
+      "epoch": 7,
+      "train_loss_scaled": 79.6181376912789,
+      "train_mae_w": 4299.948677635742,
+      "val_mae_w": 3137.5744647094757
+    },
+    {
+      "epoch": 8,
+      "train_loss_scaled": 82.33028195075124,
+      "train_mae_w": 4446.423858546094,
+      "val_mae_w": 3624.296909334875
+    },
+    {
+      "epoch": 9,
+      "train_loss_scaled": 83.32125786643977,
+      "train_mae_w": 4499.94364313031,
+      "val_mae_w": 2892.8113204404904
+    },
+    {
+      "epoch": 10,
+      "train_loss_scaled": 78.46724965767554,
+      "train_mae_w": 4237.792495367468,
+      "val_mae_w": 2935.993669072445
+    },
+    {
+      "epoch": 11,
+      "train_loss_scaled": 77.99940281461554,
+      "train_mae_w": 4212.525420898177,
+      "val_mae_w": 2855.2581852597777
+    },
+    {
+      "epoch": 12,
+      "train_loss_scaled": 78.40031258491744,
+      "train_mae_w": 4234.177414861479,
+      "val_mae_w": 2948.0735502726793
+    },
+    {
+      "epoch": 13,
+      "train_loss_scaled": 78.36625739391785,
+      "train_mae_w": 4232.338191064595,
+      "val_mae_w": 2925.185859884345
+    },
+    {
+      "epoch": 14,
+      "train_loss_scaled": 78.85825380909513,
+      "train_mae_w": 4258.909515089356,
+      "val_mae_w": 2957.6726342760626
+    },
+    {
+      "epoch": 15,
+      "train_loss_scaled": 79.04877692722438,
+      "train_mae_w": 4269.1991256431165,
+      "val_mae_w": 3186.9803677864247
+    },
+    {
+      "epoch": 16,
+      "train_loss_scaled": 78.84502521226977,
+      "train_mae_w": 4258.195076280869,
+      "val_mae_w": 2991.2543809970616
+    },
+    {
+      "epoch": 17,
+      "train_loss_scaled": 75.41567522217656,
+      "train_mae_w": 4072.9856581426366,
+      "val_mae_w": 3008.3930503153465
+    },
+    {
+      "epoch": 18,
+      "train_loss_scaled": 77.88149270066741,
+      "train_mae_w": 4206.1574317282075,
+      "val_mae_w": 3078.232766475884
+    },
+    {
+      "epoch": 19,
+      "train_loss_scaled": 79.77979046733756,
+      "train_mae_w": 4308.679083304672,
+      "val_mae_w": 3061.8506158687533
+    },
+    {
+      "epoch": 20,
+      "train_loss_scaled": 82.49907933306275,
+      "train_mae_w": 4455.540124034156,
+      "val_mae_w": 3356.0389599937325
+    },
+    {
+      "epoch": 21,
+      "train_loss_scaled": 86.19050672249487,
+      "train_mae_w": 4654.903595499975,
+      "val_mae_w": 3140.2756877702936
+    },
+    {
+      "epoch": 22,
+      "train_loss_scaled": 81.48403139961393,
+      "train_mae_w": 4400.720278384234,
+      "val_mae_w": 2946.40104802693
+    },
+    {
+      "epoch": 23,
+      "train_loss_scaled": 76.30103595580971,
+      "train_mae_w": 4120.801467783628,
+      "val_mae_w": 2928.438839813833
+    },
+    {
+      "epoch": 24,
+      "train_loss_scaled": 76.86137022208749,
+      "train_mae_w": 4151.063524359954,
+      "val_mae_w": 2771.461541089036
+    },
+    {
+      "epoch": 25,
+      "train_loss_scaled": 77.80509485591922,
+      "train_mae_w": 4202.031401893485,
+      "val_mae_w": 3030.3419295036947
+    },
+    {
+      "epoch": 26,
+      "train_loss_scaled": 83.23997342028814,
+      "train_mae_w": 4495.553701882283,
+      "val_mae_w": 3307.0750418474468
+    },
+    {
+      "epoch": 27,
+      "train_loss_scaled": 80.4565931307642,
+      "train_mae_w": 4345.231266036026,
+      "val_mae_w": 3088.218469408067
+    },
+    {
+      "epoch": 28,
+      "train_loss_scaled": 82.3984404966148,
+      "train_mae_w": 4450.104907332892,
+      "val_mae_w": 3278.5900390676206
+    },
+    {
+      "epoch": 29,
+      "train_loss_scaled": 83.12093671528916,
+      "train_mae_w": 4489.124868740831,
+      "val_mae_w": 3286.2943455845157
+    },
+    {
+      "epoch": 30,
+      "train_loss_scaled": 80.22706379510505,
+      "train_mae_w": 4332.835040854608,
+      "val_mae_w": 2950.124776974273
+    },
+    {
+      "epoch": 31,
+      "train_loss_scaled": 81.20485287416749,
+      "train_mae_w": 4385.642641979668,
+      "val_mae_w": 3234.1764116332333
+    },
+    {
+      "epoch": 32,
+      "train_loss_scaled": 81.15661058230707,
+      "train_mae_w": 4383.037213303407,
+      "val_mae_w": 2942.1878255903553
+    },
+    {
+      "epoch": 33,
+      "train_loss_scaled": 80.48134034854627,
+      "train_mae_w": 4346.567792730354,
+      "val_mae_w": 3016.6577395316554
+    },
+    {
+      "epoch": 34,
+      "train_loss_scaled": 79.404750650912,
+      "train_mae_w": 4288.424251811965,
+      "val_mae_w": 3299.218813145434
+    },
+    {
+      "epoch": 35,
+      "train_loss_scaled": 82.34799297267233,
+      "train_mae_w": 4447.380380357549,
+      "val_mae_w": 3248.7311704313674
+    },
+    {
+      "epoch": 36,
+      "train_loss_scaled": 81.20880213223006,
+      "train_mae_w": 4385.855930150884,
+      "val_mae_w": 3160.4539002774554
+    },
+    {
+      "epoch": 37,
+      "train_loss_scaled": 80.9917833046955,
+      "train_mae_w": 4374.135361854026,
+      "val_mae_w": 3172.9650092132006
+    },
+    {
+      "epoch": 38,
+      "train_loss_scaled": 80.02282796791422,
+      "train_mae_w": 4321.804845970369,
+      "val_mae_w": 3153.477265345381
+    }
+  ],
+  "feature_importance": null
+}

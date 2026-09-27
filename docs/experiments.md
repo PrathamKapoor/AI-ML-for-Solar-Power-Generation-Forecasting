@@ -1,220 +1,223 @@
-# Experimental design and status
+# Experiments
 
 The experiment matrix is declared in `configs/experiments.yaml` rather than
 hard-coded, so the set of runs is auditable in one file. This document records
-what each experiment asks, how it is implemented, and its execution status.
+what each experiment asks, how it is implemented, and **its executed status**.
+
+Status is read from the artefacts, not asserted:
+`scripts/evaluate.py` rebuilds the registry from the per-run JSON records,
+`scripts/generate_report.py` regenerates the coverage table, and
+`tools/check_consistency.py` fails the build if the documentation and the
+results disagree.
 
 ## Status summary
 
-Status is read from the registry (`results/experiments.csv`, rebuilt from the
-per-run JSON records by `scripts/evaluate.py`).
+| Group | Question | Implementation | Status | Records |
+| --- | --- | --- | --- | ---: |
+| A | How strong are the persistence references? | training runs | executed | 3 |
+| B | Classical ML vs recurrent DL vs attention | training runs | executed | 11 |
+| C | Does relative performance hold across four horizons? | training runs | **executed, complete** | 44 |
+| D | Does the ranking change across weather regimes? | analysis of B predictions | executed | — |
+| E | What is each input group worth (leave-one-out)? | training runs | executed | 12 |
+| F | What does each architectural component add? | analysis of B | executed | — |
+| G | Does performance hold across seasons? | analysis of B predictions | executed | — |
+| H | Which variables drive the forecasts? | refit + SHAP / permutation | executed | — |
+| I | What is the accuracy-per-cost profile? | assembly from the registry | executed | — |
+| J | Does a model transfer to unseen sites? | `scripts/run_cross_site.py` | executed | 60 |
+| K | Can intervals be calibrated? | split conformal on stored predictions | executed | — |
+| N | What is each information type worth alone? | training runs | executed | 25 |
+| M | How much of a neural score is initialisation? | repeated seeds | executed | 17 |
 
-| Group | Question | Implementation | Status |
-| --- | --- | --- | --- |
-| A | How strong are the persistence references? | `scripts/run_experiments.py --only A_baselines` | **executed** |
-| B | Classical ML vs recurrent DL vs attention, one protocol | `--only B_ml_vs_dl` | **executed** (11/11) |
-| C | Does relative performance hold across horizons? | `--only C_horizons [--horizons H]` | **partially executed** — see below |
-| D | Does the ranking change across weather regimes? | post-hoc on B's predictions | **executed** (`--uncertainty`-independent stage) |
-| E | Which input groups matter? | `--only E_feature_ablation` | **partially executed** — see below |
-| F | What does each architectural component add? | analysis of B (backbone vs composite) | **executed** |
-| G | Does performance hold across seasons? | post-hoc on B's predictions | **executed** |
-| H | Which variables drive the forecasts? | `scripts/evaluate.py --explainability` | **implemented, opt-in** (requires refitting) |
-| I | What is the accuracy-per-unit-cost profile? | assembled from the registry | **executed** |
-| K | Can intervals be calibrated? | `scripts/evaluate.py --uncertainty` | **executed** |
-| J | Does a model transfer to unseen sites? | — | **not implemented** |
-
-### Why C and E are partial, and what was done instead
-
-Both groups are implemented and runnable in full. The partial state is a
-**time-budget** artefact of this implementation session, not a methodological
-choice, and it is recorded here rather than hidden:
-
-* **C (horizons)** — the 1-hour horizon is complete for all eleven models (in
-  group B). The 15-minute, 6-hour and 24-hour runs were launched in parallel and
-  sixteen runs completed before the session's compute budget was reached. The
-  horizon table reads each `(model, horizon)` cell from whichever group recorded
-  it, and the `source_group` column in
-  `results/tables/horizon_comparison.csv` shows the provenance of every row.
-  Completing the matrix needs one command per horizon:
-
-  ```bash
-  python scripts/run_experiments.py --only C_horizons --horizons 15min
-  python scripts/run_experiments.py --only C_horizons --horizons 6h
-  python scripts/run_experiments.py --only C_horizons --horizons 24h
-  ```
-
-  `--horizons` exists precisely so that one long group can be split across
-  parallel processes without editing code.
-
-* **E (feature ablation)** — configured for one tree model and one recurrent
-  model across six input sets (12 runs). Fewer than twelve completed. The choice
-  of models is documented in the configuration: a tree model and a recurrent
-  model test the two structurally different ways the inputs are consumed
-  (flattened window versus ordered sequence), and retraining four models six times
-  would multiply the training budget without changing the answer to which input
-  groups matter. Attention and transformer inputs are covered by the permutation
-  importance analysis of Experiment H instead.
-
-* **H (explainability)** is opt-in because SHAP and permutation importance need a
-  fitted estimator and the repository stores no binary weights. The stage refits
-  the declared models under the recorded seed, which reproduces the Experiment-B
-  models. Until it is run, `results/metrics/evaluation_report.json` records
-  `explainability: not_run`, so "not attempted" is visibly distinct from "run and
-  found nothing".
-
-* **J (cross-site)** is declared with its holdout panel in `configs/data.yaml`
-  (`dataset.holdout_stations`) and is **not implemented**. It requires per-station
-  pipeline runs, per-station scalers and a capacity-aware scoring path, which is
-  a separate piece of work rather than a flag. RQ6's cross-site half is therefore
-  open, and the paper says so. The six holdout stations have never been used for
-  fitting or tuning, so implementing it later will not contaminate the existing
-  results.
+Total training records: **103**. Canonical result table:
+`results/tables/final_experiment_matrix.csv` (**454 rows**).
 
 ## Experiments in detail
 
 ### A — Baseline comparison (executed)
 
-*Question.* Do the two persistence references behave differently, and by how much
-does a linear fit improve on them?
+Persistence, smart persistence and linear regression at 1 h.
 
-*Runs.* `persistence`, `smart_persistence`, `linear_regression` at 1 hour.
-
-*Note.* Smart persistence is the guarded clear-sky ratio form
-`f(t+h) = y(t) · clip(GHI_clear(t+h)/max(GHI_clear(t), 20 W/m²), 0, 10)`, clipped
-to rated capacity. The three guards are each necessary: measured on this data, the
-unguarded ratio form reaches an RMSE of 142 kW against a 55 kW plant, because at
+Smart persistence is the guarded clear-sky ratio
+`f(t+h) = y(t) · clip(GHI_clear(t+h)/max(GHI_clear(t), 20 W/m²), 0, 10)`, clipped to
+rated capacity. The three guards are each necessary: measured on this data, the
+unguarded ratio reaches an RMSE of 142 kW against a 55 kW plant, because at
 sunrise and sunset the reference approaches zero while the previous reading need
-not.
+not. The reference is not a formality — it is the benchmark that four of the
+learned models fail to beat at 15 minutes.
 
 ### B — Machine learning versus deep learning (executed, headline)
 
-*Question.* Under one protocol, one split and one input set, does a recurrent or
-attention architecture beat well-tuned gradient boosting?
+All 11 models at 1 h with the full input set, on an identical split, an identical
+feature list, one seed and pinned thread counts. Every other experiment is read
+relative to this one.
 
-*Runs.* All eleven models at 1 hour with the full input set. Every other
-experiment is read relative to this one.
+### C — Forecast horizons (executed, complete: 44 runs)
 
-*Controls.* Identical split, identical feature list, identical lookback, identical
-training protocol, seed 42, thread count pinned to 1.
+All 11 models at 15 min, 1 h, 6 h and 24 h. All four horizons are exact integer
+multiples of the 15-minute working resolution, so the lookback window spans the
+same diurnal phase at every horizon and the only thing that varies is the gap
+being predicted.
 
-### C — Forecast horizons (partially executed)
+**This is the experiment that changed the study's conclusion.** At 1 h, four
+models fail to beat persistence; at 15 minutes the failure is far worse
+(LSTM skill −0.65); at 6 hours every learned model reaches skill 0.53–0.59
+because persistence itself has collapsed. A single-horizon benchmark cannot know
+whether its reference is strong.
 
-*Question.* Is relative performance consistent across horizons, and does any
-architectural advantage shrink as the horizon grows?
-
-*Design.* Every model at 15 minutes, 1 hour, 6 hours and 24 hours. All four
-horizons are exact integer multiples of the 15-minute working resolution, so the
-lookback window spans the same diurnal phase at every horizon and the only thing
-that varies is the gap being predicted.
-
-*Analysis.* `results/tables/horizon_comparison.csv` plus
-`fig07_horizon_comparison.png`: RMSE, capacity-normalised error and skill against
-the two persistence references.
+Outputs: `horizon_comparison.csv`, `fig07_horizon_comparison.png`.
 
 ### D — Weather regimes (executed)
 
-*Question.* Does the ranking of models change across weather regimes?
+Post-hoc stratification of the stored test predictions by the regime label at the
+*target* timestamp, with the persistence reference **rescored inside each
+stratum**. Stratifying a skill score without rescoring the reference in the same
+stratum would be meaningless, since a regime in which persistence is nearly
+perfect cannot hide behind a high absolute error.
 
-*Implementation.* Post-hoc stratification of the stored test predictions by the
-regime label at the **target** timestamp, with the persistence reference rescored
-inside each stratum. Stratifying a skill score without rescoring the reference in
-the same stratum would be meaningless, since a regime in which persistence is
-nearly perfect cannot hide behind a high absolute error.
+The decisive observation: absolute error is *lowest* under cloudy conditions
+(persistence nRMSE 0.104 against 0.185 in clear sky) because the signal amplitude
+is small, while skill is *also* lowest there (gradient boosting +0.024 against
++0.358). Reading the error column alone inverts the answer to the question an
+operator actually asks.
 
-*Outputs.* `weather_regime_comparison.csv`, `fig08_weather_regime_comparison.png`.
+Outputs: `weather_regime_comparison.csv`, `fig08_weather_regime_comparison.png`.
 
-### E — Feature-group ablation (partially executed)
+### E — Feature-group ablation, leave-one-out (executed, 12 runs)
 
-*Question.* Which input groups carry the signal: weather, solar geometry, PV
-history, calendar, or almost nothing?
+Each input group removed in turn, for one tree model and one recurrent model.
+Percentages are relative to the same model with the full input set.
 
-*Design.* Each group removed in turn, plus a `minimal` set (current power, GHI and
-temperature only). Percentages are reported relative to the same model with the
-full input set, so they are directly comparable between models.
+### N — Additive input regimes (executed, 25 runs)
 
-*Outputs.* `feature_ablation.csv`, `fig20_feature_ablation.png`.
+The complementary direction: a model given *only* one kind of information. Five
+regimes (PV history only, weather only, both, both plus geometry, full) × five
+models spanning both access patterns.
+
+This is where the most useful finding of the study came from, and it is one the
+leave-one-out table cannot show: **for the tree models the weather variables add
+nothing** (15 PV-history features reach nRMSE 0.119 against 0.121 for all 33),
+**while for the recurrent models they are decisive** (LSTM goes from 0.176 with PV
+history alone to 0.165 with weather, and its skill from −0.058 to +0.008). The
+value of a feature group depends on how the model reads it, which is why a single
+global importance ranking is not sufficient.
+
+Outputs: `feature_regimes.csv`, `fig23_feature_regimes.png`.
 
 ### F — Model ablation (executed)
 
-*Question.* What does each architectural component contribute?
-
-*Implementation.* Comparison of the composite architectures against the best of
-their recurrent backbones within Experiment B. The composites and the backbones
-were trained under an identical seed, split and input set, so a difference in
-accuracy is attributable to the architecture. No significance is claimed here; the
-paired test on the same rows is in the statistical tables.
-
-*Why it is not re-trained.* Re-running these five models under their own group id
-would reproduce byte-identical runs and cost about 40 minutes of CPU for no
-additional information. The configuration marks the group `analysis_only` for this
-reason.
+Composite architectures against the best of their recurrent backbones within
+Experiment B. All share a seed, a split and an input set, so a difference is
+attributable to the architecture. Not re-trained: the composites and backbones
+were already trained under an identical configuration, and the group is marked
+`analysis_only` for that reason.
 
 ### G — Seasonal generalisation (executed)
 
-*Question.* Does performance hold across seasons, and does it degrade on a test
-year that follows the training period?
+Post-hoc stratification of the stored predictions. The test period is a full
+calendar year, so each season appears exactly once and the season mix cannot be
+confounded with the split.
 
-*Implementation.* Post-hoc stratification of the stored test predictions. Because
-the test period is a full calendar year, every season appears exactly once and the
-season mix cannot be confounded with the split.
+Outputs: `seasonal_comparison.csv`, `fig09_seasonal_comparison.png`.
 
-*Outputs.* `seasonal_comparison.csv`, `fig09_seasonal_comparison.png`.
+### H — Explainability (executed)
 
-### H — Explainability (implemented, opt-in)
+* **SHAP** (`TreeExplainer`, mean |value|, `tree_path_dependent`) for XGBoost,
+  collapsed over the lookback, with a beeswarm summary and per-variable
+  dependence plots.
+* **Grouped permutation importance** for the attention-recurrent model: a variable
+  is scrambled across the whole window and the daylight MAE increase recorded.
+* **Regime-specific permutation importance**, measured inside clear, partly
+  cloudy, cloudy and high-variability steps separately. Regimes with fewer than
+  500 windows are skipped rather than summarised. The ranking genuinely changes
+  between regimes.
+* **Attention weights are not treated as explanations**, and the outputs say so.
+* Scope is one model per access pattern. Adding the LSTM and Transformer would
+  double the cost of the stage for the same conclusion.
 
-*Question.* Which variables dominate the forecast, and do tree and sequence models
-agree?
-
-*Implementation.* SHAP for XGBoost; grouped permutation importance for the neural
-models. Attention weights are deliberately not treated as explanations. Both
-methods are predictive attributions, not causal claims, and this is stated in the
-figure titles and the output JSON.
-
-*Command.* `python scripts/evaluate.py --explainability`
+Outputs: `importance_xgboost.csv`, `importance_attention_lstm.csv`,
+`importance_regime_attention_lstm.csv`, `feature_importance.csv`,
+`dependence_attention_lstm.csv`, and the corresponding figures.
 
 ### I — Computational cost (executed)
 
-*Question.* What is the accuracy-per-unit-cost profile, and which models are
-Pareto-optimal?
+Training duration, per-window inference latency and parameter count with a Pareto
+flag. Thread counts are pinned to 1 for every run, so durations are comparable
+*within* a machine; absolute values are machine-specific and the table says so.
 
-*Implementation.* Assembled from the recorded training duration, per-window
-inference latency and parameter count, with a Pareto flag. BLAS and OpenMP thread
-counts are pinned to 1 for every run so the durations are comparable *within* a
-machine; absolute values are machine-specific and only the ranking is portable.
-This is stated in the table itself.
+### J — Cross-site generalisation (executed, 60 records)
 
-*Outputs.* `computational_cost.csv`, `fig17_cost_accuracy.png`.
+Four protocols over a fixed seven-station panel, implemented in
+`src/solar_forecasting/cross_site/`. Every site is processed by the same
+pipeline, so only the target and the rated capacity differ.
+
+**The most consequential result in the study.** A model fitted at one
+installation is worse than persistence at every other installation tested: skill
+runs from −0.10 to −1.07 across the panel. Pooling six training sites
+(leave-one-site-out) repairs transfer for five of the six holdouts but not for the
+primary station itself (+0.002 for the tree models).
+
+Leakage guards, each asserted in `tests/test_cross_site.py`: scalers fitted on
+training-site rows only; early stopping never sees the held-out site; target
+scaler inversion returns true watts because standardisation is affine; nRMSE
+normalised by each site's own rated capacity; the panel fixed in configuration and
+never re-selected after seeing transfer errors.
+
+Scope limitation: the panel uses gradient boosting, XGBoost and linear regression.
+The neural models were not included, because fitting each 20 times per model is
+beyond the available compute budget. This is stated as a limitation, not hidden.
+
+Outputs: `cross_site_comparison.csv`, `fig22_cross_site_transfer.png`.
 
 ### K — Uncertainty (executed)
 
-*Question.* Can a deterministic model be given well-calibrated intervals at
-acceptable cost?
+Split conformal prediction at α ∈ {0.1, 0.2}, calibrated on the first 31 days of
+the test period.
 
-*Implementation.* Split conformal prediction, symmetric and unadapted, using the
-finite-sample `ceil((n+1)(1-α))/n` quantile of the absolute residuals.
+**The calibration trade-off, stated plainly.** A conformal interval is valid under
+exchangeability between calibration and evaluation residuals. The honest options
+were to calibrate on the validation split (requiring a refit of every model) or on
+an initial block of the test period. The second is implemented so intervals can be
+derived from stored predictions, and the consequence is that the coverage
+guarantee is *approximate*: the calibration block precedes the evaluation block,
+so under seasonal drift the two are not exchangeable. Reported coverage is
+therefore an empirical description, not a proof of validity.
 
-**The calibration choice and its cost, stated plainly.** A conformal interval is
-valid under exchangeability between calibration and evaluation residuals. The
-honest options were to calibrate on the validation split — which requires refitting
-every model and re-predicting the validation period — or to calibrate on an initial
-block of the test period. The implemented option is the second, so that intervals
-can be derived from the stored test predictions without refitting. The consequence
-is that the coverage guarantee is **approximate**: the calibration block is earlier
-in the year than the evaluation block, so under seasonal drift the two are not
-exchangeable. The reported coverage is therefore an empirical description of
-interval behaviour, not a proof of validity, and the caveat is carried in the output
-record, in the figure and here.
+Outputs: `uncertainty_coverage.csv`, `fig18_conformal_intervals.png`.
 
-*Outputs.* `uncertainty_coverage.csv`, `fig18_conformal_intervals.png`.
+### M — Multi-seed replication (executed, 17 records)
+
+Every neural model repeated across seeds on the identical split and input set:
+LSTM 5, GRU 5, attention-LSTM 4, CNN-LSTM 3. The default seed 42 is one of them and
+is already recorded under group B, so no seed is a special case.
+
+`multi_seed_results.csv` reports the mean, standard deviation, a t-based 95%
+interval and the best and worst single seed. The best-of-seeds number is never
+quoted as a performance figure.
+
+**Why three seeds at the low end.** A single transformer run costs about
+19 minutes on this hardware and the study had a bounded compute budget. Three
+seeds is the documented minimum, and it is enough for the question being asked —
+whether seed spread is large enough to change a conclusion — because the observed
+spread is 44–253 W against a 2 900 W gap between the best and worst model.
+
+Outputs: `multi_seed_results.csv`, `fig21_multiseed_spread.png`.
 
 ## Mandatory error analysis (executed)
 
-Aggregate metrics are not sufficient, so every model's daylight errors are
-stratified by regime, season, time-of-day band, generation level (as a fraction of
-rated capacity) and a ramping flag. Strata with fewer than 200 daylight
-observations are reported as under-sampled rather than summarised, because a metric
-computed on a handful of points is noise presented as a result.
+Daylight errors stratified by regime, season, time-of-day band, generation level
+as a fraction of rated capacity, and a ramping flag. Strata with fewer than 200
+daylight observations are reported as under-sampled rather than summarised.
 
-*Outputs.* `error_analysis.csv`, `fig16_intraday_error_profile.png`,
+Outputs: `error_analysis.csv`, `fig16_intraday_error_profile.png`,
 `fig02_forecast_error_over_time.png`, `fig15_error_distribution_by_model.png`,
 `fig11_residual_distribution.png`.
+
+## Temporal dependence (executed)
+
+Autocorrelation of the forecast error to 192 lags, the integrated
+autocorrelation time, and the bootstrap interval width against block length from
+1 to 384 steps. These are diagnostics, not adjustments: no p-value was sought by
+changing a method, a block length or a sample after the fact.
+
+Outputs: `error_autocorrelation.csv`, `block_length_sensitivity.csv`,
+`fig24_error_autocorrelation.png`, `fig25_block_length_sensitivity.png`.

@@ -1,71 +1,72 @@
 # Discussion
 
-The purpose of this section is to say what the numbers in `paper/results.md` mean,
-and equally what they do not mean.
+The purpose of this section is to say what the numbers mean, and equally what
+they do not.
 
-## The most interesting result is the reference, not the winner
+## The most important result is not about any model
 
 The headline table invites the reading "gradient boosting is best, at 6 664 W
-RMSE". That is the least informative sentence in the paper. The informative one is
-that **two of the eleven models are worse than holding the last observation
-forward**, and that a clear-sky-corrected persistence — a rule with no fitted
-parameters at all — is beaten by only a linear regression, and matched by a
-Transformer that costs 1 122 seconds to train.
+RMSE". That is the least informative sentence available. The informative one is
+in the horizon and cross-site tables.
 
-This is not a new observation; it is the same one the literature repeatedly reports
-and repeatedly fails to foreground, because studies that compare only against a
-fully fitted model have no reason to construct a strong reference. The contribution
-here is the construction: the reference is guarded (a reference floor where the
-clear-sky model vanishes, a ratio clip, a capacity clip) rather than naive, and it is
-rescored inside every stratum, so the comparison cannot be won by choosing an
-easy condition.
+**At a one-hour horizon, four of eleven models fail to beat a rule with no fitted
+parameters.** At 15 minutes the failure is far worse — LSTM and GRU have skill of
+−0.65 and −0.67 against persistence, which means they are roughly two-thirds
+worse than repeating the last measurement. At 6 hours the same models reach skill
++0.53. The models did not change; the reference did. A benchmark that evaluates at
+one horizon, which is what most of the literature does, cannot know whether its
+reference is strong or weak, and therefore cannot know whether a 20% RMSE
+improvement means anything.
 
-## Why architecture did not pay here, and when it might
+**A model fitted at one installation does not transfer to another.** Skill against
+persistence runs from −0.10 to −1.07 across a seven-station panel within a single
+campus. Pooling six training sites repairs transfer for five of the six holdouts,
+so the failure is a consequence of single-site fitting rather than of the model
+family — and it still fails on the largest array. Taken together, these two
+results say that most published single-site PV results are *local* skill: a number
+about a plant, not about a method.
 
-LSTM and GRU underperform persistence; the Transformer underperforms gradient
-boosting by 18% in RMSE; only the convolutional-recurrent hybrid is competitive.
-Three mechanisms are plausible and this study cannot separate them:
+## Why capacity did not pay, and when it might
+
+At one hour, gradient boosting attains the lowest error and the shortest training
+time, and the Transformer costs 118× more for a worse result. Three mechanisms
+are plausible and this study cannot separate them:
 
 1. **Data volume.** 43 745 training windows from a single 55 kW array. Recurrent
-   and attention architectures have far more capacity than that supports. The tree
-   models, with depth-limited boosting and strong regularisation, are operating
-   closer to the data's information content.
+   and attention architectures carry more capacity than that supports. The
+   tree models, with depth-limited boosting and strong regularisation, sit closer
+   to the data's information content.
 2. **Signal structure.** The predictability here is dominated by the deterministic
-   diurnal and irradiance structure, which is available in closed form (solar
-   position, clear-sky reference) and is therefore learnable by a model that
-   interpolates a smooth function. Recurrent models spend capacity on temporal
-   dynamics that a lagged window already exposes.
-3. **Optimisation budget.** A fixed budget of 70 epochs, one learning rate, one
-   batch size, one seed. This is a fair-protocol constraint, not a tuning effort, and
-   a neural model with per-architecture tuning might close the gap. Reporting the
-   trees at a tuned operating point and the networks at a single setting is a real
-   asymmetry in the comparison, and it is the asymmetry that gap G3 in the review
-   identifies — now with the roles reversed.
+   diurnal and irradiance structure, which is available in closed form and is
+   therefore learnable by a model that interpolates a smooth function. The input
+   regime study supports this directly: fifteen PV-history features alone give
+   gradient boosting nRMSE 0.119, *better* than all 33 inputs.
+3. **Optimisation budget.** A fixed protocol — 70 epochs, one learning rate, one
+   batch size, one seed per family outside the multi-seed study — is a
+   fairness constraint, not a tuning effort. The trees received a small
+   validation grid and the neural models received a single setting. This
+   asymmetry is a real limitation and is stated as a threat to internal validity.
 
-The honest statement is therefore: **under one fixed protocol, capacity did not
-pay for itself on this record.** Not "deep learning does not work for PV
+The defensible statement is therefore: **under one fixed protocol, capacity did
+not pay for itself on this record.** Not "deep learning does not work for PV
 forecasting", which the literature does not support and this study does not test.
 
-## Skill is more informative than error, and more fragile
+## The same information is worth different amounts to different models
 
-Three observations point the same way:
+The additive input-regime study produced the second-most useful result, and it is
+one the leave-one-out ablation cannot show. For the tree models, the twelve
+weather variables add nothing: PV history alone matches the full input set.
+For the recurrent models, the same weather variables are decisive, taking LSTM
+from negative skill to slightly positive. Weather alone is worse than persistence
+for every family, so neither signal is redundant.
 
-* In cloudy conditions, *absolute* error is **lowest** (persistence nRMSE 0.104
-  against 0.185 in clear sky) because the signal amplitude is small, while *skill*
-  is **lowest** (gradient boosting +0.024 against +0.358). Reading the error table
-  alone would conclude that cloudy days are the easy ones.
-* At 15 minutes, persistence reaches 0.097 nRMSE — better than every learned model
-  except the two gradient-boosted variants — and by 6 hours it is at 0.407, worse
-  than every model in the table. The reference's competence is entirely a function
-  of the horizon, so a benchmark that reports one horizon has no idea whether its
-  reference is strong or weak.
-* Against a *naive* persistence, the learned models' skill is uniformly flattering.
-  Against the *clear-sky* reference, it is uniformly smaller.
-
-The operational implication is direct: report skill against the strongest available
-reference, and report it per regime, because a single skill number averaged over
-conditions is a number whose meaning depends on the mix of conditions in the test
-year.
+The generalisable point is that **feature importance is relative to the
+architecture**. A single global importance ranking, whether from SHAP or from
+permutation, describes one model on one split, and quoting it as the ranking of
+"the inputs" is a category error. The regime-specific analysis sharpens this
+further: under clear sky the trailing power *variability* dominates, while under
+broken cloud the current power reading does. One global table would have hidden
+that.
 
 ## Two procedures, two answers
 
@@ -76,35 +77,35 @@ autocorrelation of the loss differential is the entire explanation: consecutive
 i.i.d. estimate, and the test statistic shrinks accordingly.
 
 This is a general problem in the energy-forecasting literature, where tests are
-routinely applied to serially dependent errors and reported without qualification.
-The lesson generalises beyond this dataset: **a non-significant Diebold-Mariano
-result on photovoltaic data is weak evidence of equivalence, and an interval is the
-more informative statistic.** A reader who saw only the p-value column would
-conclude, wrongly, that the models are indistinguishable.
+routinely applied to serially dependent errors and reported without
+qualification. A non-significant Diebold-Mariano result on photovoltaic data is
+weak evidence of equivalence, and an interval is the more informative statistic. A
+reader shown only the p-value column would conclude, wrongly, that the models are
+indistinguishable. Both are reported, together with the diagnostics that explain
+the gap.
 
 ## The trade-off the error metric hides
 
-The best model by RMSE is also the cheapest to train here (gradient boosting, 9.5 s,
-Pareto-optimal). The best model by MAE (CNN-LSTM) is 29× more expensive for a
-slightly worse normalised error. The Transformer is dominated on both axes. Under
-the thread-pinned CPU protocol — the environment a small operator would actually
-have — the accuracy-cost frontier contains only the tree models and the reference,
-and the case for a neural architecture at this horizon has to be made on grounds
-other than the error metric: interpretability, transfer to another site, or
-uncertainty quantification. Two of those three are untested in this study, and
-saying so is part of the finding.
+The best model by RMSE is also the cheapest to train, so on this record the
+accuracy-cost frontier contains only the tree models and the reference. The case
+for a neural architecture at this horizon would have to be made on other grounds:
+uncertainty quantification, transfer, or a regime the tree models cannot reach.
+The present study finds none of those: conformal intervals are as usable around
+the tree model, and transfer fails for every family tested. That is an honest
+negative result and it is reported as one.
 
 ## What would change the conclusions
 
-* A second site, or the six declared holdout stations, would show whether the
-  ranking is a property of these models or of this array. Cross-site transfer is the
-  experiment most likely to change the conclusion, and it is not implemented.
-* Completing the 6-hour and 24-hour horizons would establish whether the learned
-  models' advantage at long horizons is a general property or an artefact of the
-  one-horizon result.
-* An information regime with numerical weather prediction would raise the ceiling for
-  every model and would probably change the ranking, since a one-hour forecast
-  without NWP is fundamentally limited by cloud arrival.
-* Multiple seeds would establish how much of the neural models' deficit is
-  initialisation rather than architecture. With one seed per configuration, that
-  question is open, and it is the most obvious criticism of this design.
+* **A second climate.** The cross-site panel is one campus. Transfer across
+  climates is a different and easier problem than transfer across arrays, and it
+  is untested here.
+* **Numerical weather prediction inputs.** Under a strictly historical information
+  set a one-hour forecast cannot anticipate a cloud front, which bounds the
+  ceiling and makes persistence unusually strong. The ranking of model families
+  would probably change with forecast-weather available.
+* **Per-family tuning.** The asymmetry between a tuned tree arm and a
+  single-setting neural arm is the most obvious criticism of this design, and a
+  fair-budget study might close part of the gap.
+* **Cross-site transfer for the neural models.** Only three cheap models were
+  carried through the 20 fits per model that the transfer protocol requires. A
+  neural model might transfer better or worse; it is not known here.

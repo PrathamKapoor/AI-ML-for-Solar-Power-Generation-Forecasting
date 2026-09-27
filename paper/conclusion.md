@@ -1,55 +1,84 @@
 # Conclusion
 
-This study set out to ask how robust and generalisable different machine-learning
-and deep-learning approaches are for short-term solar PV power forecasting across
-horizons and weather conditions, and answered it with a controlled, leakage-audited
-benchmark of eleven models on one three-year record with co-located meteorology.
+This study asked when additional model complexity provides meaningful forecasting
+value over strong physical and statistical baselines for solar PV power, and
+answered it with a controlled benchmark of 11 models over a three-year,
+15-minute rooftop record with co-located meteorology: four horizons, four
+weather regimes, four seasons, five additive input regimes, multi-seed
+replication of every neural architecture, three cross-site protocols over a
+seven-station panel, conformal intervals, and a measured account of the
+statistical dependence in the errors.
 
-**What the benchmark establishes.**
+## What the benchmark establishes
 
-1. A clear-sky-corrected persistence forecast is a strong enough reference that two
-   of eleven models — LSTM and GRU — are worse than it at a one-hour horizon, and a
-   third is statistically indistinguishable from it. Comparisons made only against
-   a fully fitted model, or only against naive persistence, do not surface this.
-2. Under one fixed protocol, a depth-limited gradient-boosted tree model attains
-   the lowest capacity-normalised error of the set while being the cheapest model
-   to train, and it is the only model that is Pareto-optimal on both accuracy and
-   cost. Neural capacity did not pay for itself on this record.
-3. A single aggregate error misleads in a specific, reproducible way. Absolute error
-   is *lowest* in cloudy conditions and *highest* in clear conditions purely because
-   of signal amplitude, while skill against the reference is *lowest* in cloudy
-   conditions and *highest* in clear conditions. Any conclusion about where
-   forecasting is hard, drawn from error alone, is therefore inverted.
-4. The reference's competence is a function of the horizon. Persistence is the best
-   model in the table at 15 minutes and the worst at 6 hours. A benchmark that
-   reports one horizon cannot know whether its reference is strong.
-5. Statistical testing on this data requires the variance assumption to be stated.
-   With serially correlated errors, a Diebold-Mariano test rejects nothing while a
-   serial-correlation-aware block bootstrap separates eight of the eleven models;
-   the honest report gives both, with the autocorrelation that explains them.
+1. **A clear-sky-corrected persistence forecast is a strong reference, and its
+   strength depends entirely on the horizon.** At 15 minutes it is competitive
+   with the best learned model and four of eleven models are catastrophically
+   worse than it (skill −0.53 to −0.67). At one hour three models fail to beat it.
+   At 6 hours it collapses and every learned model reaches skill 0.53–0.59. A
+   single-horizon benchmark cannot know whether its reference is strong, and most
+   published comparisons are made at one hour.
+2. **Model capacity did not pay for itself on this record.** Gradient boosting
+   attains the lowest capacity-normalised error and is simultaneously the cheapest
+   model to train; the Transformer costs 118× more for a worse result. The
+   explanation is a combination of single-site data volume, a signal dominated by
+   the deterministic diurnal shape, and a fixed protocol that gave the tree arm a
+   validation grid and the neural arm a single setting. The claim is about this
+   record under this protocol, not about deep learning in general.
+3. **A single aggregate error misleads in a specific, reproducible way.** Absolute
+   error is *lowest* under broken cloud, because the signal amplitude is small,
+   while forecast skill is *also* lowest there. Any conclusion about where
+   forecasting is hard, drawn from absolute error alone, is inverted.
+4. **The value of an input group depends on the architecture that reads it.**
+   Fifteen PV-history features alone match the full 33-input set for gradient
+   boosting, while the same twelve weather variables are decisive for the
+   recurrent models. Feature importance is therefore relative to a model family,
+   and a single global ranking is a category error.
+5. **Importance rankings change with the weather.** Under clear sky the trailing
+   power variability dominates; under broken cloud the current power reading does.
+6. **A model fitted at one installation does not transfer to another.** Skill
+   against persistence runs from −0.10 to −1.07 across a seven-station panel
+   within one campus. Pooling six training sites repairs transfer for five of the
+   six holdouts, so the failure is a consequence of single-site fitting, but it
+   persists on the largest array. Published single-site PV results should be read
+   as local skill.
+7. **Statistical treatment has to match the data.** Errors are strongly
+   autocorrelated, and a Diebold-Mariano test therefore rejects nothing while a
+   serial-correlation-aware moving-block bootstrap separates eight of the eleven
+   models. Both are reported, with the diagnostics that explain the gap, and no
+   result was adjusted towards significance.
+8. **Seed spread does not change the conclusions.** Across three to five seeds the
+   RMSE standard deviation is 44–253 W against a 2 900 W gap between the best and
+   worst model, so the ranking is not an artefact of one initialisation.
 
-**What it does not establish.** One station, one climate, one information regime
-without NWP, one seed per configuration, a partially completed horizon matrix, an
-explainability analysis that is implemented but not run, and no cross-site
-validation. Nothing here supports a claim about PV forecasting in general, and the
-paper says so.
+## What it does not establish
 
-**The three experiments that would matter most next**, in order:
+One climate, although with a seven-station cross-site panel; no NWP inputs; three
+seeds at the low end rather than five, and no transformer replication; a
+cross-site panel restricted to three cheap models; a per-family tuning asymmetry
+rather than a matched tuning budget; approximate conformal coverage; and
+machine-specific absolute cost figures.
 
-1. **Cross-site transfer** over the six declared holdout stations. This is the only
-   experiment that can distinguish "these models suit this array" from "these
-   models suit PV forecasting", and it is the most likely to change the ranking.
-2. **Completion of the horizon matrix.** The persistence degradation from 15 minutes
-   to 6 hours is currently measured on three models; extending it to all eleven
-   would establish whether learned models' long-horizon advantage is general.
-3. **Multi-seed replication** of the neural models, which is the only way to
-   separate architecture from initialisation and therefore the only way to make the
-   H2 verdict ("trees match or beat recurrent networks") a defensible claim rather
-   than a single-seed observation.
+## The three experiments that would matter most next
+
+1. **A second climate.** Transfer within one campus is the easy case. Whether the
+   cross-site failure is a site-specificity problem or something deeper is
+   unknown.
+2. **A matched tuning budget per family.** The largest threat to the H2 verdict is
+   that the tree arm was tuned and the neural arm was not. A study that gives each
+   family the same tuning effort would turn "capacity did not pay under this
+   protocol" into a defensible claim about methods rather than about a protocol.
+3. **Numerical weather prediction inputs.** Without them, the reference is
+   unusually strong at short horizons and the ceiling is low. The most likely
+   setting in which an attention architecture pays for itself is the one this
+   study cannot reach.
 
 Finally, the reproducibility apparatus is part of the contribution rather than
-packaging: per-run records that carry the split dates, seed, feature list,
-hyperparameters, durations and package versions; a registry rebuildable from those
-records; an evaluation report that distinguishes "not run" from "no result"; and a
-test suite that asserts the leakage controls at the point where they would
-otherwise be silent.
+packaging: per-run records carrying split dates, seed, feature list,
+hyperparameters, durations, git revision and package versions; a registry
+rebuildable from those records; an evaluation report that distinguishes "not run"
+from "no result"; a machine-generated manuscript whose every table is rendered
+from a results file; a checker that fails the build if the prose and the results
+disagree; and 146 tests that assert the leakage controls at the point where they
+would otherwise be silent — two of which found real defects, a stale-index mask in
+the chronological split and a sign error in the persistence reference.

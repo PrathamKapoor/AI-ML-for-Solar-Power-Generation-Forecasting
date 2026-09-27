@@ -223,12 +223,21 @@ of a model family, and a new installation must be calibrated on its own data.
 | --- | ---: | --- | --- |
 | CNN-LSTM | 3 | 6 711 ± 56 | +0.266 ± 0.006 |
 | Attention-LSTM | 4 | 8 813 ± 253 | +0.036 ± 0.028 |
+| LSTM | 5 | 9 210 ± 194 | −0.007 ± 0.021 |
+| GRU | 5 | 9 574 ± 44 | −0.047 ± 0.005 |
 
-The across-seed spread is small relative to the between-model differences, so
-the ranking in Table 2 is not an artefact of one initialisation. Note the honest
-caveat: **three seeds is the documented minimum**, not five, because a single
-transformer run costs about 19 minutes on this hardware and the study had a
-bounded compute budget. The best-of-seeds number is never quoted.
+The across-seed spread is small relative to the between-model differences — GRU
+varies by 44 W across five initialisations, against a 2 900 W gap between the
+best and worst model — so the ranking in Table 2 is not an artefact of one
+initialisation. The spread is also informative about which architectures are
+unstable: GRU is the most reproducible (sd 44 W) and attention-LSTM the least
+(sd 253 W), which is consistent with attention being the component that depends
+most on where optimisation starts.
+
+Note the honest caveat: **three seeds is the documented minimum**, and only the
+four fastest neural architectures were replicated — a single transformer run costs
+about 19 minutes on this hardware. The best-of-seeds number is never quoted,
+because reporting the best run of five is a report of selection.
 
 ### 6. Statistics: the two procedures disagree, and that is the finding (Table 10)
 

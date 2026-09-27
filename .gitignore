@@ -86,3 +86,8 @@ logs/
 *.blg
 *.out
 *.toc
+
+# Worker logs and process state from tools/launch_experiments.py. These are
+# machine-local scheduling artefacts, not reproducibility evidence: every run's
+# own record lives in results/experiments/.
+logs/

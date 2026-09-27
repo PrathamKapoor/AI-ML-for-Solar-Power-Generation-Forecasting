@@ -1,0 +1,365 @@
+{
+  "spec": {
+    "experiment_id": "M_multiseed__lstm__1h__seed789",
+    "model": "lstm",
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "features": "full",
+    "seed": 789,
+    "ablation": null,
+    "concurrent_weather": false,
+    "label": "M_multiseed / lstm / 1h / full / seed 789",
+    "notes": "Neural models repeated over five seeds at the default horizon."
+  },
+  "metrics_daylight": {
+    "mae": 6459.486860227132,
+    "rmse": 9010.242503655625,
+    "mse": 81184469.97468238,
+    "smape": 64.41015723509375,
+    "r2": 0.6073243328086892,
+    "bias": 21.6040286237294,
+    "peak_error": 42780.64840625,
+    "n": 17679.0,
+    "nrmse_capacity": 0.16382259097555682,
+    "nrmse_mean": 0.578502871840144,
+    "skill_vs_persistence_rmse": 0.014380079865737416,
+    "skill_vs_persistence_mae": 0.023638946024882812,
+    "persistence_rmse": 9141.700892599894,
+    "persistence_mae": 6615.879273275225,
+    "skill_vs_smart_persistence_rmse": -0.13296559165054478,
+    "skill_vs_smart_persistence_mae": -0.2957410000110112,
+    "smart_persistence_rmse": 7952.794480306486,
+    "smart_persistence_mae": 4985.168224338227
+  },
+  "metrics_all_steps": {
+    "mae": 3475.5461599900696,
+    "rmse": 6424.653524032141,
+    "mse": 41276172.90385861,
+    "smape": 131.18281216235897,
+    "r2": 0.7498954663967576,
+    "bias": 171.0994163257904,
+    "peak_error": 42780.64840625,
+    "n": 35009.0,
+    "nrmse_capacity": 0.11681188225512984,
+    "nrmse_mean": 0.8167921261797985,
+    "skill_vs_persistence_rmse": 0.011822048891750203,
+    "skill_vs_persistence_mae": -0.030507995187152526,
+    "persistence_rmse": 6501.514749268427,
+    "persistence_mae": 3372.6532702532495,
+    "skill_vs_smart_persistence_rmse": -0.13663658402180912,
+    "skill_vs_smart_persistence_mae": -0.37505050175807164,
+    "smart_persistence_rmse": 5652.3374439519785,
+    "smart_persistence_mae": 2527.577100292977
+  },
+  "metadata": {
+    "model_family": "recurrent",
+    "model_kind": "torch",
+    "model_description": "Single-layer LSTM, the field's reference architecture.",
+    "feature_spec": "full",
+    "n_features": 33,
+    "feature_columns": [
+      "ghi",
+      "temperature",
+      "relative_humidity",
+      "wind_speed",
+      "solar_elevation",
+      "sin_solar_elevation",
+      "hour_sin",
+      "hour_cos",
+      "doy_sin",
+      "doy_cos",
+      "pv_power_w_lag_0",
+      "pv_power_w_lag_1",
+      "pv_power_w_lag_2",
+      "pv_power_w_lag_4",
+      "pv_power_w_lag_8",
+      "pv_power_w_lag_12",
+      "pv_power_w_lag_24",
+      "pv_power_w_lag_48",
+      "pv_power_w_lag_96",
+      "pv_rolling_mean_4",
+      "pv_rolling_std_4",
+      "pv_rolling_mean_12",
+      "pv_rolling_std_12",
+      "pv_rolling_mean_24",
+      "pv_rolling_std_24",
+      "ghi_rollmean_4",
+      "ghi_rollmean_24",
+      "temperature_rollmean_4",
+      "temperature_rollmean_24",
+      "ghi_delta_1",
+      "ghi_slope_1",
+      "ghi_delta_4",
+      "ghi_slope_4"
+    ],
+    "lookback_steps": 24,
+    "horizon": "1h",
+    "horizon_steps": 4,
+    "seed": 789,
+    "split_sizes": {
+      "train": 43745,
+      "val": 11681,
+      "test": 35009
+    },
+    "split_date_ranges": {
+      "train": [
+        "2021-06-02 05:45:00",
+        "2022-08-31 21:45:00"
+      ],
+      "val": [
+        "2022-09-01 05:45:00",
+        "2022-12-31 21:45:00"
+      ],
+      "test": [
+        "2023-01-01 05:45:00",
+        "2023-12-31 21:45:00"
+      ]
+    },
+    "target_split_dates": {
+      "train": [
+        "2021-06-02 06:45:00",
+        "2022-08-31 22:45:00"
+      ],
+      "val": [
+        "2022-09-01 06:45:00",
+        "2022-12-31 22:45:00"
+      ],
+      "test": [
+        "2023-01-01 06:45:00",
+        "2023-12-31 22:45:00"
+      ]
+    },
+    "concurrent_weather": false,
+    "information_set": "weather observed at or before the forecast origin (strict historical setting)",
+    "training": {
+      "epochs_run": 23,
+      "best_epoch": 8,
+      "best_val_mae_w": 2794.608309307942,
+      "stopped_early": true,
+      "train_seconds": 161.918,
+      "n_parameters": 50401,
+      "device": "cpu",
+      "config": {
+        "epochs": 70,
+        "batch_size": 256,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "patience": 14,
+        "min_delta": 0.0,
+        "grad_clip": 1.0,
+        "device": "cpu",
+        "verbose": false,
+        "shuffle": true
+      }
+    },
+    "cost": {
+      "train_seconds": 161.91787110001314,
+      "inference_ms_per_window": 0.03924426576011576,
+      "n_parameters": 50401
+    },
+    "environment": {
+      "timestamp_utc": "2026-09-27T02:00:23+00:00",
+      "seed": 789,
+      "git_revision": "c53fd4f",
+      "platform": {
+        "python": "3.13.14",
+        "implementation": "CPython",
+        "system": "Windows",
+        "release": "11",
+        "machine": "AMD64",
+        "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD"
+      },
+      "torch": {
+        "version": "2.13.0+cpu",
+        "cuda_available": false,
+        "device_count": 0,
+        "device_name": "cpu",
+        "num_threads": 8
+      },
+      "packages": {
+        "numpy": "2.5.2",
+        "pandas": "2.3.3",
+        "scipy": "1.17.1",
+        "scikit-learn": "not installed",
+        "torch": "2.13.0+cpu",
+        "xgboost": "3.4.1",
+        "shap": "0.52.0",
+        "matplotlib": "3.10.3",
+        "seaborn": "0.13.2",
+        "pvlib": "0.15.2",
+        "statsmodels": "not installed",
+        "openpyxl": "3.1.5",
+        "pyyaml": "not installed",
+        "requests": "2.33.1",
+        "tqdm": "4.70.0",
+        "joblib": "1.5.3"
+      }
+    },
+    "dataset": {
+      "name": "hong_kong_rooftop_pv_60_stations",
+      "primary_station": "LSK North",
+      "rated_w": 55000.0
+    },
+    "experiment_label": "M_multiseed / lstm / 1h / full / seed 789",
+    "notes": "Neural models repeated over five seeds at the default horizon.",
+    "ablation": null,
+    "regime_distribution_test": {
+      "scope": "daylight",
+      "n": 17679,
+      "counts": {
+        "Cloudy": 6012,
+        "Clear": 5824,
+        "High-variability": 3432,
+        "Partly cloudy": 2411
+      },
+      "shares": {
+        "Cloudy": 0.340064,
+        "Clear": 0.32943,
+        "High-variability": 0.194129,
+        "Partly cloudy": 0.136376
+      }
+    },
+    "wall_seconds_including_setup": 164.7553171000036
+  },
+  "training_history": [
+    {
+      "epoch": 0,
+      "train_loss_scaled": 105.32031458197979,
+      "train_mae_w": 5688.049991460304,
+      "val_mae_w": 4004.620859011993
+    },
+    {
+      "epoch": 1,
+      "train_loss_scaled": 89.76953164196154,
+      "train_mae_w": 4848.196529948652,
+      "val_mae_w": 3735.9342201677487
+    },
+    {
+      "epoch": 2,
+      "train_loss_scaled": 86.2846108265439,
+      "train_mae_w": 4659.985889930608,
+      "val_mae_w": 3120.995225057169
+    },
+    {
+      "epoch": 3,
+      "train_loss_scaled": 84.5215094479901,
+      "train_mae_w": 4564.7658099201135,
+      "val_mae_w": 3174.95873455651
+    },
+    {
+      "epoch": 4,
+      "train_loss_scaled": 84.64122559661753,
+      "train_mae_w": 4571.231337875292,
+      "val_mae_w": 3426.362499981528
+    },
+    {
+      "epoch": 5,
+      "train_loss_scaled": 87.35735906547274,
+      "train_mae_w": 4717.9219646137935,
+      "val_mae_w": 3172.597604870294
+    },
+    {
+      "epoch": 6,
+      "train_loss_scaled": 82.80865632668574,
+      "train_mae_w": 4472.259495058849,
+      "val_mae_w": 2960.180244409052
+    },
+    {
+      "epoch": 7,
+      "train_loss_scaled": 82.60938223464447,
+      "train_mae_w": 4461.4972693473865,
+      "val_mae_w": 3283.6056681227024
+    },
+    {
+      "epoch": 8,
+      "train_loss_scaled": 80.76250148394652,
+      "train_mae_w": 4361.752504247404,
+      "val_mae_w": 2794.608309307942
+    },
+    {
+      "epoch": 9,
+      "train_loss_scaled": 78.9880407135389,
+      "train_mae_w": 4265.918935861057,
+      "val_mae_w": 2982.891513007559
+    },
+    {
+      "epoch": 10,
+      "train_loss_scaled": 83.16087922889587,
+      "train_mae_w": 4491.282050050831,
+      "val_mae_w": 3276.8486522363187
+    },
+    {
+      "epoch": 11,
+      "train_loss_scaled": 84.80155271535729,
+      "train_mae_w": 4579.890148571006,
+      "val_mae_w": 3198.544502773671
+    },
+    {
+      "epoch": 12,
+      "train_loss_scaled": 83.48313051462173,
+      "train_mae_w": 4508.68592346591,
+      "val_mae_w": 2901.6757552799268
+    },
+    {
+      "epoch": 13,
+      "train_loss_scaled": 83.79583170731165,
+      "train_mae_w": 4525.574023577166,
+      "val_mae_w": 3058.8514909312375
+    },
+    {
+      "epoch": 14,
+      "train_loss_scaled": 84.1457117016901,
+      "train_mae_w": 4544.470044795251,
+      "val_mae_w": 3092.673597968531
+    },
+    {
+      "epoch": 15,
+      "train_loss_scaled": 83.10223548053301,
+      "train_mae_w": 4488.1148683566,
+      "val_mae_w": 3242.2263485602484
+    },
+    {
+      "epoch": 16,
+      "train_loss_scaled": 83.73899455690942,
+      "train_mae_w": 4522.504411089364,
+      "val_mae_w": 3394.4653900161475
+    },
+    {
+      "epoch": 17,
+      "train_loss_scaled": 83.13169024806274,
+      "train_mae_w": 4489.705636394665,
+      "val_mae_w": 3495.3769409158076
+    },
+    {
+      "epoch": 18,
+      "train_loss_scaled": 84.62331328859106,
+      "train_mae_w": 4570.263945175019,
+      "val_mae_w": 3231.70010557351
+    },
+    {
+      "epoch": 19,
+      "train_loss_scaled": 87.14898134916149,
+      "train_mae_w": 4706.668078103969,
+      "val_mae_w": 3377.0700295530455
+    },
+    {
+      "epoch": 20,
+      "train_loss_scaled": 85.94115768085446,
+      "train_mae_w": 4641.436964491488,
+      "val_mae_w": 3565.033346835893
+    },
+    {
+      "epoch": 21,
+      "train_loss_scaled": 94.04483510057132,
+      "train_mae_w": 5079.093483663186,
+      "val_mae_w": 3501.5973892051707
+    },
+    {
+      "epoch": 22,
+      "train_loss_scaled": 93.26378237782863,
+      "train_mae_w": 5036.911052376689,
+      "val_mae_w": 3786.429646415605
+    }
+  ],
+  "feature_importance": null
+}
