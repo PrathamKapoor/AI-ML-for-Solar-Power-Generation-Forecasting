@@ -45,17 +45,32 @@ def main() -> None:
             "supporting_papers": supporting,
         }
 
-    # Category composition of the corpus.
-    category_counts = Counter(categories[pid] for pid in papers if pid in categories)
+    # Category composition of the corpus. An id present in one source but not the
+    # other used to be skipped silently, which under-counted the corpus and left
+    # the summary disagreeing with corpus_size. A renumbered id in one file but
+    # not the other is exactly that case, so it is now an error.
+    only_analysis = sorted(set(papers) - set(categories))
+    only_verified = sorted(set(categories) - set(papers))
+    if only_analysis or only_verified:
+        raise SystemExit(
+            f"paper ids disagree between the analysis and the verified records; "
+            f"analysis-only={only_analysis} verified-only={only_verified}")
+    category_counts = Counter(categories[pid] for pid in papers)
 
-    # Evidence integrity: every paper id cited by a gap must exist in the corpus.
+    # Evidence integrity: every paper id cited by a gap must exist in the corpus,
+    # and no gap may cite the same paper twice. A repeated citation inflated
+    # n_cited, which is the number a reader takes as the strength of the evidence.
     known = set(papers)
     dangling = {}
+    repeated = {}
     for gap in gaps:
         cited = [p.strip() for p in gap["evidence_papers"].split(",") if p.strip()]
         bad = [p for p in cited if p not in known]
         if bad:
             dangling[gap["gap_id"]] = bad
+        dupes = sorted({p for p in cited if cited.count(p) > 1})
+        if dupes:
+            repeated[gap["gap_id"]] = dupes
 
     payload = {
         "corpus_size": n,
@@ -64,12 +79,14 @@ def main() -> None:
         "gaps": [
             {
                 "gap_id": g["gap_id"],
-                "cited_papers": [p.strip() for p in g["evidence_papers"].split(",") if p.strip()],
-                "n_cited": len([p for p in g["evidence_papers"].split(",") if p.strip()]),
+                "cited_papers": list(dict.fromkeys(
+                    p.strip() for p in g["evidence_papers"].split(",") if p.strip())),
+                "n_cited": len({p.strip() for p in g["evidence_papers"].split(",") if p.strip()}),
             }
             for g in gaps
         ],
         "dangling_evidence_references": dangling,
+        "repeated_evidence_references": repeated,
         "notes": [
             "A low count is evidence that a practice is rare in this corpus, not proof that it is "
             "absent from the entire literature. The corpus is a purposive 30-paper sample, not a "
@@ -92,6 +109,10 @@ def main() -> None:
         print("DANGLING EVIDENCE REFERENCES:", dangling)
     else:
         print("all gap evidence references resolve to corpus papers")
+    if repeated:
+        print("REPEATED EVIDENCE REFERENCES:", repeated)
+    else:
+        print("no gap cites the same paper twice")
     print(f"wrote {OUT}")
 
 

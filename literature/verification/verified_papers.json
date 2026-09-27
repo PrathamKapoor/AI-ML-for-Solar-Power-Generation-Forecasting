@@ -1,352 +1,5 @@
 [
   {
-    "id": "G1",
-    "category": "G",
-    "category_name": "Systematic review / state of the field",
-    "from_seed": "ml-pv-review-comparison",
-    "doi_resolution": {
-      "status": "curated_direct"
-    },
-    "doi": "10.1109/access.2023.3270041",
-    "title": "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison",
-    "title_variants": [
-      "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison"
-    ],
-    "authors_crossref": [
-      "Jwaone Gaboitaolelwe",
-      "Adamu Murtala Zungeru",
-      "Abid Yahya",
-      "Caspar K. Lebekwe",
-      "Dasari Naga Vinod",
-      "Ayodeji Olalekan Salau"
-    ],
-    "authors_openalex": [
-      "Jwaone Gaboitaolelwe",
-      "Adamu Murtala Zungeru",
-      "Abid Yahya",
-      "Caspar K. Lebekwe",
-      "Dasari Naga Vinod",
-      "Ayodeji Olalekan Salau"
-    ],
-    "authors_s2": [
-      "Jwaone Gaboitaolelwe",
-      "A. M. Zungeru",
-      "A. Yahya",
-      "C. Lebekwe",
-      "Dasari Naga Vinod",
-      "Ayodeji Olalekan Salau"
-    ],
-    "date_parts_crossref": [
-      2023
-    ],
-    "published_print": [
-      2023
-    ],
-    "published_online": null,
-    "publication_date_s2": null,
-    "year_openalex": 2023,
-    "container_crossref": "IEEE Access",
-    "container_openalex": "IEEE Access",
-    "venue_s2": "IEEE Access",
-    "journal_s2": "IEEE Access",
-    "publisher_crossref": "Institute of Electrical and Electronics Engineers (IEEE)",
-    "publisher_openalex": "Institute of Electrical and Electronics Engineers",
-    "type_crossref": "journal-article",
-    "type_openalex": "article",
-    "url_crossref": "https://doi.org/10.1109/access.2023.3270041",
-    "url_openalex": "https://doi.org/10.1109/access.2023.3270041",
-    "abstract": "The growing interest in renewable energy and the falling prices of solar panels place solar electricity in a favourable position for adoption. However, the high-rate adoption of intermittent renewable energy introduces challenges and the potential to create power instability between the available power generation and the load demand. Hence, accurate solar Photovoltaic (PV) power forecasting is essential to maintain system reliability and maximize renewable energy integration. The current solar PV power forecasting approaches are an essential tool to maintain system reliability and maximize renewable energy integration. This paper presents a comprehensive and comparative review of existing Machine Learning (ML) based approaches used in PV power forecasting, focusing on short-term horizons. We provide an overview of factors affecting solar PV power forecasting and an overview of existing PV power forecasting methods in the literature, with a specific focus on ML-based models. To further enhance the comparison and provide more insights into the advancement in the area, we simulate the performance of different ML methods used in solar PV power forecasting and, finally, a discussion on the results of the work.",
-    "abstract_source": "semanticscholar",
-    "subjects_crossref": [],
-    "keywords_openalex": [
-      "Photovoltaic system",
-      "Renewable energy",
-      "Computer science",
-      "Solar power",
-      "Solar energy",
-      "Grid parity",
-      "Reliability (semiconductor)",
-      "Reliability engineering"
-    ],
-    "concepts_openalex": [
-      "Photovoltaic system",
-      "Renewable energy",
-      "Computer science",
-      "Solar power",
-      "Solar energy",
-      "Grid parity",
-      "Reliability (semiconductor)",
-      "Reliability engineering"
-    ],
-    "citation_count_s2": 195,
-    "citation_count_crossref": 241,
-    "citation_count_openalex": 236,
-    "open_access_pdf": "https://ieeexplore.ieee.org/ielx7/6287639/6514899/10107594.pdf",
-    "title_agreement_crossref_openalex": 1.0,
-    "sources_found": [
-      "crossref",
-      "openalex",
-      "s2"
-    ]
-  },
-  {
-    "id": "G2",
-    "category": "G",
-    "category_name": "Systematic review / state of the field",
-    "from_seed": "systematic-review-dl-solar-pv",
-    "doi_resolution": {
-      "status": "resolved_from_seed",
-      "score": 1.0,
-      "title": "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review",
-      "container": "Energy Strategy Reviews"
-    },
-    "doi": "10.1016/j.esr.2025.101735",
-    "title": "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review",
-    "title_variants": [
-      "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review"
-    ],
-    "authors_crossref": [
-      "Oussama Khouili",
-      "Mohamed Hanine",
-      "Mohamed Louzazni",
-      "Miguel Angel López Flores",
-      "Eduardo García Villena",
-      "Imran Ashraf"
-    ],
-    "authors_openalex": [
-      "Oussama Khouili",
-      "Mohamed Hanine",
-      "Mohamed Louzazni",
-      "Miguel Ángel López Flores",
-      "Eduardo García Villena",
-      "Imran Ashraf"
-    ],
-    "authors_s2": [
-      "Oussama Khouili",
-      "Mohamed Hanine",
-      "Mohamed Louzazni",
-      "Miguel Angel Alor Flores",
-      "Eduardo García Villena",
-      "Imran Ashraf"
-    ],
-    "date_parts_crossref": [
-      2025,
-      5
-    ],
-    "published_print": [
-      2025,
-      5
-    ],
-    "published_online": null,
-    "publication_date_s2": "2025-05-01",
-    "year_openalex": 2025,
-    "container_crossref": "Energy Strategy Reviews",
-    "container_openalex": "Energy Strategy Reviews",
-    "venue_s2": "Energy Strategy Reviews",
-    "journal_s2": "Energy Strategy Reviews",
-    "publisher_crossref": "Elsevier BV",
-    "publisher_openalex": "Elsevier BV",
-    "type_crossref": "journal-article",
-    "type_openalex": "review",
-    "url_crossref": "https://doi.org/10.1016/j.esr.2025.101735",
-    "url_openalex": "https://doi.org/10.1016/j.esr.2025.101735",
-    "abstract": "Accurate solar and photovoltaic (PV) power forecasting is essential for optimizing grid integration, managing energy storage, and maximizing the efficiency of solar power systems. Deep learning (DL) models have shown promise in this area due to their ability to learn complex, non-linear relationships within large datasets. This study presents a systematic literature review (SLR) of deep learning applications for solar PV forecasting, addressing a gap in the existing literature, which often focuses on traditional ML or broader renewable energy applications. This review specifically aims to identify the DL architectures employed, preprocessing and feature engineering techniques used, the input features leveraged, evaluation metrics applied, and the persistent challenges in this field. Through a rigorous analysis of 26 selected papers from an initial set of 155 articles retrieved from the Web of Science database, we found that Long Short-Term Memory (LSTM) networks were the most frequently used algorithm (appearing in 32.69% of the papers), closely followed by Convolutional Neural Networks (CNNs) at 28.85%. Furthermore, Wavelet Transform (WT) was found to be the most prominent data decomposition technique, while Pearson Correlation was the most used for feature selection. We also found that ambient temperature, pressure, and humidity are the most common input features. Our systematic evaluation provides critical insights into state-of-the-art DL-based solar forecasting and identifies key areas for upcoming research. Future research should prioritize the development of more robust and interpretable models, as well as explore the integration of multi-source data to further enhance forecasting accuracy. Such advancements are crucial for the effective integration of solar energy into future power grids. • Review of DL approaches on solar and photovoltaic power forecasting. • Data preprocessing techniques and feature engineering approach for DL algorithms. • Prominent features employed for DL-based solar forecasting. • Obstacles in DL-based solar forecasting.",
-    "abstract_source": "openalex_inverted_index",
-    "subjects_crossref": [],
-    "keywords_openalex": [
-      "Photovoltaic system",
-      "Computer science",
-      "Engineering",
-      "Electrical engineering"
-    ],
-    "concepts_openalex": [
-      "Photovoltaic system",
-      "Computer science",
-      "Engineering",
-      "Electrical engineering"
-    ],
-    "citation_count_s2": 49,
-    "citation_count_crossref": 51,
-    "citation_count_openalex": 50,
-    "open_access_pdf": "https://doi.org/10.1016/j.esr.2025.101735",
-    "title_agreement_crossref_openalex": 1.0,
-    "sources_found": [
-      "crossref",
-      "openalex",
-      "s2"
-    ]
-  },
-  {
-    "id": "G3",
-    "category": "G",
-    "category_name": "Systematic review / state of the field",
-    "from_seed": "dl-solar-irradiance-review",
-    "doi_resolution": {
-      "status": "resolved_from_seed",
-      "score": 1.0,
-      "title": "Deep learning models for solar irradiance forecasting: A comprehensive review",
-      "container": "Journal of Cleaner Production"
-    },
-    "doi": "10.1016/j.jclepro.2021.128566",
-    "title": "Deep learning models for solar irradiance forecasting: A comprehensive review",
-    "title_variants": [
-      "Deep learning models for solar irradiance forecasting: A comprehensive review"
-    ],
-    "authors_crossref": [
-      "Pratima Kumari",
-      "Durga Toshniwal"
-    ],
-    "authors_openalex": [
-      "Pratima Kumari",
-      "Durga Toshniwal"
-    ],
-    "authors_s2": [
-      "P. Kumari",
-      "Durga Toshniwal"
-    ],
-    "date_parts_crossref": [
-      2021,
-      10
-    ],
-    "published_print": [
-      2021,
-      10
-    ],
-    "published_online": null,
-    "publication_date_s2": "2021-10-10",
-    "year_openalex": 2021,
-    "container_crossref": "Journal of Cleaner Production",
-    "container_openalex": "Journal of Cleaner Production",
-    "venue_s2": "",
-    "journal_s2": "Journal of Cleaner Production",
-    "publisher_crossref": "Elsevier BV",
-    "publisher_openalex": "Elsevier BV",
-    "type_crossref": "journal-article",
-    "type_openalex": "article",
-    "url_crossref": "https://doi.org/10.1016/j.jclepro.2021.128566",
-    "url_openalex": "https://doi.org/10.1016/j.jclepro.2021.128566",
-    "abstract": null,
-    "abstract_source": "unavailable_paywalled",
-    "subjects_crossref": [],
-    "keywords_openalex": [
-      "Solar irradiance",
-      "Irradiance",
-      "Environmental science",
-      "Meteorology",
-      "Computer science",
-      "Artificial intelligence",
-      "Geography"
-    ],
-    "concepts_openalex": [
-      "Solar irradiance",
-      "Irradiance",
-      "Environmental science",
-      "Meteorology",
-      "Computer science",
-      "Artificial intelligence",
-      "Geography",
-      "Physics"
-    ],
-    "citation_count_s2": 394,
-    "citation_count_crossref": 399,
-    "citation_count_openalex": 443,
-    "open_access_pdf": "",
-    "title_agreement_crossref_openalex": 1.0,
-    "sources_found": [
-      "crossref",
-      "openalex",
-      "s2"
-    ],
-    "abstract_unavailable_note": [
-      "Crossref REST API (no abstract field)",
-      "OpenAlex work record (no abstract_inverted_index)",
-      "Semantic Scholar Graph API (abstract = null)",
-      "doi.org redirect + publisher landing page citation_abstract meta tag (bot-served shell, no abstract)",
-      "RePEc/IDEAS mirror (404 for this record)",
-      "search-engine indexed excerpts (returned only citing works, not the source abstract)"
-    ]
-  },
-  {
-    "id": "G4",
-    "category": "A",
-    "category_name": "Classical / conventional machine learning",
-    "from_seed": "discovered",
-    "doi_resolution": {
-      "status": "curated_direct"
-    },
-    "doi": "10.1016/j.rser.2022.112364",
-    "title": "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction",
-    "title_variants": [
-      "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction"
-    ],
-    "authors_crossref": [
-      "Dávid Markovics",
-      "Martin János Mayer"
-    ],
-    "authors_openalex": [
-      "Dávid Markovics",
-      "Martin János Mayer"
-    ],
-    "authors_s2": [
-      "Dávid Markovics",
-      "M. J. Mayer"
-    ],
-    "date_parts_crossref": [
-      2022,
-      6
-    ],
-    "published_print": [
-      2022,
-      6
-    ],
-    "published_online": null,
-    "publication_date_s2": "2022-06-01",
-    "year_openalex": 2022,
-    "container_crossref": "Renewable and Sustainable Energy Reviews",
-    "container_openalex": "Renewable and Sustainable Energy Reviews",
-    "venue_s2": "Renewable & Sustainable Energy Reviews",
-    "journal_s2": "Renewable and Sustainable Energy Reviews",
-    "publisher_crossref": "Elsevier BV",
-    "publisher_openalex": "Elsevier BV",
-    "type_crossref": "journal-article",
-    "type_openalex": "article",
-    "url_crossref": "https://doi.org/10.1016/j.rser.2022.112364",
-    "url_openalex": "https://doi.org/10.1016/j.rser.2022.112364",
-    "abstract": "The increase of the worldwide installed photovoltaic (PV) capacity and the intermittent nature of the solar resource highlights the importance of power forecasting for the grid integration of the technology. This study compares 24 machine learning models for deterministic day-ahead power forecasting based on numerical weather predictions (NWP), tested for two-year-long 15-min resolution datasets of 16 PV plants in Hungary. The effects of the predictor selection and the benefits of the hyperparameter tuning are also evaluated. The results show that the two most accurate models are kernel ridge regression and multilayer perceptron with an up to 44.6% forecast skill score over persistence. Supplementing the basic NWP data with Sun position angles and statistically processed irradiance values as the inputs of the learning models results in a 13.1% decrease of the root mean square error (RMSE), which underlines the importance of the predictor selection. The hyperparameter tuning is essential to exploit the full potential of the models, especially for the less robust models, which are prone to under or overfitting without proper tuning. The overall best forecasts have a 13.9% lower RMSE compared to the baseline scenario of using linear regression. Moreover, the power forecasts based on only daily average irradiance forecasts and the Sun position angles have only a 1.5% higher RMSE than the best scenario, which demonstrates the effectiveness of machine learning even for limited data availability. The results of this paper can support both researchers and practitioners in constructing the best data-driven techniques for NWP-based PV power forecasting.",
-    "abstract_source": "openalex_inverted_index",
-    "subjects_crossref": [],
-    "keywords_openalex": [
-      "Numerical weather prediction",
-      "Mean squared error",
-      "Overfitting",
-      "Forecast skill",
-      "Machine learning",
-      "Perceptron",
-      "Solar irradiance",
-      "Photovoltaic system"
-    ],
-    "concepts_openalex": [
-      "Numerical weather prediction",
-      "Mean squared error",
-      "Overfitting",
-      "Forecast skill",
-      "Machine learning",
-      "Perceptron",
-      "Solar irradiance",
-      "Photovoltaic system"
-    ],
-    "citation_count_s2": 429,
-    "citation_count_crossref": 469,
-    "citation_count_openalex": 484,
-    "open_access_pdf": "https://www.sciencedirect.com/science/article/pii/S136403212200274X/pdf",
-    "title_agreement_crossref_openalex": 1.0,
-    "sources_found": [
-      "crossref",
-      "openalex",
-      "s2"
-    ]
-  },
-  {
     "id": "A1",
     "category": "A",
     "category_name": "Classical / conventional machine learning",
@@ -707,6 +360,86 @@
     "citation_count_crossref": 10,
     "citation_count_openalex": 10,
     "open_access_pdf": "https://www.nature.com/articles/s41598-026-47042-3_reference.pdf",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "A5",
+    "category": "A",
+    "category_name": "Classical / conventional machine learning",
+    "from_seed": "discovered",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1016/j.rser.2022.112364",
+    "title": "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction",
+    "title_variants": [
+      "Comparison of machine learning methods for photovoltaic power forecasting based on numerical weather prediction"
+    ],
+    "authors_crossref": [
+      "Dávid Markovics",
+      "Martin János Mayer"
+    ],
+    "authors_openalex": [
+      "Dávid Markovics",
+      "Martin János Mayer"
+    ],
+    "authors_s2": [
+      "Dávid Markovics",
+      "M. J. Mayer"
+    ],
+    "date_parts_crossref": [
+      2022,
+      6
+    ],
+    "published_print": [
+      2022,
+      6
+    ],
+    "published_online": null,
+    "publication_date_s2": "2022-06-01",
+    "year_openalex": 2022,
+    "container_crossref": "Renewable and Sustainable Energy Reviews",
+    "container_openalex": "Renewable and Sustainable Energy Reviews",
+    "venue_s2": "Renewable & Sustainable Energy Reviews",
+    "journal_s2": "Renewable and Sustainable Energy Reviews",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.rser.2022.112364",
+    "url_openalex": "https://doi.org/10.1016/j.rser.2022.112364",
+    "abstract": "The increase of the worldwide installed photovoltaic (PV) capacity and the intermittent nature of the solar resource highlights the importance of power forecasting for the grid integration of the technology. This study compares 24 machine learning models for deterministic day-ahead power forecasting based on numerical weather predictions (NWP), tested for two-year-long 15-min resolution datasets of 16 PV plants in Hungary. The effects of the predictor selection and the benefits of the hyperparameter tuning are also evaluated. The results show that the two most accurate models are kernel ridge regression and multilayer perceptron with an up to 44.6% forecast skill score over persistence. Supplementing the basic NWP data with Sun position angles and statistically processed irradiance values as the inputs of the learning models results in a 13.1% decrease of the root mean square error (RMSE), which underlines the importance of the predictor selection. The hyperparameter tuning is essential to exploit the full potential of the models, especially for the less robust models, which are prone to under or overfitting without proper tuning. The overall best forecasts have a 13.9% lower RMSE compared to the baseline scenario of using linear regression. Moreover, the power forecasts based on only daily average irradiance forecasts and the Sun position angles have only a 1.5% higher RMSE than the best scenario, which demonstrates the effectiveness of machine learning even for limited data availability. The results of this paper can support both researchers and practitioners in constructing the best data-driven techniques for NWP-based PV power forecasting.",
+    "abstract_source": "openalex_inverted_index",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Numerical weather prediction",
+      "Mean squared error",
+      "Overfitting",
+      "Forecast skill",
+      "Machine learning",
+      "Perceptron",
+      "Solar irradiance",
+      "Photovoltaic system"
+    ],
+    "concepts_openalex": [
+      "Numerical weather prediction",
+      "Mean squared error",
+      "Overfitting",
+      "Forecast skill",
+      "Machine learning",
+      "Perceptron",
+      "Solar irradiance",
+      "Photovoltaic system"
+    ],
+    "citation_count_s2": 429,
+    "citation_count_crossref": 469,
+    "citation_count_openalex": 484,
+    "open_access_pdf": "https://www.sciencedirect.com/science/article/pii/S136403212200274X/pdf",
     "title_agreement_crossref_openalex": 1.0,
     "sources_found": [
       "crossref",
@@ -2685,6 +2418,273 @@
       "crossref",
       "openalex",
       "s2"
+    ]
+  },
+  {
+    "id": "G1",
+    "category": "G",
+    "category_name": "Systematic review / state of the field",
+    "from_seed": "ml-pv-review-comparison",
+    "doi_resolution": {
+      "status": "curated_direct"
+    },
+    "doi": "10.1109/access.2023.3270041",
+    "title": "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison",
+    "title_variants": [
+      "Machine Learning Based Solar Photovoltaic Power Forecasting: A Review and Comparison"
+    ],
+    "authors_crossref": [
+      "Jwaone Gaboitaolelwe",
+      "Adamu Murtala Zungeru",
+      "Abid Yahya",
+      "Caspar K. Lebekwe",
+      "Dasari Naga Vinod",
+      "Ayodeji Olalekan Salau"
+    ],
+    "authors_openalex": [
+      "Jwaone Gaboitaolelwe",
+      "Adamu Murtala Zungeru",
+      "Abid Yahya",
+      "Caspar K. Lebekwe",
+      "Dasari Naga Vinod",
+      "Ayodeji Olalekan Salau"
+    ],
+    "authors_s2": [
+      "Jwaone Gaboitaolelwe",
+      "A. M. Zungeru",
+      "A. Yahya",
+      "C. Lebekwe",
+      "Dasari Naga Vinod",
+      "Ayodeji Olalekan Salau"
+    ],
+    "date_parts_crossref": [
+      2023
+    ],
+    "published_print": [
+      2023
+    ],
+    "published_online": null,
+    "publication_date_s2": null,
+    "year_openalex": 2023,
+    "container_crossref": "IEEE Access",
+    "container_openalex": "IEEE Access",
+    "venue_s2": "IEEE Access",
+    "journal_s2": "IEEE Access",
+    "publisher_crossref": "Institute of Electrical and Electronics Engineers (IEEE)",
+    "publisher_openalex": "Institute of Electrical and Electronics Engineers",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1109/access.2023.3270041",
+    "url_openalex": "https://doi.org/10.1109/access.2023.3270041",
+    "abstract": "The growing interest in renewable energy and the falling prices of solar panels place solar electricity in a favourable position for adoption. However, the high-rate adoption of intermittent renewable energy introduces challenges and the potential to create power instability between the available power generation and the load demand. Hence, accurate solar Photovoltaic (PV) power forecasting is essential to maintain system reliability and maximize renewable energy integration. The current solar PV power forecasting approaches are an essential tool to maintain system reliability and maximize renewable energy integration. This paper presents a comprehensive and comparative review of existing Machine Learning (ML) based approaches used in PV power forecasting, focusing on short-term horizons. We provide an overview of factors affecting solar PV power forecasting and an overview of existing PV power forecasting methods in the literature, with a specific focus on ML-based models. To further enhance the comparison and provide more insights into the advancement in the area, we simulate the performance of different ML methods used in solar PV power forecasting and, finally, a discussion on the results of the work.",
+    "abstract_source": "semanticscholar",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Renewable energy",
+      "Computer science",
+      "Solar power",
+      "Solar energy",
+      "Grid parity",
+      "Reliability (semiconductor)",
+      "Reliability engineering"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Renewable energy",
+      "Computer science",
+      "Solar power",
+      "Solar energy",
+      "Grid parity",
+      "Reliability (semiconductor)",
+      "Reliability engineering"
+    ],
+    "citation_count_s2": 195,
+    "citation_count_crossref": 241,
+    "citation_count_openalex": 236,
+    "open_access_pdf": "https://ieeexplore.ieee.org/ielx7/6287639/6514899/10107594.pdf",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "G2",
+    "category": "G",
+    "category_name": "Systematic review / state of the field",
+    "from_seed": "systematic-review-dl-solar-pv",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review",
+      "container": "Energy Strategy Reviews"
+    },
+    "doi": "10.1016/j.esr.2025.101735",
+    "title": "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review",
+    "title_variants": [
+      "Evaluating the impact of deep learning approaches on solar and photovoltaic power forecasting: A systematic review"
+    ],
+    "authors_crossref": [
+      "Oussama Khouili",
+      "Mohamed Hanine",
+      "Mohamed Louzazni",
+      "Miguel Angel López Flores",
+      "Eduardo García Villena",
+      "Imran Ashraf"
+    ],
+    "authors_openalex": [
+      "Oussama Khouili",
+      "Mohamed Hanine",
+      "Mohamed Louzazni",
+      "Miguel Ángel López Flores",
+      "Eduardo García Villena",
+      "Imran Ashraf"
+    ],
+    "authors_s2": [
+      "Oussama Khouili",
+      "Mohamed Hanine",
+      "Mohamed Louzazni",
+      "Miguel Angel Alor Flores",
+      "Eduardo García Villena",
+      "Imran Ashraf"
+    ],
+    "date_parts_crossref": [
+      2025,
+      5
+    ],
+    "published_print": [
+      2025,
+      5
+    ],
+    "published_online": null,
+    "publication_date_s2": "2025-05-01",
+    "year_openalex": 2025,
+    "container_crossref": "Energy Strategy Reviews",
+    "container_openalex": "Energy Strategy Reviews",
+    "venue_s2": "Energy Strategy Reviews",
+    "journal_s2": "Energy Strategy Reviews",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "review",
+    "url_crossref": "https://doi.org/10.1016/j.esr.2025.101735",
+    "url_openalex": "https://doi.org/10.1016/j.esr.2025.101735",
+    "abstract": "Accurate solar and photovoltaic (PV) power forecasting is essential for optimizing grid integration, managing energy storage, and maximizing the efficiency of solar power systems. Deep learning (DL) models have shown promise in this area due to their ability to learn complex, non-linear relationships within large datasets. This study presents a systematic literature review (SLR) of deep learning applications for solar PV forecasting, addressing a gap in the existing literature, which often focuses on traditional ML or broader renewable energy applications. This review specifically aims to identify the DL architectures employed, preprocessing and feature engineering techniques used, the input features leveraged, evaluation metrics applied, and the persistent challenges in this field. Through a rigorous analysis of 26 selected papers from an initial set of 155 articles retrieved from the Web of Science database, we found that Long Short-Term Memory (LSTM) networks were the most frequently used algorithm (appearing in 32.69% of the papers), closely followed by Convolutional Neural Networks (CNNs) at 28.85%. Furthermore, Wavelet Transform (WT) was found to be the most prominent data decomposition technique, while Pearson Correlation was the most used for feature selection. We also found that ambient temperature, pressure, and humidity are the most common input features. Our systematic evaluation provides critical insights into state-of-the-art DL-based solar forecasting and identifies key areas for upcoming research. Future research should prioritize the development of more robust and interpretable models, as well as explore the integration of multi-source data to further enhance forecasting accuracy. Such advancements are crucial for the effective integration of solar energy into future power grids. • Review of DL approaches on solar and photovoltaic power forecasting. • Data preprocessing techniques and feature engineering approach for DL algorithms. • Prominent features employed for DL-based solar forecasting. • Obstacles in DL-based solar forecasting.",
+    "abstract_source": "openalex_inverted_index",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Engineering",
+      "Electrical engineering"
+    ],
+    "concepts_openalex": [
+      "Photovoltaic system",
+      "Computer science",
+      "Engineering",
+      "Electrical engineering"
+    ],
+    "citation_count_s2": 49,
+    "citation_count_crossref": 51,
+    "citation_count_openalex": 50,
+    "open_access_pdf": "https://doi.org/10.1016/j.esr.2025.101735",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ]
+  },
+  {
+    "id": "G3",
+    "category": "G",
+    "category_name": "Systematic review / state of the field",
+    "from_seed": "dl-solar-irradiance-review",
+    "doi_resolution": {
+      "status": "resolved_from_seed",
+      "score": 1.0,
+      "title": "Deep learning models for solar irradiance forecasting: A comprehensive review",
+      "container": "Journal of Cleaner Production"
+    },
+    "doi": "10.1016/j.jclepro.2021.128566",
+    "title": "Deep learning models for solar irradiance forecasting: A comprehensive review",
+    "title_variants": [
+      "Deep learning models for solar irradiance forecasting: A comprehensive review"
+    ],
+    "authors_crossref": [
+      "Pratima Kumari",
+      "Durga Toshniwal"
+    ],
+    "authors_openalex": [
+      "Pratima Kumari",
+      "Durga Toshniwal"
+    ],
+    "authors_s2": [
+      "P. Kumari",
+      "Durga Toshniwal"
+    ],
+    "date_parts_crossref": [
+      2021,
+      10
+    ],
+    "published_print": [
+      2021,
+      10
+    ],
+    "published_online": null,
+    "publication_date_s2": "2021-10-10",
+    "year_openalex": 2021,
+    "container_crossref": "Journal of Cleaner Production",
+    "container_openalex": "Journal of Cleaner Production",
+    "venue_s2": "",
+    "journal_s2": "Journal of Cleaner Production",
+    "publisher_crossref": "Elsevier BV",
+    "publisher_openalex": "Elsevier BV",
+    "type_crossref": "journal-article",
+    "type_openalex": "article",
+    "url_crossref": "https://doi.org/10.1016/j.jclepro.2021.128566",
+    "url_openalex": "https://doi.org/10.1016/j.jclepro.2021.128566",
+    "abstract": null,
+    "abstract_source": "unavailable_paywalled",
+    "subjects_crossref": [],
+    "keywords_openalex": [
+      "Solar irradiance",
+      "Irradiance",
+      "Environmental science",
+      "Meteorology",
+      "Computer science",
+      "Artificial intelligence",
+      "Geography"
+    ],
+    "concepts_openalex": [
+      "Solar irradiance",
+      "Irradiance",
+      "Environmental science",
+      "Meteorology",
+      "Computer science",
+      "Artificial intelligence",
+      "Geography",
+      "Physics"
+    ],
+    "citation_count_s2": 394,
+    "citation_count_crossref": 399,
+    "citation_count_openalex": 443,
+    "open_access_pdf": "",
+    "title_agreement_crossref_openalex": 1.0,
+    "sources_found": [
+      "crossref",
+      "openalex",
+      "s2"
+    ],
+    "abstract_unavailable_note": [
+      "Crossref REST API (no abstract field)",
+      "OpenAlex work record (no abstract_inverted_index)",
+      "Semantic Scholar Graph API (abstract = null)",
+      "doi.org redirect + publisher landing page citation_abstract meta tag (bot-served shell, no abstract)",
+      "RePEc/IDEAS mirror (404 for this record)",
+      "search-engine indexed excerpts (returned only citing works, not the source abstract)"
     ]
   }
 ]

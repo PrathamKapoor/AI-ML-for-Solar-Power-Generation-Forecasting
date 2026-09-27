@@ -71,7 +71,7 @@
       "gap_id": "RG-01",
       "cited_papers": [
         "G1",
-        "G4",
+        "A5",
         "D1",
         "B1",
         "D5",
@@ -98,7 +98,7 @@
       "cited_papers": [
         "C6",
         "A4",
-        "G4",
+        "A5",
         "D1",
         "D4"
       ],
@@ -108,7 +108,7 @@
       "gap_id": "RG-04",
       "cited_papers": [
         "A4",
-        "G4",
+        "A5",
         "D4",
         "E3",
         "A1",
@@ -158,10 +158,9 @@
         "B4",
         "D3",
         "F2",
-        "C2",
-        "D3"
+        "C2"
       ],
-      "n_cited": 6
+      "n_cited": 5
     },
     {
       "gap_id": "RG-09",
@@ -186,9 +185,33 @@
         "A2"
       ],
       "n_cited": 5
+    },
+    {
+      "gap_id": "RG-11",
+      "cited_papers": [
+        "B1",
+        "B3",
+        "C1",
+        "C4",
+        "D1",
+        "G1"
+      ],
+      "n_cited": 6
+    },
+    {
+      "gap_id": "RG-12",
+      "cited_papers": [
+        "D2",
+        "D3",
+        "G1",
+        "G2",
+        "B3"
+      ],
+      "n_cited": 5
     }
   ],
   "dangling_evidence_references": {},
+  "repeated_evidence_references": {},
   "notes": [
     "A low count is evidence that a practice is rare in this corpus, not proof that it is absent from the entire literature. The corpus is a purposive 30-paper sample, not a systematic review of all PV forecasting literature.",
     "Gaps whose claimed count cannot be derived from a boolean field are supported by qualitative coding of the main_limitation and research_gap columns instead, and are labelled as such in the gap's evidence_basis text."

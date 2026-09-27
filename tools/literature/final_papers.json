@@ -2,37 +2,6 @@
   "_comment": "Curated final literature set (30 papers). Every entry is keyed to an authoritative identifier (DOI, or OpenAlex/S2 id when no DOI exists). Fields beyond the identifier are filled exclusively from the verification script output; nothing here is invented. `category` is the review taxonomy used in the Excel workbook and references.bib.",
   "papers": [
     {
-      "id": "G1",
-      "category": "G",
-      "category_name": "Systematic review / state of the field",
-      "doi": "10.1109/access.2023.3270041",
-      "from_seed": "ml-pv-review-comparison"
-    },
-    {
-      "id": "G2",
-      "category": "G",
-      "category_name": "Systematic review / state of the field",
-      "doi": "10.3390/app13126990",
-      "from_seed": "systematic-review-dl-solar-pv",
-      "doi_unverified": true
-    },
-    {
-      "id": "G3",
-      "category": "G",
-      "category_name": "Systematic review / state of the field",
-      "doi": "10.3390/en14144270",
-      "from_seed": "dl-solar-irradiance-review",
-      "doi_unverified": true
-    },
-    {
-      "id": "G4",
-      "category": "A",
-      "category_name": "Classical / conventional machine learning",
-      "doi": "10.1016/j.rser.2022.112364",
-      "from_seed": "discovered",
-      "note": "Retained as a review-and-comparison study of classical ML methods; classified under A because its contribution is a controlled ML method comparison rather than a field survey."
-    },
-    {
       "id": "A1",
       "category": "A",
       "category_name": "Classical / conventional machine learning",
@@ -62,8 +31,15 @@
       "doi_unverified": true
     },
     {
+      "id": "A5",
+      "category": "A",
+      "category_name": "Classical / conventional machine learning",
+      "doi": "10.1016/j.rser.2022.112364",
+      "from_seed": "discovered",
+      "note": "Retained as a review-and-comparison study of classical ML methods; classified under A because its contribution is a controlled ML method comparison rather than a field survey. Id renumbered from G4 to A5 to match the category; the exclusion log records the original seeding."
+    },
+    {
       "id": "B1",
-
       "category": "B",
       "category_name": "Recurrent / RNN-based forecasting",
       "doi": "10.1016/j.energy.2019.116225",
@@ -226,6 +202,29 @@
       "category_name": "Probabilistic / explainable / robust",
       "doi": "10.1016/j.solenergy.2024.113239",
       "from_seed": "rethinking-dl-pv",
+      "doi_unverified": true
+    },
+    {
+      "id": "G1",
+      "category": "G",
+      "category_name": "Systematic review / state of the field",
+      "doi": "10.1109/access.2023.3270041",
+      "from_seed": "ml-pv-review-comparison"
+    },
+    {
+      "id": "G2",
+      "category": "G",
+      "category_name": "Systematic review / state of the field",
+      "doi": "10.3390/app13126990",
+      "from_seed": "systematic-review-dl-solar-pv",
+      "doi_unverified": true
+    },
+    {
+      "id": "G3",
+      "category": "G",
+      "category_name": "Systematic review / state of the field",
+      "doi": "10.3390/en14144270",
+      "from_seed": "dl-solar-irradiance-review",
       "doi_unverified": true
     }
   ]

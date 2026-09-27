@@ -58,7 +58,8 @@ LITERATURE_ANALYSIS_COLUMNS = [
 ]
 
 RESEARCH_GAPS_COLUMNS = [
-    "Gap ID", "Research Gap", "Evidence Papers", "Why It Matters",
+    "Gap ID", "Status", "Triage Role", "Triage Reason", "Research Gap",
+    "Evidence Papers", "Why It Matters",
     "Current Approaches", "Limitation", "Opportunity for Our Project",
     "Testable Research Question",
 ]
@@ -332,12 +333,22 @@ def main() -> None:
 
     # ------------------------------------------------------------------ Sheet 3
     ws3 = wb.create_sheet("Research Gaps")
-    rows3 = [[g["gap_id"], g["research_gap"], g["evidence_papers"], g["why_it_matters"],
-              g["current_approaches"], g["limitation"], g["opportunity_for_our_project"],
+    # Retained and dropped candidates share the sheet, with the decision and its
+    # reason in columns of their own. Hiding the dropped rows would make the
+    # claim set look narrower than the deliberation behind it, and deleting them
+    # would remove the record of why each was rejected.
+    rows3 = [[g["gap_id"],
+              "retained" if g.get("retained") else "not retained",
+              g.get("triage_role", ""),
+              g.get("triage_reason", ""),
+              g["research_gap"], g["evidence_papers"], g["why_it_matters"],
+              g["current_approaches"], g["limitation"],
+              g["opportunity_for_our_project"],
               g["testable_research_question"]] for g in gaps]
     write_rows(ws3, RESEARCH_GAPS_COLUMNS, rows3)
     style_header(ws3, len(RESEARCH_GAPS_COLUMNS))
-    autosize(ws3, {1: 10, 2: 66, 3: 30, 4: 66, 5: 60, 6: 60, 7: 66, 8: 66})
+    autosize(ws3, {1: 10, 2: 14, 3: 24, 4: 60, 5: 66, 6: 30, 7: 66, 8: 60, 9: 60,
+                   10: 66, 11: 66})
 
     # ------------------------------------------------------------------ Sheet 4
     ws4 = wb.create_sheet("Provenance")
@@ -369,8 +380,7 @@ def main() -> None:
         ("Peer-review status", "All 30 records are Crossref type 'journal-article'. No preprints, "
                                "posters or withdrawn records are included."),
         ("Excluded candidates", len(exclusions)),
-        ("Exclusion log", "See the 'Selection and Exclusions' rows below and "
-                          "tools/literature/exclusions.json"),
+        ("Exclusion log", "See the 'Exclusion Log' sheet and tools/literature/exclusions.json"),
         ("Verification artefacts", "literature/verification/verified_papers.json and "
                                    "literature/verification/raw/*.json (unmodified API payloads)"),
         ("Known limitation", "G3 (Kumari & Toshniwal, 2021) has a paywalled abstract that no open "
@@ -382,10 +392,6 @@ def main() -> None:
     ]
     for field, value in meta:
         ws5.append([field, value])
-    ws5.append([])
-    ws5.append(["Excluded candidate", "Title", "Reason for exclusion"])
-    for exc in exclusions:
-        ws5.append([exc.get("seed_or_doi", ""), exc.get("title", ""), exc.get("reason", "")])
     for r in range(1, ws5.max_row + 1):
         for c in (1, 2, 3):
             ws5.cell(row=r, column=c).alignment = Alignment(vertical="top", wrap_text=True)
@@ -393,7 +399,26 @@ def main() -> None:
     for c in (1, 2, 3):
         ws5.cell(row=1, column=c).fill = HEADER_FILL
         ws5.cell(row=1, column=c).font = HEADER_FONT
-    autosize(ws5, {1: 34, 2: 62, 3: 92})
+    autosize(ws5, {1: 34, 2: 92, 3: 10})
+
+    # The exclusion log is a table with its own header, so it goes on its own
+    # sheet. Stacking it below the key-value list put a second header in the
+    # middle of a sheet whose first row was the only one with column names, which
+    # is why the formatting audit reported a nameless column: the names were
+    # there, twelve rows down, describing a different table.
+    ws6 = wb.create_sheet("Exclusion Log")
+    ws6.append(["Excluded candidate", "Title", "Reason for exclusion"])
+    for exc in exclusions:
+        ws6.append([exc.get("seed_or_doi", ""), exc.get("title", ""),
+                    exc.get("reason", "")])
+    for r in range(1, ws6.max_row + 1):
+        for c in (1, 2, 3):
+            ws6.cell(row=r, column=c).alignment = Alignment(vertical="top", wrap_text=True)
+            ws6.cell(row=r, column=c).border = BORDER
+    for c in (1, 2, 3):
+        ws6.cell(row=1, column=c).fill = HEADER_FILL
+        ws6.cell(row=1, column=c).font = HEADER_FONT
+    autosize(ws6, {1: 34, 2: 62, 3: 92})
 
     OUT_XLSX.parent.mkdir(parents=True, exist_ok=True)
     wb.save(OUT_XLSX)
@@ -404,6 +429,16 @@ def main() -> None:
     print(f"sheets: {wb.sheetnames}")
     print(f"papers: {len(records)}  gaps: {len(gaps)}  exclusions logged: {len(exclusions)}")
 
+    # Formatting is a separate, idempotent step, but it is applied here rather
+    # than left to the reader: the audit the workbook has to pass checks frozen
+    # headers, autofilters, column widths and hyperlinks, and a workbook built
+    # without this call fails all four. Building and formatting were two commands
+    # and the second one was easy to forget, so a fresh rebuild silently produced
+    # a non-compliant workbook.
+    from format_workbook import main as format_workbook
+
+    format_workbook()
+
 
 def cat_label(category: str) -> str:
     return CATEGORY_LABEL.get(category, category)
@@ -411,3 +446,4 @@ def cat_label(category: str) -> str:
 
 if __name__ == "__main__":
     main()
+

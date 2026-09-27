@@ -96,7 +96,7 @@
       "cost_reported": false,
       "provenance_flag": "abstract_unavailable_paywalled"
     },
-    "G4": {
+    "A5": {
       "forecast_target": "PV power",
       "forecast_horizon": "Day-ahead deterministic",
       "dataset": "Two-year 15-min resolution measurements from 16 PV plants",
@@ -233,7 +233,7 @@
       "external_validation": "No - k-fold cross-validation, which is not a temporal hold-out",
       "main_contribution": "Stacked GB-XGBoost ensemble with ridge meta-learner, benchmarked against four boosting variants, an MLP and an LSTM with nonparametric tests.",
       "main_limitation": "Uses k-fold cross-validation on a time series, which leaks temporal information and inflates apparent accuracy relative to a chronological hold-out; this is a methodological weakness shared by much of the boosting literature.",
-      "research_gap": "Direct evidence that random-fold validation is common in applied PV ML, making reported gains incomparable with chronological-split studies such as G4.",
+      "research_gap": "Direct evidence that random-fold validation is common in applied PV ML, making reported gains incomparable with chronological-split studies such as A5.",
       "reproducibility": "Moderate - pipeline and comparison set described; normalisation and feature selection named",
       "weather_regime_eval": false,
       "statistical_test": true,
