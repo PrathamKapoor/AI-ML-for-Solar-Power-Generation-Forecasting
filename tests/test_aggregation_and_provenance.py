@@ -141,8 +141,19 @@ def test_feature_regime_table_orders_the_regimes_by_information_content() -> Non
         "pv_only", "weather_only", "pv_weather", "pv_weather_solar", "full"]
 
 
-def test_regimes_resolve_to_different_input_widths(config) -> None:
+def test_regimes_resolve_to_different_input_widths(config, processed_available) -> None:
+    """The regimes must partition the real feature set, not a synthetic one.
+
+    The widths and the no-target-derived-feature property are only meaningful
+    against the columns the pipeline actually builds, so this reads the generated
+    column list. That file is a build artefact and is not committed, so the test
+    skips on a fresh clone rather than reading a path that is not there -- which
+    is what it did, failing on every clone while passing in the working copy.
+    """
     from solar_forecasting.training.experiment import select_features
+
+    if not processed_available:
+        pytest.skip("the processed feature columns are a build artefact")
     columns = json.loads(
         (config.project_root_for("data") / "processed" / "feature_columns.json")
         .read_text(encoding="utf-8"))["feature_columns"]
@@ -151,11 +162,73 @@ def test_regimes_resolve_to_different_input_widths(config) -> None:
                            "full")}
     assert widths["pv_only"] < widths["pv_weather"] < widths["full"]
     assert widths["weather_only"] < widths["full"]
-    # Weather-only must contain no target-derived feature at all.
-    weather_only = select_features(columns, "weather_only", config)
-    assert not any(c.startswith("pv_") for c in weather_only)
-    pv_only = select_features(columns, "pv_only", config)
-    assert all(c.startswith("pv_") for c in pv_only)
+    assert not target_derived(select_features(columns, "weather_only", config))
+    assert all(c.startswith("pv_") for c in select_features(columns, "pv_only", config))
+
+
+def target_derived(columns):
+    """Columns the model could read the answer out of, by the builder's prefixes."""
+    from solar_forecasting.features import builder
+
+    return [c for c in columns
+            if c.startswith(builder.LAG_PREFIX) or c.startswith(builder.ROLLING_PREFIX)]
+
+
+#: A column list that mirrors the real one: the same four weather variables, the
+#: same six solar and calendar columns, the same nine lags and six rolling
+#: statistics, and the same weather-derived columns. Using the real lag indices
+#: matters -- ``weather_only`` is an explicit removal list, so a lag that the
+#: list does not name survives into the weather-only regime.
+REAL_LAGS = [0, 1, 2, 4, 8, 12, 24, 48, 96]
+REAL_ROLLING = [("mean", 4), ("std", 4), ("mean", 12), ("std", 12),
+                ("mean", 24), ("std", 24)]
+REAL_COLUMNS = (
+    ["ghi", "temperature", "relative_humidity", "wind_speed",
+     "solar_elevation", "sin_solar_elevation",
+     "hour_sin", "hour_cos", "doy_sin", "doy_cos"]
+    + [f"pv_power_w_lag_{i}" for i in REAL_LAGS]
+    + [f"pv_rolling_{stat}_{win}" for stat, win in REAL_ROLLING]
+    + ["ghi_rollmean_4", "ghi_rollmean_24", "temperature_rollmean_4",
+       "temperature_rollmean_24", "ghi_delta_1", "ghi_slope_1",
+       "ghi_delta_4", "ghi_slope_4"])
+
+
+def test_regime_partition_holds_without_the_dataset(config) -> None:
+    """The same invariant, checkable with no data at all.
+
+    A fresh clone has no processed data, so the claim that the weather-only regime
+    contains no target-derived feature cannot rest solely on a test that skips
+    when the dataset is absent.
+    """
+    from solar_forecasting.training.experiment import select_features
+
+    widths = {name: len(select_features(REAL_COLUMNS, name, config))
+              for name in ("pv_only", "weather_only", "pv_weather",
+                           "pv_weather_solar", "full")}
+    assert widths["pv_only"] < widths["pv_weather"] < widths["full"]
+    assert widths["weather_only"] < widths["full"]
+    assert not target_derived(select_features(REAL_COLUMNS, "weather_only", config))
+    assert target_derived(select_features(REAL_COLUMNS, "pv_weather", config))
+    pv_only = select_features(REAL_COLUMNS, "pv_only", config)
+    assert target_derived(pv_only), "pv_only must carry the target history"
+
+
+def test_weather_only_removes_every_target_derived_column(config) -> None:
+    """Guards the hand-maintained removal list against a new feature.
+
+    ``weather_only`` is expressed as an explicit list of columns to drop, so
+    adding a lag or a rolling window to the feature builder without adding it to
+    that list would silently leak the target history into a regime documented as
+    containing no target-derived feature. The regime result would still compute,
+    and the ablation would quietly stop measuring what it claims to measure.
+    """
+    feature_config = config.section("features")
+    remove = set((feature_config.get("feature_regimes") or {})
+                 .get("weather_only", {}).get("remove", []))
+    unremoved = [c for c in REAL_COLUMNS if target_derived([c]) and c not in remove]
+    assert not unremoved, (
+        f"weather_only would keep target-derived columns {unremoved}; add them to "
+        f"features.feature_regimes.weather_only.remove in configs/data.yaml")
 
 
 # --------------------------------------------------------------------------- #

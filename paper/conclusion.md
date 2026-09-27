@@ -84,6 +84,6 @@ hyperparameters, durations, git revision and package versions; a registry
 rebuildable from those records; an evaluation report that distinguishes "not run"
 from "no result"; a machine-generated manuscript whose every table is rendered
 from a results file; a checker that fails the build if the prose and the results
-disagree; and 191 tests that assert the leakage controls at the point where they
+disagree; and 193 tests that assert the leakage controls at the point where they
 would otherwise be silent — two of which found real defects, a stale-index mask in
 the chronological split and a sign error in the persistence reference.

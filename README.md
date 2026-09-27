@@ -305,7 +305,7 @@ python scripts/preprocess.py           # pipeline, split, features
 python scripts/run_experiments.py      # the declared experiment matrix
 python scripts/evaluate.py --report    # tables, statistics, explainability, figures
 python scripts/generate_manuscript.py  # paper/manuscript.md from the tables
-python -m pytest -q                    # 191 tests
+python -m pytest -q                    # 193 tests
 python tools/check_consistency.py      # prose versus results
 ```
 
@@ -330,7 +330,7 @@ src/solar_forecasting/
   explainability/ SHAP, permutation importance, dependence, analysis driver
   statistics/     block bootstrap, Diebold-Mariano, Wilcoxon, dependence diagnostics
   visualization/  26 figure functions
-tests/            191 tests, no network, no dataset required
+tests/            193 tests, no network, no dataset required
 literature/       literature_review.xlsx, references.bib, verification records
 docs/             methodology, dataset, experiments, reproducibility, research_gaps
 results/          experiments, tables, figures, metrics, predictions

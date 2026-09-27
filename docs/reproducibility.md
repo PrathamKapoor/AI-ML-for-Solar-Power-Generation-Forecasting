@@ -16,7 +16,7 @@ python scripts/preprocess.py                  # run the data pipeline
 python scripts/run_experiments.py             # run the declared experiment matrix
 python scripts/evaluate.py --report           # tables, stratified analysis, statistics, figures
 python scripts/generate_report.py             # assemble docs/RESULTS_REPORT.md
-python -m pytest -q                           # 191 tests
+python -m pytest -q                           # 193 tests
 ```
 
 Full experiment detail: `docs/experiments.md`. Installation notes: `README.md`.
@@ -119,7 +119,7 @@ with the `pv_power_w_lag_k` features).
 ## Verification performed
 
 ```bash
-python -m pytest -q                                   # 191 passed
+python -m pytest -q                                   # 193 passed
 python -m compileall -q src/solar_forecasting scripts  # no syntax errors
 python scripts/run_experiments.py --list              # matrix resolves from config
 python scripts/evaluate.py --report --uncertainty     # tables, statistics, figures
