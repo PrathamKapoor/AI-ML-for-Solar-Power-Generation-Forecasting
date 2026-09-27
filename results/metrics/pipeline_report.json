@@ -1,6 +1,6 @@
 {
   "pipeline_version": "1.0.0",
-  "config_fingerprint": "2e579cbd4996de57",
+  "config_fingerprint": "9b6868cedd9d6f3a",
   "config_sources": [
     "data.yaml",
     "experiments.yaml",
@@ -804,6 +804,7 @@
       }
     }
   },
+  "station": "LSK North",
   "irradiance_cleaning": {
     "n_input": 1567792,
     "n_input_missing": 0,
