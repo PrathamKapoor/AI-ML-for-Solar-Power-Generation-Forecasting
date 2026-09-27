@@ -68,21 +68,25 @@ further: under clear sky the trailing power *variability* dominates, while under
 broken cloud the current power reading does. One global table would have hidden
 that.
 
-## Two procedures, two answers
+## Two procedures, one conclusion
 
-The block-bootstrap intervals and the Diebold-Mariano test disagree, and both are
-correct. The intervals exclude zero for eight models; the test rejects nothing. The
-autocorrelation of the loss differential is the entire explanation: consecutive
-15-minute errors share a cloud field, the long-run variance is far larger than an
-i.i.d. estimate, and the test statistic shrinks accordingly.
+The block-bootstrap intervals and the Diebold-Mariano test are two answers to the
+same question, and they now agree. The test rejects 18 of 20 comparisons against
+persistence after Holm correction, and the moving-block interval excludes zero for
+eight of the eleven models. The autocorrelation of the loss differential is why
+the correction matters: consecutive fifteen-minute errors share a cloud field, the
+long-run variance is far larger than an i.i.d. estimate, and the test statistic
+shrinks accordingly. With the correction the effect survives; without it, the same
+data would have produced a table in which nothing was distinguishable.
 
 This is a general problem in the energy-forecasting literature, where tests are
 routinely applied to serially dependent errors and reported without
-qualification. A non-significant Diebold-Mariano result on photovoltaic data is
-weak evidence of equivalence, and an interval is the more informative statistic. A
-reader shown only the p-value column would conclude, wrongly, that the models are
-indistinguishable. Both are reported, together with the diagnostics that explain
-the gap.
+qualification. The two statistics are reported together for that reason, with the
+diagnostics that explain the gap between them. A reader shown only the p-value
+column would learn nothing about magnitude: the test says whether a difference
+exists, and the interval says how large it is. On this data the differences are
+statistically clear and practically small, and only the second fact is the one a
+deployer needs.
 
 ## The trade-off the error metric hides
 

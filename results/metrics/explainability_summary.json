@@ -50,34 +50,49 @@
     "n_evaluation_samples": 4000,
     "scope": "daylight test windows",
     "baseline_metrics": {
-      "mae": 5097.1959763128525,
-      "rmse": 7468.7435310989085,
-      "mse": 55782129.93333179,
-      "smape": 54.6514283976576,
-      "r2": 0.7091642012284762,
-      "bias": 1565.128639245446,
-      "peak_error": 35394.8017890625,
+      "mae": 4886.206774444047,
+      "rmse": 7123.685974418839,
+      "mse": 50746901.86213168,
+      "smape": 53.386410767524595,
+      "r2": 0.735416776736699,
+      "bias": 1542.6934198850947,
+      "peak_error": 32403.933624999998,
       "n": 4000.0,
       "nrmse_capacity": NaN,
-      "nrmse_mean": 0.48545617469232966
+      "nrmse_mean": 0.4630279950638424
     },
     "permutation": {
       "n_repeats": 5,
-      "baseline_mae_w": 5097.1959763128525
+      "baseline_mae_w": 4886.206774444047
     },
     "method": "grouped permutation importance over the lookback window (increase in daylight MAE); attention weights are not treated as explanations",
     "top_features": [
-      "pv_power_w_lag_0",
       "pv_power_w_lag_1",
-      "pv_power_w_lag_2",
+      "pv_power_w_lag_0",
       "pv_power_w_lag_8",
+      "solar_elevation",
       "pv_rolling_mean_4",
-      "pv_rolling_mean_24",
-      "pv_rolling_mean_12",
-      "pv_power_w_lag_4",
-      "pv_power_w_lag_12",
-      "ghi"
+      "pv_rolling_std_24",
+      "ghi_rollmean_4",
+      "ghi",
+      "pv_power_w_lag_96",
+      "pv_rolling_std_12"
     ],
+    "integrated_gradients_meta": {
+      "n_samples": 32,
+      "n_steps": 8192,
+      "baseline": "mean",
+      "quadrature": "composite Simpson",
+      "units": "watts",
+      "max_completeness_residual_w": 7374.689521713233,
+      "median_completeness_residual_w": 240.76501746796657,
+      "median_prediction_change_w": 12686.22705078125,
+      "median_relative_error": 0.014681321932867749,
+      "max_relative_error": 17.094392177045634,
+      "converged": true,
+      "tolerance": 0.02,
+      "note": "Completeness: the attributions must sum to the prediction change from the baseline window. The residual is that difference and is the check on the property, not a measure of model error. It is the accuracy of the path integral, so it falls as the quadrature is refined; the relative error is the meaningful figure, because a sample whose prediction barely moves has a small residual and a large relative one. 'converged' states whether the median relative error met the 2% tolerance, so a number produced by an insufficient path budget cannot be read as if it had."
+    },
     "figure": "fig10_importance_attention_lstm.png"
   }
 }

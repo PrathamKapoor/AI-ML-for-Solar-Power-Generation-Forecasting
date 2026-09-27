@@ -145,9 +145,12 @@ reported with their own leakage guards and capacity normalisation.
 
 Statistical treatment is explicit about what the data support. Forecast errors are
 strongly autocorrelated, the integrated autocorrelation time is reported, and the
-consequence is stated plainly: a Diebold-Mariano test rejects essentially
-everything while a serial-correlation-aware moving-block bootstrap separates the
-models. Both are reported; neither was adjusted to obtain a preferred answer.
+Harvey-Leybourne-Newbold correction is applied before any test is read. With that
+correction the Diebold-Mariano test rejects 18 of 20 comparisons against persistence
+after Holm adjustment, and a serial-correlation-aware moving-block bootstrap
+separates eight of the eleven models; the two agree, and the interval is reported
+alongside the p-value because it carries the effect size. Neither was adjusted to
+obtain a preferred answer.
 
 ## 1. Introduction
 
@@ -275,12 +278,32 @@ hyperparameters, durations and software versions. Groups executed in this study:
         sections.append(
             f"The integrated autocorrelation time of the loss differential on this data "
             f"is **{ess:.0f}** steps, so the nominal sample size overstates the "
-            f"information in the error series by roughly that factor. That is the "
-            f"quantitative reason the Diebold-Mariano test rejects nothing here while the "
-            f"block-bootstrap interval excludes zero for several models. Both are "
-            f"reported; the interval is the informative statistic and the test is the "
-            f"conservative one. `results/tables/error_autocorrelation.csv` and "
+            f"information in the error series by roughly that factor. The "
+            f"Harvey-Leybourne-Newbold correction and the Bartlett kernel absorb it, and "
+            f"the differences survive. What the correction changes is the size of the "
+            f"claimed effect, not its existence, and the two statistics are reported "
+            f"together for that reason: a p-value says whether a difference can be told "
+            f"from the sampling noise, the interval says how large it is. On this data "
+            f"the differences are statistically clear and practically small. "
+            f"`results/tables/error_autocorrelation.csv` and "
             f"`results/tables/block_length_sensitivity.csv` carry the diagnostics.\n")
+
+    ablation = read(tables / "ablation_statistics.csv")
+    if not ablation.empty:
+        sections.append(
+            table(ablation, ["model", "removed_regime", "rmse_increase_pct",
+                             "skill_point", "dm_p_value", "dm_p_value_holm"],
+                  "Table 10a. Reduced input sets against the full-input run of the same "
+                  "model, on the same daylight timestamps.",
+                  "results/tables/ablation_statistics.csv"))
+        sections.append(
+            "The comparison reference is the same model on the full input set, not "
+            "persistence: a regime drop of forty percent and a model that is simply "
+            "worse than persistence are different statements, and comparing every "
+            "regime to persistence would have reported the second while claiming to "
+            "answer the first. The burden of accuracy sits with the trailing power "
+            "history, and the more the architecture relies on a recurrent state the "
+            "less it needs the exogenous weather.\n")
 
     sections.append("## 10. Explainability\n")
     sections.append(table(importance, ["model", "feature", "value", "method"],

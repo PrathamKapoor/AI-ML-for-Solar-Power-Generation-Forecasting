@@ -30,9 +30,12 @@ reported with their own leakage guards and capacity normalisation.
 
 Statistical treatment is explicit about what the data support. Forecast errors are
 strongly autocorrelated, the integrated autocorrelation time is reported, and the
-consequence is stated plainly: a Diebold-Mariano test rejects essentially
-everything while a serial-correlation-aware moving-block bootstrap separates the
-models. Both are reported; neither was adjusted to obtain a preferred answer.
+Harvey-Leybourne-Newbold correction is applied before any test is read. With that
+correction the Diebold-Mariano test rejects 18 of 20 comparisons against persistence
+after Holm adjustment, and a serial-correlation-aware moving-block bootstrap
+separates eight of the eleven models; the two agree, and the interval is reported
+alongside the p-value because it carries the effect size. Neither was adjusted to
+obtain a preferred answer.
 
 ## 1. Introduction
 
@@ -542,41 +545,71 @@ Source: `results/tables/multi_seed_results.csv`
 
 | model | n_seeds | seeds | rmse_mean | rmse_std | rmse_ci_low | rmse_ci_high | skill_vs_persistence_rmse_mean | skill_vs_persistence_rmse_std |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| attention_lstm | 4 | 42, 123, 456, 789 | 8,813.4200 | 252.5470 | 8,411.5600 | 9,215.2700 | 0.0359 | 0.0276 |
-| cnn_lstm | 3 | 123, 456, 789 | 6,711.1000 | 55.7639 | 6,572.5800 | 6,849.6300 | 0.2659 | 0.0061 |
+| attention_lstm | 5 | 42, 123, 456, 789, 2026 | 8,792.3000 | 223.7500 | 8,514.4800 | 9,070.1200 | 0.0382 | 0.0245 |
+| cnn_lstm | 5 | 42, 123, 456, 789, 2026 | 6,721.7000 | 71.4879 | 6,632.9400 | 6,810.4600 | 0.2647 | 0.0078 |
 | gru | 5 | 42, 123, 456, 789, 2026 | 9,574.2300 | 44.3109 | 9,519.2100 | 9,629.2500 | -0.0473 | 0.0048 |
 | lstm | 5 | 42, 123, 456, 789, 2026 | 9,209.7900 | 194.4000 | 8,968.4100 | 9,451.1700 | -0.0074 | 0.0213 |
+| transformer | 3 | 42, 123, 456 | 7,886.5500 | 179.4500 | 7,440.7700 | 8,332.3300 | 0.1373 | 0.0196 |
 
 ## 9. Statistical analysis
 
 **Table 10. Skill intervals and Diebold-Mariano tests against persistence.**
 
-Source: `results/tables/statistical_significance.csv`
+Source: `results/tables/statistical_tests.csv`
 
 | model | loss | n_daylight_comparisons | skill_point | skill_ci_low | skill_ci_high | dm_p_value | dm_p_value_holm | dm_lag1_autocorrelation |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| smart_persistence | mae | 17679 | 0.1612 | 0.1395 | 0.1858 | 0.6366 | 1 | 0.6068 |
-| cnn_lstm | mae | 17679 | 0.2540 | 0.2307 | 0.2777 | 0.6442 | 1 | 0.5402 |
-| gradient_boosting | mae | 17679 | 0.2710 | 0.2490 | 0.2930 | 0.6789 | 1 | 0.5950 |
-| random_forest | mae | 17679 | 0.2678 | 0.2459 | 0.2898 | 0.7146 | 1 | 0.5796 |
-| xgboost | mae | 17679 | 0.2523 | 0.2301 | 0.2741 | 0.7158 | 1 | 0.5562 |
-| linear_regression | mae | 17679 | 0.1843 | 0.1624 | 0.2062 | 0.7623 | 1 | 0.5687 |
-| transformer | mae | 17679 | 0.1412 | 0.1166 | 0.1651 | 0.8327 | 1 | 0.5858 |
-| attention_lstm | mae | 17679 | 0.0056 | -0.0412 | 0.0506 | 0.9598 | 1 | 0.6332 |
-| gru | mae | 17679 | -0.0514 | -0.0983 | -0.0096 | 0.9721 | 1 | 0.6313 |
-| lstm | mae | 17679 | -0.0134 | -0.0577 | 0.0248 | 0.9863 | 1 | 0.6205 |
-| gradient_boosting | rmse | 17679 | 0.2710 | 0.2490 | 0.2930 | 0.7369 | 1 | 0.4534 |
-| cnn_lstm | rmse | 17679 | 0.2540 | 0.2307 | 0.2777 | 0.7573 | 1 | 0.3962 |
-| random_forest | rmse | 17679 | 0.2678 | 0.2459 | 0.2898 | 0.7689 | 1 | 0.4344 |
-| xgboost | rmse | 17679 | 0.2523 | 0.2301 | 0.2741 | 0.7784 | 1 | 0.4322 |
-| smart_persistence | rmse | 17679 | 0.1612 | 0.1395 | 0.1858 | 0.7859 | 1 | 0.4914 |
-| linear_regression | rmse | 17679 | 0.1843 | 0.1624 | 0.2062 | 0.7942 | 1 | 0.4478 |
-| transformer | rmse | 17679 | 0.1412 | 0.1166 | 0.1651 | 0.8509 | 1 | 0.4483 |
-| gru | rmse | 17679 | -0.0514 | -0.0983 | -0.0096 | 0.9648 | 1 | 0.5550 |
-| lstm | rmse | 17679 | -0.0134 | -0.0577 | 0.0248 | 0.9902 | 1 | 0.5239 |
-| attention_lstm | rmse | 17679 | 0.0056 | -0.0412 | 0.0506 | 0.9961 | 1 | 0.5667 |
+| linear_regression | mae | 17679 | 0.1843 | 0.1624 | 0.2062 | 0.0000 | 0.0000 | 0.5687 |
+| smart_persistence | mae | 17679 | 0.1612 | 0.1395 | 0.1858 | 0.0000 | 0.0000 | 0.6068 |
+| cnn_lstm | mae | 17679 | 0.2540 | 0.2307 | 0.2777 | 0.0000 | 0.0000 | 0.5402 |
+| gradient_boosting | mae | 17679 | 0.2710 | 0.2490 | 0.2930 | 0.0000 | 0.0000 | 0.5950 |
+| random_forest | mae | 17679 | 0.2678 | 0.2459 | 0.2898 | 0.0000 | 0.0000 | 0.5796 |
+| transformer | mae | 17679 | 0.1412 | 0.1166 | 0.1651 | 0.0000 | 0.0000 | 0.5858 |
+| xgboost | mae | 17679 | 0.2523 | 0.2301 | 0.2741 | 0.0000 | 0.0000 | 0.5562 |
+| attention_lstm | mae | 17679 | 0.0056 | -0.0412 | 0.0506 | 0.0000 | 0.0000 | 0.6332 |
+| gru | mae | 17679 | -0.0514 | -0.0983 | -0.0096 | 0.0000 | 0.0000 | 0.6313 |
+| lstm | mae | 17679 | -0.0134 | -0.0577 | 0.0248 | 0.0224 | 0.0224 | 0.6205 |
+| linear_regression | rmse | 17679 | 0.1843 | 0.1624 | 0.2062 | 0.0000 | 0.0000 | 0.4478 |
+| smart_persistence | rmse | 17679 | 0.1612 | 0.1395 | 0.1858 | 0.0000 | 0.0000 | 0.4914 |
+| cnn_lstm | rmse | 17679 | 0.2540 | 0.2307 | 0.2777 | 0.0000 | 0.0000 | 0.3962 |
+| gradient_boosting | rmse | 17679 | 0.2710 | 0.2490 | 0.2930 | 0.0000 | 0.0000 | 0.4534 |
+| random_forest | rmse | 17679 | 0.2678 | 0.2459 | 0.2898 | 0.0000 | 0.0000 | 0.4344 |
+| transformer | rmse | 17679 | 0.1412 | 0.1166 | 0.1651 | 0.0000 | 0.0000 | 0.4483 |
+| xgboost | rmse | 17679 | 0.2523 | 0.2301 | 0.2741 | 0.0000 | 0.0000 | 0.4322 |
+| gru | rmse | 17679 | -0.0514 | -0.0983 | -0.0096 | 0.0000 | 0.0000 | 0.5550 |
+| lstm | rmse | 17679 | -0.0134 | -0.0577 | 0.0248 | 0.1007 | 0.2015 | 0.5239 |
+| attention_lstm | rmse | 17679 | 0.0056 | -0.0412 | 0.0506 | 0.5143 | 0.5143 | 0.5667 |
 
-The integrated autocorrelation time of the loss differential on this data is **9** steps, so the nominal sample size overstates the information in the error series by roughly that factor. That is the quantitative reason the Diebold-Mariano test rejects nothing here while the block-bootstrap interval excludes zero for several models. Both are reported; the interval is the informative statistic and the test is the conservative one. `results/tables/error_autocorrelation.csv` and `results/tables/block_length_sensitivity.csv` carry the diagnostics.
+The integrated autocorrelation time of the loss differential on this data is **9** steps, so the nominal sample size overstates the information in the error series by roughly that factor. The Harvey-Leybourne-Newbold correction and the Bartlett kernel absorb it, and the differences survive. What the correction changes is the size of the claimed effect, not its existence, and the two statistics are reported together for that reason: a p-value says whether a difference can be told from the sampling noise, the interval says how large it is. On this data the differences are statistically clear and practically small. `results/tables/error_autocorrelation.csv` and `results/tables/block_length_sensitivity.csv` carry the diagnostics.
+
+**Table 10a. Reduced input sets against the full-input run of the same model, on the same daylight timestamps.**
+
+Source: `results/tables/ablation_statistics.csv`
+
+| model | removed_regime | rmse_increase_pct | skill_point | dm_p_value | dm_p_value_holm |
+| --- | --- | --- | --- | --- | --- |
+| attention_lstm | pv_only | 5.8425 | -0.0584 | 0.0000 | 0.0000 |
+| attention_lstm | weather_only | 2.2493 | -0.0225 | 0.0000 | 0.0000 |
+| attention_lstm | pv_weather_solar | -2.9216 | 0.0292 | 0.0000 | 0.0000 |
+| attention_lstm | pv_weather | -4.1827 | 0.0418 | 0.0000 | 0.0000 |
+| cnn_lstm | weather_only | 41.3158 | -0.4132 | 0.0000 | 0.0000 |
+| cnn_lstm | pv_weather | 0.2679 | -0.0027 | 0.0000 | 0.0000 |
+| cnn_lstm | pv_weather_solar | -0.0638 | 0.0006 | 0.3701 | 0.7402 |
+| cnn_lstm | pv_only | -1.3980 | 0.0140 | 0.0568 | 0.1704 |
+| gradient_boosting | weather_only | 50.1259 | -0.5013 | 0.0000 | 0.0000 |
+| gradient_boosting | pv_weather | 1.1050 | -0.0111 | 0.0000 | 0.0000 |
+| gradient_boosting | pv_weather_solar | 0.7550 | -0.0075 | 0.0000 | 0.0000 |
+| gradient_boosting | pv_only | -1.5634 | 0.0156 | 0.0000 | 0.0000 |
+| lstm | weather_only | 9.1104 | -0.0911 | 0.0000 | 0.0000 |
+| lstm | pv_only | 4.3906 | -0.0439 | 0.0000 | 0.0000 |
+| lstm | pv_weather_solar | -0.7627 | 0.0076 | 0.0025 | 0.0101 |
+| lstm | pv_weather | -2.1418 | 0.0214 | 0.0000 | 0.0000 |
+| xgboost | weather_only | 42.6878 | -0.4269 | 0.0000 | 0.0000 |
+| xgboost | pv_weather_solar | 0.2859 | -0.0029 | 0.0000 | 0.0000 |
+| xgboost | pv_weather | -0.5051 | 0.0051 | 0.4948 | 0.7402 |
+| xgboost | pv_only | -3.4704 | 0.0347 | 0.0000 | 0.0000 |
+
+The comparison reference is the same model on the full input set, not persistence: a regime drop of forty percent and a model that is simply worse than persistence are different statements, and comparing every regime to persistence would have reported the second while claiming to answer the first. The burden of accuracy sits with the trailing power history, and the more the architecture relies on a recurrent state the less it needs the exogenous weather.
 
 ## 10. Explainability
 
@@ -619,39 +652,39 @@ Source: `results/tables/feature_importance.csv`
 | xgboost | ghi_slope_1 | 0.0096 |  |
 | xgboost | ghi_delta_4 | 0.0324 |  |
 | xgboost | ghi_slope_4 | 0.0200 |  |
-| attention_lstm | pv_power_w_lag_0 | 7,114.4600 |  |
-| attention_lstm | pv_power_w_lag_1 | 6,282.1200 |  |
-| attention_lstm | pv_power_w_lag_2 | 5,283.2200 |  |
-| attention_lstm | pv_power_w_lag_8 | 4,208.1300 |  |
-| attention_lstm | pv_rolling_mean_4 | 3,468.0300 |  |
-| attention_lstm | pv_rolling_mean_24 | 3,030.9100 |  |
-| attention_lstm | pv_rolling_mean_12 | 2,511.9600 |  |
-| attention_lstm | pv_power_w_lag_4 | 2,296.8100 |  |
-| attention_lstm | pv_power_w_lag_12 | 2,202.4600 |  |
-| attention_lstm | ghi | 2,127.1400 |  |
-| attention_lstm | solar_elevation | 1,981.1900 |  |
-| attention_lstm | pv_rolling_std_12 | 1,710.0500 |  |
-| attention_lstm | ghi_delta_4 | 1,685.3200 |  |
-| attention_lstm | pv_power_w_lag_96 | 1,624.3700 |  |
-| attention_lstm | pv_rolling_std_4 | 1,589.8800 |  |
-| attention_lstm | pv_power_w_lag_48 | 1,450.4400 |  |
-| attention_lstm | ghi_slope_1 | 1,355.8200 |  |
-| attention_lstm | pv_rolling_std_24 | 1,318.4900 |  |
-| attention_lstm | ghi_delta_1 | 1,290.5100 |  |
-| attention_lstm | ghi_rollmean_4 | 1,259.8200 |  |
-| attention_lstm | ghi_slope_4 | 1,146.3300 |  |
-| attention_lstm | ghi_rollmean_24 | 579.7540 |  |
-| attention_lstm | pv_power_w_lag_24 | 539.2510 |  |
-| attention_lstm | relative_humidity | 284.9940 |  |
-| attention_lstm | temperature_rollmean_4 | 36.1125 |  |
-| attention_lstm | hour_cos | 3.0997 |  |
-| attention_lstm | doy_cos | 1.9364 |  |
-| attention_lstm | sin_solar_elevation | -1.3714 |  |
-| attention_lstm | doy_sin | -2.6503 |  |
-| attention_lstm | hour_sin | -3.0782 |  |
-| attention_lstm | temperature_rollmean_24 | -3.1474 |  |
-| attention_lstm | temperature | -16.5406 |  |
-| attention_lstm | wind_speed | -29.9804 |  |
+| attention_lstm | pv_power_w_lag_1 | 5,386.7600 |  |
+| attention_lstm | pv_power_w_lag_0 | 4,100.8600 |  |
+| attention_lstm | pv_power_w_lag_8 | 3,023.0400 |  |
+| attention_lstm | solar_elevation | 2,477.7000 |  |
+| attention_lstm | pv_rolling_mean_4 | 2,327.3600 |  |
+| attention_lstm | pv_rolling_std_24 | 2,281.8400 |  |
+| attention_lstm | ghi_rollmean_4 | 2,275.2500 |  |
+| attention_lstm | ghi | 2,151.3100 |  |
+| attention_lstm | pv_power_w_lag_96 | 2,013.9200 |  |
+| attention_lstm | pv_rolling_std_12 | 1,998.1200 |  |
+| attention_lstm | pv_power_w_lag_2 | 1,920.8600 |  |
+| attention_lstm | pv_rolling_mean_24 | 1,869.3500 |  |
+| attention_lstm | pv_power_w_lag_12 | 1,817.8200 |  |
+| attention_lstm | ghi_delta_4 | 1,687.1100 |  |
+| attention_lstm | pv_rolling_mean_12 | 1,510.9300 |  |
+| attention_lstm | ghi_slope_4 | 1,340.6400 |  |
+| attention_lstm | ghi_delta_1 | 1,327.4000 |  |
+| attention_lstm | pv_rolling_std_4 | 1,305.8900 |  |
+| attention_lstm | pv_power_w_lag_24 | 1,255.2500 |  |
+| attention_lstm | ghi_slope_1 | 1,197.5500 |  |
+| attention_lstm | pv_power_w_lag_4 | 924.8450 |  |
+| attention_lstm | pv_power_w_lag_48 | 562.6160 |  |
+| attention_lstm | ghi_rollmean_24 | 493.4700 |  |
+| attention_lstm | relative_humidity | 221.7290 |  |
+| attention_lstm | temperature | 23.2494 |  |
+| attention_lstm | doy_cos | 12.3095 |  |
+| attention_lstm | hour_cos | -0.2187 |  |
+| attention_lstm | doy_sin | -0.2236 |  |
+| attention_lstm | hour_sin | -3.1644 |  |
+| attention_lstm | sin_solar_elevation | -8.1497 |  |
+| attention_lstm | temperature_rollmean_24 | -22.4488 |  |
+| attention_lstm | wind_speed | -32.3754 |  |
+| attention_lstm | temperature_rollmean_4 | -38.0554 |  |
 
 ## 11. Uncertainty
 
@@ -690,42 +723,42 @@ Source: `results/tables/computational_cost.csv`
 | smart_persistence | rule-based reference | 0.0000 | 0.0000 | 0 | 0.0941 | True |
 | smart_persistence | rule-based reference | 0.0000 | 0.0000 | 0 | 0.2067 | False |
 | smart_persistence | rule-based reference | 0.0000 | 0.0000 | 0 | 0.3280 | False |
-| linear_regression | classical machine learning | 2.1435 | 0.0012 | 793 | 0.1356 | False |
-| linear_regression | classical machine learning | 1.3918 | 0.0009 | 793 | 0.0914 | True |
-| linear_regression | classical machine learning | 8.2673 | 0.0014 | 793 | 0.1780 | False |
-| linear_regression | classical machine learning | 8.4667 | 0.0010 | 793 | 0.1746 | False |
-| random_forest | classical machine learning | 287.4450 | 0.0202 | 200 | 0.1217 | False |
-| random_forest | classical machine learning | 188.2630 | 0.0171 | 200 | 0.0901 | False |
-| random_forest | classical machine learning | 536.8830 | 0.1066 | 200 | 0.1785 | False |
-| random_forest | classical machine learning | 564.1860 | 0.0428 | 200 | 0.1688 | False |
-| gradient_boosting | classical machine learning | 9.4859 | 0.0206 | 0 | 0.1212 | False |
-| gradient_boosting | classical machine learning | 11.8988 | 0.0173 | 0 | 0.0876 | True |
-| gradient_boosting | classical machine learning | 63.0244 | 0.0633 | 0 | 0.1764 | False |
-| gradient_boosting | classical machine learning | 47.6943 | 0.0711 | 0 | 0.1661 | False |
-| xgboost | classical machine learning | 42.5256 | 0.0029 | 400 | 0.1243 | False |
-| xgboost | classical machine learning | 36.4617 | 0.0021 | 400 | 0.0930 | False |
-| xgboost | classical machine learning | 133.5540 | 0.0036 | 400 | 0.1817 | False |
-| xgboost | classical machine learning | 135.5020 | 0.0036 | 400 | 0.1722 | False |
-| lstm | recurrent neural network | 312.6060 | 0.0520 | 50401 | 0.1684 | False |
-| lstm | recurrent neural network | 181.0180 | 0.0359 | 50401 | 0.1596 | False |
-| lstm | recurrent neural network | 829.5520 | 0.0888 | 50401 | 0.2006 | False |
-| lstm | recurrent neural network | 850.6670 | 0.0753 | 50401 | 0.1886 | False |
-| gru | recurrent neural network | 361.9260 | 0.0467 | 37825 | 0.1748 | False |
-| gru | recurrent neural network | 136.0070 | 0.0447 | 37825 | 0.1615 | False |
-| gru | recurrent neural network | 498.6340 | 0.1874 | 37825 | 0.2007 | False |
-| gru | recurrent neural network | 1,139.4300 | 0.2975 | 37825 | 0.1909 | False |
-| cnn_lstm | hybrid convolutional-recurrent | 274.1260 | 0.0265 | 64225 | 0.1240 | False |
-| cnn_lstm | hybrid convolutional-recurrent | 207.6680 | 0.0258 | 64225 | 0.0882 | False |
-| cnn_lstm | hybrid convolutional-recurrent | 437.0280 | 0.0695 | 64225 | 0.1853 | False |
-| cnn_lstm | hybrid convolutional-recurrent | 511.9600 | 0.0766 | 64225 | 0.1770 | False |
-| attention_lstm | hybrid recurrent-attention | 172.7780 | 0.0328 | 55201 | 0.1653 | False |
-| attention_lstm | hybrid recurrent-attention | 251.3470 | 0.0369 | 55201 | 0.1479 | False |
-| attention_lstm | hybrid recurrent-attention | 595.4610 | 0.0924 | 55201 | 0.2023 | False |
-| attention_lstm | hybrid recurrent-attention | 1,371.9300 | 0.0657 | 55201 | 0.1820 | False |
-| transformer | attention-only transformer | 1,121.9900 | 0.0478 | 69185 | 0.1427 | False |
-| transformer | attention-only transformer | 2,766.3100 | 0.0718 | 69185 | 0.0997 | False |
-| transformer | attention-only transformer | 3,404.4100 | 0.1323 | 69185 | 0.1820 | False |
-| transformer | attention-only transformer | 3,172.2700 | 0.1873 | 69185 | 0.1829 | False |
+| linear_regression | classical machine learning | 2.1435 | 0.0012 | 16 | 0.1356 | False |
+| linear_regression | classical machine learning | 1.3918 | 0.0009 | 16 | 0.0914 | True |
+| linear_regression | classical machine learning | 8.2673 | 0.0014 | 16 | 0.1780 | False |
+| linear_regression | classical machine learning | 8.4667 | 0.0010 | 16 | 0.1746 | False |
+| random_forest | classical machine learning | 287.4450 | 0.0202 | 100666 | 0.1217 | False |
+| random_forest | classical machine learning | 188.2630 | 0.0171 | 100666 | 0.0901 | False |
+| random_forest | classical machine learning | 536.8830 | 0.1066 | 100666 | 0.1785 | False |
+| random_forest | classical machine learning | 564.1860 | 0.0428 | 100666 | 0.1688 | False |
+| gradient_boosting | classical machine learning | 9.4859 | 0.0206 | 3070 | 0.1212 | False |
+| gradient_boosting | classical machine learning | 11.8988 | 0.0173 | 3070 | 0.0876 | True |
+| gradient_boosting | classical machine learning | 63.0244 | 0.0633 | 3070 | 0.1764 | False |
+| gradient_boosting | classical machine learning | 47.6943 | 0.0711 | 3070 | 0.1661 | False |
+| xgboost | classical machine learning | 42.5256 | 0.0029 | 27292 | 0.1243 | False |
+| xgboost | classical machine learning | 36.4617 | 0.0021 | 27292 | 0.0930 | False |
+| xgboost | classical machine learning | 133.5540 | 0.0036 | 27292 | 0.1817 | False |
+| xgboost | classical machine learning | 135.5020 | 0.0036 | 27292 | 0.1722 | False |
+| lstm | recurrent neural network | 312.6060 | 0.0520 | 43873 | 0.1684 | False |
+| lstm | recurrent neural network | 181.0180 | 0.0359 | 43873 | 0.1596 | False |
+| lstm | recurrent neural network | 829.5520 | 0.0888 | 43873 | 0.2006 | False |
+| lstm | recurrent neural network | 850.6670 | 0.0753 | 43873 | 0.1886 | False |
+| gru | recurrent neural network | 361.9260 | 0.0467 | 32929 | 0.1748 | False |
+| gru | recurrent neural network | 136.0070 | 0.0447 | 32929 | 0.1615 | False |
+| gru | recurrent neural network | 498.6340 | 0.1874 | 32929 | 0.2007 | False |
+| gru | recurrent neural network | 1,139.4300 | 0.2975 | 32929 | 0.1909 | False |
+| cnn_lstm | hybrid convolutional-recurrent | 274.1260 | 0.0265 | 60145 | 0.1240 | False |
+| cnn_lstm | hybrid convolutional-recurrent | 207.6680 | 0.0258 | 60145 | 0.0882 | False |
+| cnn_lstm | hybrid convolutional-recurrent | 437.0280 | 0.0695 | 60145 | 0.1853 | False |
+| cnn_lstm | hybrid convolutional-recurrent | 511.9600 | 0.0766 | 60145 | 0.1770 | False |
+| attention_lstm | hybrid recurrent-attention | 172.7780 | 0.0328 | 48673 | 0.1653 | False |
+| attention_lstm | hybrid recurrent-attention | 251.3470 | 0.0369 | 48673 | 0.1479 | False |
+| attention_lstm | hybrid recurrent-attention | 595.4610 | 0.0924 | 48673 | 0.2023 | False |
+| attention_lstm | hybrid recurrent-attention | 1,371.9300 | 0.0657 | 48673 | 0.1820 | False |
+| transformer | attention-only transformer | 1,121.9900 | 0.0478 | 68097 | 0.1427 | False |
+| transformer | attention-only transformer | 2,766.3100 | 0.0718 | 68097 | 0.0997 | False |
+| transformer | attention-only transformer | 3,404.4100 | 0.1323 | 68097 | 0.1820 | False |
+| transformer | attention-only transformer | 3,172.2700 | 0.1873 | 68097 | 0.1829 | False |
 
 ## 13. Discussion
 

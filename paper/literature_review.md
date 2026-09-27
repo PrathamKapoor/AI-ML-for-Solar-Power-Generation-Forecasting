@@ -103,9 +103,12 @@ cross-attention between sites has genuine structure to exploit. It also explains
 single-site results in the corpus are so often modest — a single site gives an
 architecture that is designed to fuse many sites nothing to fuse. This is also the
 clearest methodological gap in the reproduction literature: cross-site claims are
-made far more often than cross-site validation is performed, and the validation in
-this project (Experiment J) is declared but not implemented, which limits what can
-be concluded.
+made far more often than cross-site validation is performed. This project closes
+that gap for one panel — Experiment J trains on one site and tests on six unseen
+ones, and finds that transfer fails: skill against persistence runs from −0.10 to
+−1.07 across the panel, and pooling six training sites repairs it for five of the
+six holdouts. The negative result is itself the evidence that the gap in the
+literature is a real one.
 
 ## 4. Attention, transformers and explainability
 

@@ -113,11 +113,21 @@ def horizon_comparison(registry: pd.DataFrame,
     combined = combined.drop_duplicates(subset=["model", "horizon"], keep="first")
     combined["source_group"] = combined["experiment_group"]
     combined = _ordered(combined, "model", MODEL_ORDER)
+    # Inference latency is part of the horizon question: a model that is accurate
+    # at every horizon may still be unusable at a short one, where the forecast
+    # must be emitted on every cadence. It is therefore carried in the table
+    # rather than only in the cost table.
+    if "inference_ms_per_window" in combined.columns:
+        pass
+    elif "inference_ms_per_window" in registry.columns:
+        combined = combined.merge(registry[["model", "inference_ms_per_window"]]
+                                 .drop_duplicates("model"),
+                                 on="model", how="left")
     columns = ["model", "model_family", "horizon", "horizon_steps", "source_group",
-               "experiment_id", "rmse", "mae", "nrmse_capacity", "nrmse_mean", "r2",
+               "experiment_id", "mae", "rmse", "nrmse_capacity", "nrmse_mean", "r2",
                "smape", "persistence_rmse", "smart_persistence_rmse",
                "skill_vs_persistence_rmse", "skill_vs_smart_persistence_rmse",
-               "train_seconds", "n_parameters"]
+               "train_seconds", "inference_ms_per_window", "n_parameters"]
     return combined[[c for c in columns if c in combined.columns]].reset_index(drop=True)
 
 
@@ -254,6 +264,213 @@ def model_ablation(registry: pd.DataFrame, config: Config | None = None
     return pd.DataFrame(rows)
 
 
+# A footprint is measured once per model per process. The measurement involves a
+# fit, and the value is a property of the architecture rather than of the run.
+_FOOTPRINT_CACHE: dict[str, dict[str, float]] = {}
+
+
+def model_footprint(model_name: str) -> dict[str, float]:
+    """Parameter count, serialised size and training peak memory for one model.
+
+    Parameter count alone understates the deployment footprint of a tree
+    ensemble, because a fitted forest is mostly a lookup table rather than a
+    weight tensor, so all three measures are reported: the number of trainable
+    parameters, the size of the pickled artefact, and the peak resident memory
+    observed while fitting. A rule-based model is reported as zero, which is its
+    exact cost.
+    """
+    import pickle
+    import tracemalloc
+
+    import numpy as np
+
+    from ..models import registry as model_registry
+
+    info = model_registry.model_info(model_name)
+    if info["requires_training"] == "no":
+        return {"n_parameters": 0.0, "model_size_bytes": 0.0, "peak_train_memory_mb": 0.0,
+                "resident_memory_mb": 0.0, "size_measure": "no fitted state"}
+    cached = _FOOTPRINT_CACHE.get(model_name)
+    if cached is not None:
+        return dict(cached)
+
+    settings: dict[str, Any] = {}
+    if info["kind"] == "torch":
+        from ..config import load_config
+        settings = (load_config().get("neural", {}) or {}).get(model_name, {})
+    if info["kind"] == "sklearn":
+        from ..config import load_config
+        settings = (load_config().get("classical", {}) or {}).get(model_name, {})
+
+    try:
+        model = model_registry.build_model(model_name, n_features=16,
+                                           random_state=42, **settings)
+    except Exception:
+        return {"n_parameters": float("nan"), "model_size_bytes": float("nan"),
+                "peak_train_memory_mb": float("nan"), "size_measure": "unavailable"}
+
+    rng = np.random.default_rng(0)
+    # A sequence model consumes a lookback window, so the probe input has to be
+    # three-dimensional for it and two-dimensional for a tabular estimator.
+    if info["kind"] == "torch":
+        lookback = int((load_config().get("neural", {}) or {}).get("lookback", 24))
+        X = rng.normal(size=(400, lookback, 16))
+    else:
+        X = rng.normal(size=(400, 16))
+    y = rng.normal(size=400)
+    size_bytes = float("nan")
+    peak_mb = float("nan")
+    resident_mb = float("nan")
+    if info["kind"] == "torch":
+        # A sequence forecaster is trained by the experiment runner, not by the
+        # adapter, so there is no fit to trace here. The deployment cost is
+        # measured instead: build the module and run one inference pass. The
+        # training peak is left as NaN rather than reported as zero, because
+        # "not measured" and "free" are different claims.
+        try:
+            import torch
+
+            rss_before = _rss_mb()
+            size_bytes = parameter_bytes(model)
+            with torch.no_grad():
+                model(torch.as_tensor(X[:1], dtype=torch.float32))
+            resident_mb = max(0.0, _rss_mb() - rss_before)
+        except Exception:
+            resident_mb = float("nan")
+        _FOOTPRINT_CACHE[model_name] = {
+            "n_parameters": fitted_size(model), "model_size_bytes": size_bytes,
+            "peak_train_memory_mb": float("nan"), "resident_memory_mb": resident_mb,
+            "size_measure": "parameter buffer",
+            "memory_measure": "resident after one inference pass"}
+        return dict(_FOOTPRINT_CACHE[model_name])
+    try:
+        rss_before = _rss_mb()
+        tracemalloc.start()
+        model.fit(X, y)
+        _current, peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        peak_mb = peak / (1024.0 * 1024.0)
+        # Resident memory attributable to the fitted artefact. Unlike tracemalloc,
+        # which only sees Python allocations, this covers the native buffers of a
+        # fitted estimator.
+        resident_mb = max(0.0, _rss_mb() - rss_before)
+    except Exception:
+        try:
+            tracemalloc.stop()
+        except Exception:
+            pass
+    try:
+        size_bytes = float(len(pickle.dumps(model)))
+    except Exception:
+        size_bytes = parameter_bytes(model)
+    _FOOTPRINT_CACHE[model_name] = {
+        "n_parameters": fitted_size(model), "model_size_bytes": size_bytes,
+        "peak_train_memory_mb": peak_mb, "resident_memory_mb": resident_mb,
+        "size_measure": "fitted structure",
+        "memory_measure": "python peak plus resident after fit"}
+    return dict(_FOOTPRINT_CACHE[model_name])
+
+
+def _rss_mb() -> float:
+    """Resident set size of this process in MB, or NaN if it cannot be read."""
+    try:
+        import psutil
+
+        return float(psutil.Process().memory_info().rss) / (1024.0 * 1024.0)
+    except Exception:
+        return float("nan")
+
+
+def parameter_bytes(model: Any) -> float:
+    """Bytes occupied by a neural network's parameters, in float32."""
+    import torch
+
+    module = model
+    if not isinstance(module, torch.nn.Module):
+        inner = getattr(model, "inner_model", None) or getattr(model, "module", None)
+        module = inner if isinstance(inner, torch.nn.Module) else None
+    if module is None:
+        return float("nan")
+    return float(sum(p.numel() * p.element_size()
+                     for p in module.parameters() if p.requires_grad))
+
+
+def _flatten(items: Any) -> list:
+    "Flatten nested sequences one or two levels deep."
+    out: list = []
+    for item in items:
+        if isinstance(item, (list, tuple, np.ndarray)):
+            out.extend(item)
+        else:
+            out.append(item)
+    return out
+
+
+def fitted_size(model: Any) -> float:
+    """A structural size for any fitted estimator, in the same units as parameters.
+
+    A fitted tree ensemble has no weight tensor, so reporting a parameter count of
+    zero would understate it by orders of magnitude. The measure is the number of
+    stored scalars in the fitted structure: tree nodes for a scikit-learn or
+    gradient-boosting ensemble, coefficients for a linear model, and the tensor
+    count for a neural network.
+    """
+    import torch
+
+    inner = getattr(model, "estimator", model)
+
+    if isinstance(inner, torch.nn.Module) or isinstance(model, torch.nn.Module):
+        return float(sum(p.numel() for p in inner.parameters() if p.requires_grad))
+
+    if hasattr(inner, "get_booster"):
+        # XGBoost: the number of stored tree nodes across the boosted rounds,
+        # which is the direct analogue of a scikit-learn ensemble's node count.
+        try:
+            dumps = inner.get_booster().get_dump(dump_format="json")
+            total = sum(dump.count('"nodeid"') for dump in dumps)
+            return float(total) if total else float("nan")
+        except Exception:
+            return float("nan")
+
+    total = 0
+    for predictor in _flatten(getattr(inner, "_predictors", []) or []):
+        nodes = getattr(predictor, "nodes", None)
+        if nodes is not None:
+            # HistGradientBoosting: one TreePredictor per boosting iteration, each
+            # holding a structured node array. The attribute is nested one level
+            # deep in recent scikit-learn versions.
+            total += len(nodes)
+    if total:
+        return float(total)
+
+    if hasattr(inner, "coefs_"):
+        # A multi-layer perceptron stores a weight matrix per layer.
+        return float(sum(np.asarray(w).size for w in inner.coefs_))
+
+    estimators = getattr(inner, "estimators_", None)
+    if estimators is not None:
+        total = 0
+        for node in np.ravel(estimators):
+            tree = getattr(node, "tree", None)
+            if tree is not None and hasattr(tree, "node_count"):
+                total += int(tree.node_count)
+            elif hasattr(node, "tree_"):
+                total += int(node.tree_.node_count)
+            elif hasattr(node, "estimators_"):     # nested ensemble
+                for child in np.ravel(node.estimators_):
+                    inner_tree = getattr(child, "tree_", None)
+                    if inner_tree is not None:
+                        total += int(inner_tree.node_count)
+        return float(total) if total else float("nan")
+
+    if hasattr(inner, "coef_"):
+        return float(np.asarray(inner.coef_).size)
+    n_parameters = getattr(model, "n_parameters", None)
+    if n_parameters:
+        return float(n_parameters)
+    return float("nan")
+
+
 def computational_cost(registry: pd.DataFrame) -> pd.DataFrame:
     """Training duration, inference latency, parameter count and the Pareto flag."""
     if registry.empty:
@@ -266,20 +483,51 @@ def computational_cost(registry: pd.DataFrame) -> pd.DataFrame:
     for _, row in _ordered(frame, "model", MODEL_ORDER).iterrows():
         train_seconds = float(row.get("train_seconds", np.nan) or 0.0)
         inference_ms = float(row.get("inference_ms_per_window", np.nan) or 0.0)
-        rows.append({
+        recorded = row.get("n_parameters")
+        n_parameters = float(recorded) if recorded and np.isfinite(recorded) else None
+        # The footprint is a property of the architecture, not of the horizon, so
+        # it is measured once per model. Re-measuring it per row would both cost
+        # a fit each time and report the allocator's noise as if it were a
+        # property of the model.
+        measured = model_footprint(str(row["model"]))
+        size_bytes = measured["model_size_bytes"]
+        peak_mb = measured["peak_train_memory_mb"]
+        resident_mb = measured["resident_memory_mb"]
+        size_measure = measured.get("size_measure")
+        # The structural size is reported as the parameter count for every family,
+        # because it is the only measure that means the same thing across them.
+        # What the runner recorded is kept in its own column: for a tree ensemble
+        # it is an estimator count, not a parameter count, and labelling it as
+        # one would make a 200-tree forest look three orders of magnitude
+        # smaller than a 200-weight layer.
+        n_parameters = measured["n_parameters"]
+        n_parameters_recorded = float(recorded) if recorded is not None else None
+        entries = {
             "model": row["model"],
             "model_family": MODEL_FAMILIES.get(row["model"], row.get("model_family")),
             "horizon": row["horizon"],
             "requires_training": bool(train_seconds > 0),
             "train_seconds": train_seconds,
             "inference_ms_per_window": inference_ms,
-            "n_parameters": float(row.get("n_parameters", np.nan) or 0.0),
+            "n_parameters": n_parameters,
+            "n_parameters_recorded": n_parameters_recorded,
             "nrmse_capacity": float(row.get("nrmse_capacity", np.nan)),
             "rmse": float(row.get("rmse", np.nan)),
-            "thread_note": ("BLAS and OpenMP thread counts are pinned to 1 for every run "
-                            "so the durations are comparable across machines; absolute "
-                            "values are machine specific and only the ranking is portable"),
-        })
+        }
+        if size_bytes is not None:
+            entries["model_size_bytes"] = size_bytes
+            entries["model_size_kb"] = size_bytes / 1024.0
+        if peak_mb is not None:
+            entries["peak_train_memory_mb"] = peak_mb
+        if resident_mb is not None:
+            entries["resident_memory_mb"] = resident_mb
+        if size_measure:
+            entries["n_parameters_measure"] = size_measure
+        entries["thread_note"] = (
+            "BLAS and OpenMP thread counts are pinned to 1 for every run "
+            "so the durations are comparable across machines; absolute "
+            "values are machine specific and only the ranking is portable")
+        rows.append(entries)
     table = pd.DataFrame(rows)
     if table.empty:
         return table
@@ -400,3 +648,8 @@ def format_markdown_table(frame: pd.DataFrame, float_format: str = "{:,.4g}",
         lines.append(f"| _... {len(frame) - int(max_rows)} further rows in "
                      f"{'the CSV'} |" + " |" * (len(columns) - 2) + " |")
     return "\n".join(lines)
+
+
+
+
+

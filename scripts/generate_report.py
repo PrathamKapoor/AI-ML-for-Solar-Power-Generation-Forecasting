@@ -144,10 +144,19 @@ GROUP_DESCRIPTIONS = {
     "F_model_ablation": "Composite architectures against their backbones (analysis of "
                         "Experiment B).",
     "G_seasonal": "Seasonal stratification of the stored predictions (analysis stage).",
-    "H_explainability": "SHAP and permutation importance (requires refitting; opt-in).",
+    "H_explainability": "SHAP and permutation importance, with integrated gradients for "
+                        "the recurrent models (executed).",
     "I_cost": "Training and inference cost, assembled from the registry (analysis stage).",
-    "J_cross_site": "Cross-site transfer to held-out stations (not executed; see docs).",
-    "K_uncertainty": "Split conformal prediction intervals (opt-in stage).",
+    "J_cross_site": "Cross-site transfer to held-out stations: within-site reference, "
+                    "train-on-A/test-on-B, and leave-one-site-out (executed).",
+    "K_uncertainty": "Split conformal prediction intervals, with coverage and interval "
+                     "width for three nominal levels (executed).",
+    "M_multiseed": "Five seeds per recurrent model, aggregated to mean, standard deviation "
+                   "and a 95% confidence interval (executed).",
+    "N_feature_regimes": "Additive feature regimes, from power history alone to the full "
+                         "engineered set (executed).",
+    "S_stratified": "Error stratified by regime, season, time of day, generation level and "
+                    "ramping state (analysis of stored predictions).",
 }
 
 

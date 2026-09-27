@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -217,6 +218,39 @@ def score(seq: SequenceSet, predicted_w: np.ndarray, rated_w: float | None,
     return out["daylight"], out["all_steps"]
 
 
+def _source_checksum(config: Config) -> str | None:
+    """SHA-256 of the downloaded archive, or None when it is absent.
+
+    Recorded with every run so that a result is traceable to the exact bytes it
+    was produced from, and so that a silent archive replacement would show up as
+    a provenance difference rather than as an unexplained metric change.
+    """
+    import json
+
+    manifest = config.project_root_for("data") / "raw" / "download_manifest.json"
+    if not manifest.exists():
+        return None
+    try:
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    return (payload.get("archive") or {}).get("sha256")
+
+
+def _source_archive(config: Config) -> str | None:
+    """The local path recorded for the downloaded archive, if any."""
+    import json
+
+    manifest = config.project_root_for("data") / "raw" / "download_manifest.json"
+    if not manifest.exists():
+        return None
+    try:
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    return (payload.get("archive") or {}).get("local_path")
+
+
 def _build(model_name: str, config: Config, n_features: int):
     """Construct a model with the hyperparameters declared in ``models.yaml``."""
     info = reg.model_info(model_name)
@@ -410,7 +444,24 @@ def run_experiment(config: Config, spec: ExperimentSpec, featured: pd.DataFrame,
         predictions["error"] = predictions["predicted"] - predictions["actual"]
         predictions["abs_error"] = predictions["error"].abs()
 
-    metadata["environment"] = run_metadata(spec.seed)
+    environment = run_metadata(spec.seed)
+    metadata["environment"] = environment
+    # Provenance: a record must be traceable to the exact data it was fitted on,
+    # not only to the code. The archive checksum identifies the input bytes, and
+    # the timestamp distinguishes two runs of the same configuration.
+    metadata["provenance"] = {
+        "recorded_at_utc": environment.get("timestamp_utc"),
+        "source_archive": _source_archive(config),
+        "source_archive_sha256": _source_checksum(config),
+        "dataset": config.section("dataset")["name"],
+        "station": config.section("dataset")["primary_station"],
+        "config_fingerprint": config.fingerprint(),
+        "git_revision": environment.get("git_revision"),
+        "experiment_id": spec.experiment_id,
+        "note": ("The archive checksum identifies the input data. A run whose "
+                 "checksum differs from a previous run is not comparable with it, "
+                 "even if the configuration matches."),
+    }
     metadata["dataset"] = {
         "name": config.section("dataset")["name"],
         "primary_station": config.section("dataset")["primary_station"],
@@ -480,3 +531,4 @@ def save_experiment(result: ExperimentResult, directory: Path | None = None) -> 
     path = target / f"{result.spec.experiment_id}.json"
     write_json(result.to_dict(), path)
     return path
+

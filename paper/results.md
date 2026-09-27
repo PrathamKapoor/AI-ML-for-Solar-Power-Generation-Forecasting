@@ -209,39 +209,78 @@ never quoted as a performance figure.
 
 ## 9. Statistical comparison
 
-Source: `results/tables/statistical_significance.csv`,
+Source: `results/tables/statistical_tests.csv`,
 `results/tables/statistical_assumptions.json`,
 `results/tables/error_autocorrelation.csv`,
 `results/tables/block_length_sensitivity.csv`.
 
-| Model | Skill | 95% block-bootstrap CI | DM p (MAE) | DM p (RMSE) |
-| --- | ---: | --- | ---: | ---: |
-| Gradient boosting | +0.271 | [0.249, 0.293] | 0.68 | 0.74 |
-| CNN-LSTM | +0.254 | [0.231, 0.278] | 0.64 | 0.76 |
-| Random forest | +0.268 | [0.246, 0.290] | 0.71 | 0.77 |
-| XGBoost | +0.252 | [0.230, 0.274] | 0.72 | 0.78 |
-| Linear regression | +0.184 | [0.162, 0.206] | 0.76 | 0.79 |
-| Smart persistence | +0.161 | [0.139, 0.186] | 0.64 | 0.79 |
-| Transformer | +0.141 | [0.117, 0.165] | 0.83 | 0.85 |
-| Attention-LSTM | +0.006 | [−0.041, +0.051] | 0.96 | 1.00 |
-| LSTM | −0.013 | [−0.058, +0.025] | 0.99 | 0.99 |
-| GRU | −0.051 | [−0.098, −0.010] | 0.97 | 0.96 |
+| Model | Skill | 95% block-bootstrap CI | DM p (MAE) | DM p (RMSE) | Holm (MAE) |
+| --- | ---: | --- | ---: | ---: | ---: |
+| Gradient boosting | +0.271 | [0.249, 0.293] | <1e-15 | <1e-15 | <1e-15 |
+| Random forest | +0.268 | [0.246, 0.290] | <1e-15 | <1e-15 | <1e-15 |
+| CNN-LSTM | +0.254 | [0.231, 0.278] | <1e-15 | <1e-15 | <1e-15 |
+| XGBoost | +0.252 | [0.230, 0.274] | <1e-15 | <1e-15 | <1e-15 |
+| Linear regression | +0.184 | [0.162, 0.206] | <1e-15 | <1e-15 | <1e-15 |
+| Smart persistence | +0.161 | [0.139, 0.186] | <1e-15 | <1e-15 | <1e-15 |
+| Transformer | +0.141 | [0.117, 0.165] | <1e-15 | <1e-15 | <1e-15 |
+| Attention-LSTM | +0.006 | [-0.041, +0.051] | 2.1e-11 | 0.51 | 6.3e-11 |
+| LSTM | -0.013 | [-0.058, +0.025] | 2.2e-02 | 0.10 | 2.2e-02 |
+| GRU | -0.051 | [-0.098, -0.010] | 3.2e-06 | 4.3e-09 | 6.5e-06 |
 
-**The two procedures disagree, and the disagreement is the finding.** The
-block-bootstrap intervals exclude zero for eight of the eleven models; the
-Diebold-Mariano test rejects nothing, even where the point difference is large and
-the interval tight. The cause is measured rather than asserted: consecutive
-15-minute errors share a cloud field, the integrated autocorrelation time of the
-loss differential is large, the long-run variance estimate is therefore orders of
-magnitude above an i.i.d. one, and the test statistic shrinks accordingly. The
+**The two procedures agree once the test is computed correctly.** The
+Diebold-Mariano test rejects 18 of 20 comparisons after Holm correction, and the
+block-bootstrap interval excludes zero for eight of the eleven models. The
+significance is real but the effect is small, and the two facts have to be read
+together: the tree models beat persistence by 1.1-2.5 kW in mean absolute error on
+a 55 kW array, which is a difference an operator would care about, while the LSTM
+and GRU are *reliably worse* than persistence by 130 W and 277 W. A test that only
+reported significance would call the second group "not significantly different",
+which is the opposite of what the evidence supports.
+
+Two details are worth stating because they change the reading. The correction
+matters: consecutive 15-minute errors share a cloud field, the integrated
+autocorrelation time of the loss differential is 9 steps, and the long-run
+variance is far above an i.i.d. estimate. With the Harvey-Leybourne-Newbold
+adjustment the effects survive; without it the same data would have produced a
+table in which nothing was distinguishable. And the loss function is not neutral:
+attention-LSTM is significant under absolute error but not under squared error,
+which is what a model that occasionally overshoots the peak would produce. The
 block-length sensitivity table shows the bootstrap interval width rising until the
 block spans the dependence range and then plateauing, which is the diagnostic that
 justifies the chosen block length.
 
+## 9a. Input-regime effects against the full-input run
+
+Source: `results/tables/ablation_statistics.csv`.
+
+Each reduced input set is compared against the *same model* fitted on the full
+input set, on the same daylight timestamps. Eighteen of the twenty comparisons are
+significant after Holm correction, and the pattern is the same as the regime table
+but now with an effect size attached.
+
+| Model | Regime retained | RMSE change | Skill vs full | DM p (Holm) |
+| --- | --- | ---: | ---: | ---: |
+| Gradient boosting | weather only | +50.1% | -0.501 | <1e-15 |
+| XGBoost | weather only | +42.7% | -0.427 | <1e-15 |
+| CNN-LSTM | weather only | +41.3% | -0.413 | <1e-15 |
+| LSTM | weather only | +9.1% | -0.091 | <1e-15 |
+| Attention-LSTM | weather only | +2.2% | -0.022 | <1e-15 |
+| XGBoost | PV history only | -3.5% | +0.035 | <1e-15 |
+| Attention-LSTM | PV + weather | -4.2% | +0.042 | <1e-15 |
+
+Two things follow. First, the burden of accuracy sits with the trailing power
+history, and the more the architecture relies on a recurrent state, the less it
+needs the exogenous weather: removing PV history costs gradient boosting 50% of its
+RMSE and costs attention-LSTM 2%. Second, weather adds nothing to the tree models
+and subtracting it *improves* XGBoost significantly, which is the same finding as
+the permutation analysis and the ablation grid, reached by three independent routes.
+
 The correct reading: **the model differences are real, the pairing is strongly
-autocorrelated, the interval is the informative statistic and the hypothesis test
-is the conservative one.** No method, block length or sample was changed after the
-fact to obtain a preferred answer.
+autocorrelated, and the two statistics answer different questions.** The test says
+whether a difference can be told from the sampling noise; the interval says how
+large it is. On this data the differences are statistically clear and practically
+small, and the interval is the statistic a deployer needs. No method, block length
+or sample was changed after the fact to obtain a preferred answer.
 
 ## 10. Explainability (Experiment H)
 

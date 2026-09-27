@@ -43,7 +43,8 @@ MATRIX_COLUMNS = [
     "experiment_id", "research_question", "experiment_group", "protocol", "model",
     "model_family", "horizon", "site", "weather_regime", "season", "feature_regime",
     "seed", "n_observations", "mae", "rmse", "nrmse", "smape", "r2",
-    "skill_vs_persistence", "train_time_seconds", "inference_ms_per_window",
+    "skill_vs_persistence", "train_time", "inference_time",
+    "train_time_seconds", "inference_ms_per_window",
     "n_parameters", "status", "source",
 ]
 
@@ -66,6 +67,8 @@ def from_registry(registry: pd.DataFrame) -> pd.DataFrame:
     frame["experiment_id"] = frame["experiment_id"]
     frame["nrmse"] = frame.get("nrmse_capacity")
     frame["skill_vs_persistence"] = frame.get("skill_vs_persistence_rmse")
+    frame["train_time"] = frame.get("train_seconds")
+    frame["inference_time"] = frame.get("inference_ms_per_window")
     frame["train_time_seconds"] = frame.get("train_seconds")
     frame["n_observations"] = frame.get("n_test")
     frame["status"] = "executed"
@@ -181,6 +184,8 @@ def from_cross_site(cross_site: pd.DataFrame) -> pd.DataFrame:
     frame["nrmse"] = frame.get("nrmse_capacity")
     frame["skill_vs_persistence"] = frame.get("skill_vs_persistence_rmse")
     frame["n_observations"] = frame.get("n")
+    frame["train_time"] = frame.get("train_seconds")
+    frame["inference_time"] = frame.get("inference_ms_per_window")
     frame["train_time_seconds"] = frame.get("train_seconds")
     frame["status"] = "executed"
     frame["source"] = "results/tables/cross_site_comparison.csv"
@@ -241,3 +246,4 @@ def coverage_summary(matrix: pd.DataFrame) -> dict[str, Any]:
         "models_covered": sorted({str(m) for m in executed["model"]}),
         "sites_covered": sorted({str(s) for s in executed["site"]}),
     }
+

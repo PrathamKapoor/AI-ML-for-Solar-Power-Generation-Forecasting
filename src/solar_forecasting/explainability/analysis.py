@@ -32,6 +32,9 @@ import torch
 from ..config import Config
 from ..evaluation import metrics as metrics_mod
 from ..explainability.importance import (collapse_over_lookback, dependence_frame,
+                                         generation_level_labels,
+                                         integrated_gradients,
+                                         permutation_importance_by_condition,
                                          permutation_importance_by_regime,
                                          permutation_importance_sequence,
                                          shap_importance)
@@ -102,6 +105,33 @@ def _fit(config: Config, model_name: str, state: dict[str, Any], prepared: dict[
     raise KeyError(f"explainability is not defined for model kind {info['kind']!r}")
 
 
+def _assert_deterministic(forward, n_features: int) -> None:
+    """Fail loudly if the path handed to integrated gradients is not deterministic.
+
+    Integrated gradients is only defined for a deterministic function of its
+    input. A module left in training mode applies dropout, so the path points and
+    the two endpoints are each evaluated on a differently masked network, and the
+    completeness residual stops being a check on anything. The composed path is
+    probed, not the module, because it is the path that has to be deterministic:
+    the module plus the affine inverse target transform.
+
+    The module's own mode is deliberately left alone here. Switching it to
+    evaluation mode is the caller's job, so that the state is restored in the
+    same place that changed it.
+    """
+    import torch
+
+    probe = torch.zeros(1, 1, int(n_features), dtype=torch.float32)
+    with torch.no_grad():
+        first = float(forward(probe).sum())
+        second = float(forward(probe).sum())
+    if first != second:
+        raise RuntimeError(
+            "the forward path given to integrated gradients is not deterministic, so "
+            "the attributions and the completeness residual would be meaningless; "
+            "check that the module is in evaluation mode and that no dropout is active")
+
+
 def _shap_values(estimator, X: np.ndarray, seed: int = 42, n_samples: int = 600
                  ) -> pd.DataFrame | None:
     """Raw SHAP values at the origin timestep, for beeswarm and dependence plots.
@@ -160,13 +190,16 @@ def _shap_dependence(X: np.ndarray, shap_values: pd.DataFrame | None,
 
 def explain_model(config: Config, model_name: str, state: dict[str, Any],
                   n_permutation_repeats: int = 10, n_shap_samples: int = 2000,
-                  n_evaluation_samples: int = 4000, seed: int = 42) -> dict[str, Any]:
+                  n_evaluation_samples: int = 4000,
+                  n_integrated_gradient_samples: int = 32,
+                  seed: int = 42) -> dict[str, Any]:
     """Refit one model and return its importances plus a plain-language summary."""
     prepared = _prepare_sequences(config, state)
     sequence = prepared["sequence"]
     selected = prepared["selected"]
     lookback = prepared["lookback"]
     target_scaler = state["scalers"].target_scaler
+    rated_w = state["station"].get("rated_w")
 
     fitted, kind = _fit(config, model_name, state, prepared)
 
@@ -249,6 +282,63 @@ def explain_model(config: Config, model_name: str, state: dict[str, Any],
             predict_fn, X, y_true, selected, lookback, np.asarray(sequence.regime)[
                 evaluation_index], n_repeats=max(3, int(n_permutation_repeats) // 2),
             seed=seed)
+        # Generation level matters as much as weather: a variable can matter where
+        # the plant is producing and not matter where it is idle, and the
+        # attribution is only interpretable against absolute error in the
+        # high-generation rows.
+        out["condition_importance"] = permutation_importance_by_condition(
+            predict_fn, X, y_true, selected, lookback,
+            np.asarray(sequence.regime)[evaluation_index],
+            generation_level_labels(y_true, rated_w),
+            n_repeats=max(3, int(n_permutation_repeats) // 2), seed=seed)
+
+        # The target is standardised during training, so a raw forward pass
+        # returns standardised units. The completeness residual is reported in
+        # watts, so the affine inverse transform is applied inside the
+        # differentiable path rather than relabelling the units afterwards.
+        target_mean = float(np.asarray(getattr(target_scaler, "mean_", 0.0)).ravel()[0])
+        target_scale = float(np.asarray(getattr(target_scaler, "scale_", 1.0)).ravel()[0])
+
+        def forward(tensor):
+            """A differentiable forward path returning watts, for integrated gradients.
+
+            Deliberately separate from ``predict_fn``: that one runs under
+            ``torch.no_grad`` for permutation speed, and a no-grad path cannot
+            produce a gradient at all. The target standardisation is undone here
+            so the attribution and the completeness residual are both in watts.
+            """
+            return (fitted(tensor) * target_scale + target_mean).sum()
+
+        # Integrated gradients requires a deterministic function of the input.
+        # A module left in training mode applies dropout, so the network changes
+        # between the sixteen path points and between the two endpoints, which
+        # corrupts every attribution and makes the completeness residual
+        # meaningless. Evaluation mode is set here and restored immediately
+        # afterwards so the surrounding analysis is unaffected.
+        was_training = bool(getattr(fitted, "training", False))
+        fitted.eval()
+        try:
+            # The probe runs while the module is in evaluation mode, so it checks
+            # the composed path rather than the mode itself.
+            _assert_deterministic(forward, int(X.shape[2]))
+            # The path is long and the function along it is sharply nonlinear,
+            # because the sequence inputs are not standardised. The completeness
+            # residual falls as the rule is refined: on this model it is 22% of
+            # the prediction change at 512 steps, 6.6% at 1024, 2.4% at 2048 and
+            # 0.25% at 4096, and the budget here is set from that curve so the
+            # published number meets the 2% tolerance the summary states. A
+            # coarse rule would report an attribution total that does not
+            # reconstruct the prediction. The budget is spent on path resolution
+            # rather than on more samples, because a mean attribution needs far
+            # fewer samples than the integral needs steps.
+            # ``tools/check_integrated_gradients.py`` enforces the tolerance.
+            out["integrated_gradients"] = integrated_gradients(
+                forward, X, selected, n_samples=n_integrated_gradient_samples,
+                n_steps=8192, seed=seed)
+        finally:
+            if was_training:
+                fitted.train()
+
         out["dependence"] = dependence_frame(
             predict_fn, X, y_true, selected, lookback,
             out["top_features"][:3], n_samples=min(3000, int(evaluation_index.size)),
@@ -285,3 +375,6 @@ def importance_frame(results: dict[str, Any]) -> pd.DataFrame:
     if not rows:
         return pd.DataFrame()
     return pd.concat(rows, ignore_index=True)
+
+
+

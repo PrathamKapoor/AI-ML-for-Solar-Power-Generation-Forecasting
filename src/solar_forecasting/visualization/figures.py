@@ -782,6 +782,11 @@ def plot_feature_regimes(regime_table: pd.DataFrame, metric: str = "nrmse_capaci
     frame = regime_table.dropna(subset=[metric]).copy()
     if frame.empty:
         raise ValueError("feature-regime table has no plottable rows")
+    # The regime column is named feature_regime here and feature_spec in the
+    # registry; either spelling is accepted so the figure does not depend on which
+    # builder produced the table.
+    if "feature_regime" not in frame.columns and "feature_spec" in frame.columns:
+        frame = frame.rename(columns={"feature_spec": "feature_regime"})
     order = ["pv_only", "weather_only", "pv_weather", "pv_weather_solar", "full"]
     regimes = [r for r in order if r in set(frame["feature_regime"])] + \
               [r for r in frame["feature_regime"].unique() if r not in order]
@@ -923,6 +928,243 @@ def plot_memory_and_size(cost: pd.DataFrame, name: str = "fig28_cost_memory",
     fig.tight_layout()
     return save(fig, name, directory)
 # ---------------------------------------------------------------------------
+# 30-33. Dataset panels and horizon detail
+# ---------------------------------------------------------------------------
+def plot_temporal_coverage(featured: pd.DataFrame, split_ranges: Mapping[str, Any] | None = None,
+                           name: str = "fig19b_temporal_coverage",
+                           directory: Path | None = None) -> Path:
+    """Record length, split boundaries and daylight coverage over time."""
+    frame = featured.copy()
+    times = pd.to_datetime(frame["Time"])
+    daily = frame.assign(day=times.dt.date).groupby("day")["daylight"].mean()
+    fig, axes = plt.subplots(2, 1, figsize=(9.0, 4.6), sharex=True)
+    axes[0].plot(pd.to_datetime(daily.index), 100.0 * daily.to_numpy(),
+                 color="#1f77b4", lw=0.8)
+    axes[0].set_ylabel("Daylight steps (%)")
+    axes[0].set_title(f"Temporal coverage: {len(frame):,} 15-minute steps from "
+                      f"{times.min().date()} to {times.max().date()}")
+    if split_ranges:
+        for label, colour in (("train", "#2ca02c"), ("val", "#ff7f0e"),
+                              ("test", "#d62728")):
+            bounds = split_ranges.get(label)
+            if not bounds:
+                continue
+            start = pd.Timestamp(str(bounds[0]))
+            axes[1].axvspan(start, start, color=colour, alpha=0.15)
+            axes[1].axvline(start, color=colour, lw=0.8)
+            axes[1].text(start, 0.55, f" {label} start", color=colour, fontsize=7.5,
+                         rotation=90, va="bottom")
+    axes[1].plot(pd.to_datetime(times.dt.date), frame["pv_power_w"] / 1000.0,
+                 color="#bbbbbb", lw=0.2)
+    axes[1].set_ylabel("PV power (kW)")
+    axes[1].set_xlabel("Date")
+    axes[1].set_title("Chronological split boundaries")
+    fig.autofmt_xdate()
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_generation_distribution(featured: pd.DataFrame, rated_w: float | None,
+                                 name: str = "fig19c_generation_distribution",
+                                 directory: Path | None = None) -> Path:
+    """Generation histogram, and why a percentage error is undefined for it."""
+    frame = featured
+    power = pd.to_numeric(frame["pv_power_w"], errors="coerce")
+    daylight = frame["daylight"].astype(bool)
+    scale = rated_w or float(power.max())
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.2))
+    axes[0].hist(power / scale, bins=80, color="#1f77b4")
+    axes[0].set_xlabel("Power / rated capacity")
+    axes[0].set_ylabel("Count")
+    axes[0].set_title("Full record")
+    axes[1].hist(power[daylight] / scale, bins=80, color="#ff7f0e")
+    axes[1].set_xlabel("Power / rated capacity")
+    axes[1].set_title("Daylight steps only")
+    zero_fraction = float((power <= 0).mean())
+    fig.suptitle(f"{zero_fraction:.1%} of steps are exactly zero, which is why MAPE is "
+                 f"undefined for this target", y=1.03)
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_weather_distribution(featured: pd.DataFrame, name: str = "fig19d_weather_distribution",
+                              directory: Path | None = None) -> Path:
+    """Class balance of the regime taxonomy, daylight and all steps."""
+    frame = featured
+    order = ["Clear", "Partly cloudy", "Cloudy", "High-variability", "Night"]
+    labels = frame["regime"].astype(object)
+    counts = labels.value_counts().reindex(order).fillna(0)
+    daylight_mask = labels.isin(order[:4]).to_numpy()
+    daylight_share = counts.to_numpy()[1:4].sum()
+    fig, ax = plt.subplots(figsize=(7.0, 3.2))
+    positions = np.arange(len(order))
+    ax.bar(positions, counts.to_numpy() / len(frame) * 100.0, color="#4c72b0",
+           label="share of all steps")
+    if daylight_share > 0:
+        ax.bar(positions[1:4], counts.to_numpy()[1:4] / daylight_share * 100.0,
+               color="#dd8452", label="share of daylight steps")
+    ax.set_xticks(positions, order, rotation=20, ha="right")
+    ax.set_ylabel("Share of steps (%)")
+    ax.set_title("Weather-regime taxonomy over the record")
+    ax.legend()
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_horizon_metric(horizon_table: pd.DataFrame, metric: str = "mae",
+                        name: str = "fig07b_horizon_mae",
+                        directory: Path | None = None) -> Path:
+    """One error metric against horizon, one line per model."""
+    frame = horizon_table.dropna(subset=[metric]).copy()
+    if frame.empty:
+        raise ValueError(f"no rows with a finite {metric!r}")
+    order = ["15min", "1h", "6h", "24h"]
+    horizons = [h for h in order if h in set(frame["horizon"])]
+    fig, ax = plt.subplots(figsize=(7.2, 3.4))
+    for model, group in frame.groupby("model"):
+        group = group.set_index("horizon").reindex(horizons).dropna(subset=[metric])
+        ax.plot([horizons.index(h) for h in group.index], group[metric],
+                marker="o", ms=4, lw=1.3, color=color(model), label=pretty(model))
+    ax.set_xticks(range(len(horizons)), horizons)
+    ax.set_xlabel("Forecast horizon")
+    ax.set_ylabel(_metric_label(metric))
+    ax.set_title(f"{_metric_label(metric)} against forecast horizon")
+    ax.legend(ncol=2, fontsize=7.5)
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_horizon_ranking(horizon_table: pd.DataFrame, metric: str = "nrmse_capacity",
+                         name: str = "fig07c_horizon_ranking",
+                         directory: Path | None = None) -> Path:
+    """Rank of each model at each horizon, as a heatmap-like grid."""
+    frame = horizon_table.dropna(subset=[metric]).copy()
+    if frame.empty:
+        raise ValueError("no rows to rank")
+    order = ["15min", "1h", "6h", "24h"]
+    horizons = [h for h in order if h in set(frame["horizon"])]
+    models = list(dict.fromkeys(frame["model"]))
+    ranks = np.full((len(models), len(horizons)), np.nan)
+    for j, horizon in enumerate(horizons):
+        subset = frame[frame["horizon"] == horizon].dropna(subset=[metric])
+        ordered = subset.sort_values(metric)["model"].tolist()
+        for i, model in enumerate(models):
+            if model in ordered:
+                ranks[i, j] = ordered.index(model) + 1
+    fig, ax = plt.subplots(figsize=(2.0 + 1.0 * len(horizons), 0.42 * len(models) + 1.6))
+    image = ax.imshow(ranks, cmap="viridis_r", aspect="auto", vmin=1, vmax=len(models))
+    ax.set_xticks(range(len(horizons)), horizons)
+    ax.set_yticks(range(len(models)), [pretty(m) for m in models])
+    for i in range(len(models)):
+        for j in range(len(horizons)):
+            if np.isfinite(ranks[i, j]):
+                ax.text(j, i, f"{int(ranks[i, j])}", ha="center", va="center",
+                        color="white" if ranks[i, j] > len(models) / 2 else "black",
+                        fontsize=7.5)
+    ax.set_xlabel("Forecast horizon")
+    ax.set_title(f"Rank by {metric} (1 = best) at each horizon")
+    fig.colorbar(image, ax=ax, shrink=0.7, label="rank")
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_horizon_cost(horizon_table: pd.DataFrame, name: str = "fig07d_horizon_cost",
+                      directory: Path | None = None) -> Path:
+    """Training time and inference latency against horizon."""
+    frame = horizon_table.dropna(subset=["train_seconds"]).copy()
+    if frame.empty:
+        raise ValueError("no cost rows")
+    order = ["15min", "1h", "6h", "24h"]
+    horizons = [h for h in order if h in set(frame["horizon"])]
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.2))
+    for model, group in frame.groupby("model"):
+        group = group.set_index("horizon").reindex(horizons)
+        positions = [horizons.index(h) for h in group.index]
+        axes[0].plot(positions, group["train_seconds"].clip(lower=0.1), marker="o",
+                     ms=4, lw=1.2, color=color(model), label=pretty(model))
+        if "inference_ms_per_window" in group.columns:
+            axes[1].plot(positions, group["inference_ms_per_window"], marker="o", ms=4,
+                         lw=1.2, color=color(model))
+    for ax, title, ylabel in ((axes[0], "Training time by horizon", "Training time (s)"),
+                              (axes[1], "Inference latency by horizon",
+                               "ms per forecast window")):
+        ax.set_yscale("log")
+        ax.set_xticks(range(len(horizons)), horizons)
+        ax.set_xlabel("Forecast horizon")
+        ax.set_ylabel(ylabel)
+        ax.set_title(title)
+    axes[0].legend(ncol=2, fontsize=7)
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_error_by_horizon(horizon_table: pd.DataFrame, name: str = "fig29_error_by_horizon",
+                          directory: Path | None = None) -> Path:
+    """Error by horizon with the reference alongside, to show the reference collapse."""
+    frame = horizon_table.copy()
+    order = ["15min", "1h", "6h", "24h"]
+    horizons = [h for h in order if h in set(frame["horizon"])]
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.2))
+    for model, group in frame.groupby("model"):
+        group = group.set_index("horizon").reindex(horizons)
+        positions = [horizons.index(h) for h in group.index]
+        axes[0].plot(positions, group["nrmse_capacity"], marker="o", ms=4, lw=1.2,
+                     color=color(model), label=pretty(model))
+        axes[1].plot(positions, group.get("skill_vs_persistence_rmse"), marker="o", ms=4,
+                     lw=1.2, color=color(model))
+    axes[0].set_xticks(range(len(horizons)), horizons)
+    axes[0].set_ylabel("nRMSE (fraction of capacity)")
+    axes[0].set_title("Accuracy by horizon")
+    axes[0].legend(ncol=2, fontsize=7)
+    axes[1].set_xticks(range(len(horizons)), horizons)
+    axes[1].axhline(0.0, color="#000000", lw=0.8)
+    axes[1].set_ylabel("Skill against persistence")
+    axes[1].set_title("Skill by horizon: the reference is the moving part")
+    for ax in axes:
+        ax.set_xlabel("Forecast horizon")
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+def plot_residual_against(frame: pd.DataFrame, x_column: str, model: str,
+                          name: str, xlabel: str, directory: Path | None = None) -> Path:
+    """Residual against one explanatory variable, binned so the trend is visible.
+
+    A scatter of 17 000 points hides the pattern; a binned median with an
+    interquartile band shows where the error actually grows.
+    """
+    daylight = frame[frame["daylight"].astype(bool)].copy()
+    if daylight.empty or x_column not in daylight.columns:
+        raise ValueError(f"column {x_column!r} is not available in the predictions")
+    if x_column == "actual":
+        daylight["_x"] = daylight["actual"]
+    else:
+        daylight["_x"] = daylight[x_column]
+    daylight = daylight[np.isfinite(daylight["_x"])]
+    if daylight.empty:
+        raise ValueError("no finite values to bin")
+    bins = np.linspace(daylight["_x"].min(), daylight["_x"].max(), 16)
+    daylight["_bin"] = pd.cut(daylight["_x"], bins=bins, include_lowest=True)
+    grouped = daylight.groupby("_bin", observed=True)["error"]
+    median = grouped.median() / 1000.0
+    spread = grouped.quantile(0.75) / 1000.0 - grouped.quantile(0.25) / 1000.0
+    centres = [float(str(interval).split(",")[0][1:].split(".")[0])
+               for interval in median.index]
+    fig, ax = plt.subplots(figsize=(6.8, 3.2))
+    ax.fill_between(centres, (median - spread / 2).to_numpy(),
+                    (median + spread / 2).to_numpy(), color="#1f77b4", alpha=0.2,
+                    label="interquartile range")
+    ax.plot(centres, median.to_numpy(), color="#1f77b4", lw=1.6, label="median error")
+    ax.axhline(0.0, color="#000000", lw=0.8)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel("Signed error (kW)")
+    ax.set_title(f"{pretty(model)}: error against {xlabel.lower()}")
+    ax.legend()
+    fig.tight_layout()
+    return save(fig, name, directory)
+
+
+# ---------------------------------------------------------------------------
 # 20. Ablation (leave-one-out)
 # ---------------------------------------------------------------------------
 def plot_ablation(ablation: pd.DataFrame, metric: str = "nrmse_capacity",
@@ -952,3 +1194,4 @@ def plot_ablation(ablation: pd.DataFrame, metric: str = "nrmse_capacity",
     ax.legend(ncol=len(models))
     fig.tight_layout()
     return save(fig, name, directory)
+

@@ -571,5 +571,23 @@
       "val_mae_w": 5162.761715209206
     }
   ],
-  "feature_importance": null
+  "feature_importance": null,
+  "provenance": {
+    "source_sha256": "610500cfda8309bcba85c4562a1406592882094638132c7ee478cd53e37e96ec",
+    "source_archive": "data\\raw\\hk_pv_dataset.zip",
+    "source_size_bytes": 296120326,
+    "source_url": "https://zenodo.org/api/records/10909062/files/dataset.zip/content",
+    "source_doi": "10.5061/dryad.m37pvmd99",
+    "source_zenodo_record": 10909062,
+    "source_licence": "CC0-1.0",
+    "checksum_verified": true,
+    "recorded_at": "2026-09-26T21:22:28+00:00",
+    "git_revision": "94ac682",
+    "seed": 42,
+    "experiment_id": "C_horizons__transformer__24h",
+    "experiment_group": "C_horizons",
+    "model": "transformer",
+    "horizon": "24h",
+    "features": "full"
+  }
 }

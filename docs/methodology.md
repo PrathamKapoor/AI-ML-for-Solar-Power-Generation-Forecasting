@@ -201,11 +201,18 @@ diagnostics are reported for every evaluation:
 | Bootstrap interval width against block length 1–384 steps | `block_length_sensitivity.csv` | that the chosen block length has passed the point where the width plateaus, and that a too-short block understates the uncertainty |
 
 The measured integrated autocorrelation time on this data is reported in
-`results/metrics/evaluation_report.json`. It is the quantitative reason a
-Diebold-Mariano test rejects nothing here while the block bootstrap separates the
-models, and it is reported rather than used to adjust any result towards
-significance. No p-value was sought by changing a method, a block length or a
-sample after the fact.
+`results/metrics/evaluation_report.json`. It is the quantitative reason the
+Harvey-Leybourne-Newbold correction and the Bartlett kernel are applied before any
+p-value is read: without them the long-run variance is understated and the same
+data yields a table in which nothing is distinguishable. It is reported as a
+diagnostic and was not used to adjust any result towards significance. No p-value
+was sought by changing a method, a block length or a sample after the fact.
+
+The test and the interval are both reported because they answer different
+questions. A p-value says whether a difference can be told from the sampling noise;
+the interval says how large the difference is. A p-value column on its own is the
+more likely of the two to be read as a ranking, and on this data it would have
+described two clearly separable groups as indistinguishable.
 
 ## 11.2 Multi-seed replication
 
@@ -273,17 +280,30 @@ Leakage controls, each asserted in `tests/test_cross_site.py`:
 
 ## 13. Limitations
 
+* **The sequence inputs are not standardised.** The target is standardised, but
+  the feature window is passed to the network in its original units, so a power
+  feature reaches 35 835 while a sine of solar elevation stays inside [-1, 1].
+  This is consistent across every neural run, so the comparisons between them
+  remain valid, but it is poor conditioning: it slows convergence, makes the
+  gradients scale-dependent, and it is why the integrated-gradient path integral
+  needs a large number of steps to converge (see §8). The classical models
+  standardise through the pipeline's `feature_scaler`, so the two arms are not
+  conditioned alike. Fixing this would require retraining every neural run, and it
+  is the single most likely source of headroom in the neural results.
 * One station, one climate. A single 55 kW Hong Kong rooftop array cannot
   support a claim about PV forecasting in general; it supports a claim about the
   relative behaviour of these eleven models on this record.
 * No NWP inputs. Under a strict historical information set, a one-hour forecast
   cannot anticipate a cloud front, which bounds the attainable accuracy.
 * Test year follows the training period, so the test year is entirely
-  out-of-sample in time but not in the sense of an unseen site.
+  out-of-sample in time but not in the sense of an unseen site. Experiment J
+  addresses the unseen-site case and finds that transfer fails, so the
+  single-site headline numbers are *local* skill.
 * Cost figures are machine-specific in absolute terms; only the ranking is
   portable.
-* Cross-site transfer (Experiment J) is not implemented, so RQ6's site half is
-  open. See `docs/experiments.md`.
+* Cross-site transfer (Experiment J) covers three cheap models over seven
+  stations, not the neural architectures; 20 fits per model per protocol is
+  beyond the compute budget. See `docs/experiments.md`.
 
 ## 14. Reproducibility
 

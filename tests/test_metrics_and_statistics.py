@@ -136,12 +136,39 @@ def test_diebold_mariano_detects_a_real_difference() -> None:
 
 
 def test_diebold_mariano_does_not_invent_a_difference() -> None:
+    """An exactly null differential must not be declared significant.
+
+    This is deliberately a structural check rather than a sampled one. A single
+    seed can land in the tail of a correctly calibrated test, so asserting on one
+    realised p-value tests the seed as much as the code. The false-positive rate
+    over many draws is checked separately.
+    """
     rng = np.random.default_rng(7)
     a = rng.normal(size=800)
-    b = rng.normal(size=800)
-    result = comparison.diebold_mariano(a, b, "a", "b", loss="mae")
-    assert result.p_value > 0.05
+    result = comparison.diebold_mariano(a, a.copy(), "a", "b", loss="mae")
+    assert result.p_value == 1.0
     assert not result.mean_significance
+    assert result.mean_differential == 0.0
+
+
+def test_diebold_mariano_rejects_at_the_nominal_rate_when_there_is_no_pairing() -> None:
+    """Calibration: the false-positive rate must be near the nominal level.
+
+    Two independent samples carry no pairing, so the loss differential is centred
+    on zero but is not white noise. A test whose rejection rate were far from the
+    nominal five percent would be miscalibrated in whichever direction it leaned,
+    and a significance table built from it could not be read at face value.
+    """
+    rejected = 0
+    trials = 200
+    for seed in range(trials):
+        rng = np.random.default_rng(seed)
+        a = rng.normal(size=600)
+        b = rng.normal(size=600)
+        if comparison.diebold_mariano(a, b, "a", "b", loss="mae").mean_significance:
+            rejected += 1
+    rate = rejected / trials
+    assert 0.01 <= rate <= 0.12, f"false positive rate {rate:.3f} is not near 5%"
 
 
 def test_diebold_mariano_reports_the_serial_correlation_it_found() -> None:

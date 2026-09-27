@@ -229,7 +229,13 @@ def diebold_mariano(errors_a, errors_b, model_a: str = "A", model_b: str = "B",
     else:
         raise KeyError(f"unknown DM correction {correction!r}")
 
-    variance = long_run / denom_n
+    # The statistic is dbar / sqrt(V / n), so the summed autocovariances are a
+    # variance estimate for a single observation and have to be divided by n a
+    # second time. Omitting that division yields dbar / sd, the mean divided by
+    # the standard deviation, which is not a test statistic at all: it does not
+    # shrink as the sample grows, and it would report a fifty percent difference
+    # in error over tens of thousands of intervals as insignificant.
+    variance = long_run / (denom_n * n)
     if variance <= 0:
         statistic = 0.0
         p_value = 1.0

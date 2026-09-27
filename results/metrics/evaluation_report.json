@@ -1,7 +1,7 @@
 {
   "registry": {
     "status": "ok",
-    "n_rows": 112,
+    "n_rows": 118,
     "groups": [
       "A_baselines",
       "B_ml_vs_dl",
@@ -137,23 +137,36 @@
       "interpretation": "The nominal sample size overstates the information in the error series by about 9x. That is why an i.i.d. treatment would understate the interval width by roughly that factor, and why the Diebold-Mariano test rejects nothing even where the block-bootstrap interval excludes zero. Both are reported."
     }
   },
-  "uncertainty": {
+  "ablation_statistics": {
     "status": "ok",
-    "models": [
-      "xgboost",
-      "lstm",
-      "transformer"
+    "written": [
+      "ablation_statistics.csv"
     ],
-    "skipped": [],
-    "alphas": [
-      0.1,
-      0.2
-    ],
-    "note": "Split conformal intervals calibrated on the first 31 days of the test period and evaluated on the remainder. The coverage guarantee is approximate because the calibration block is not exchangeable with the evaluation block under seasonal drift."
+    "n_comparisons": 20,
+    "reference": "the same model fitted on the full input set",
+    "n_significant_at_0_05": 17,
+    "note": "Skill is measured against the full-input run of the same model, so a value of zero means the removed variable family changed nothing. A negative value means the reduced model was better, which is possible and is reported rather than suppressed."
+  },
+  "uncertainty": {
+    "status": "outputs_present_from_earlier_run",
+    "reason": "not recomputed by this invocation; the stage is opt-in and was run separately with --uncertainty",
+    "existing_outputs": [
+      "uncertainty_coverage.csv"
+    ]
   },
   "explainability": {
-    "status": "not_run",
-    "reason": "requires refitting the models; re-run with --explainability"
+    "status": "outputs_present_from_earlier_run",
+    "reason": "not recomputed by this invocation; the stage is opt-in and was run separately with --explainability",
+    "existing_outputs": [
+      "dependence_attention_lstm.csv",
+      "dependence_xgboost.csv",
+      "importance_attention_lstm.csv",
+      "importance_condition_attention_lstm.csv",
+      "importance_regime_attention_lstm.csv",
+      "importance_xgboost.csv",
+      "integrated_gradients_attention_lstm.csv",
+      "integrated_gradients_completeness_attention_lstm.csv"
+    ]
   },
   "notes": [
     "training curves: no run has recorded an epoch history yet; the field is persisted by current runs, so this figure appears after the neural experiments are re-run"
@@ -167,6 +180,9 @@
       "fig05_rmse_comparison.png",
       "fig06_r2_comparison.png",
       "fig07_horizon_comparison.png",
+      "fig07b_horizon_mae.png",
+      "fig07c_horizon_ranking.png",
+      "fig07d_horizon_cost.png",
       "fig08_weather_regime_comparison.png",
       "fig09_seasonal_comparison.png",
       "fig11_residual_distribution.png",
@@ -177,28 +193,40 @@
       "fig17_cost_accuracy.png",
       "fig18_conformal_intervals.png",
       "fig19_dataset_overview.png",
+      "fig19b_temporal_coverage.png",
+      "fig19c_generation_distribution.png",
+      "fig19d_weather_distribution.png",
       "fig20_feature_ablation.png",
       "fig21_multiseed_spread.png",
       "fig21b_multiseed_mae.png",
       "fig22_cross_site_transfer.png",
+      "fig23_feature_regimes.png",
       "fig24_error_autocorrelation.png",
       "fig25_block_length_sensitivity.png",
-      "fig28_cost_memory.png"
+      "fig26_residual_vs_generation.png",
+      "fig26b_residual_vs_irradiance.png",
+      "fig28_cost_memory.png",
+      "fig29_error_by_horizon.png"
     ],
-    "failed": {
-      "feature_regimes": "KeyError: 'feature_regime'"
+    "failed": {},
+    "provenance": {
+      "file": "results/metrics/figure_provenance.json",
+      "paper_index": "paper/figures/README.md",
+      "n_figures": 38,
+      "n_documented": 38,
+      "unmatched": []
     }
   },
   "matrix": {
     "status": "ok",
-    "rows": 454,
+    "rows": 466,
     "written": [
       "final_experiment_matrix.csv",
       "multi_seed_results.csv"
     ],
     "coverage": {
-      "rows": 454,
-      "executed_rows": 454,
+      "rows": 466,
+      "executed_rows": 466,
       "research_questions_covered": [
         "RQ1",
         "RQ2",
@@ -248,5 +276,5 @@
       ]
     }
   },
-  "elapsed_seconds": 47.67
+  "elapsed_seconds": 111.29
 }

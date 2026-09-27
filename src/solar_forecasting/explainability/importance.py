@@ -221,6 +221,193 @@ def dependence_frame(predict_fn: Callable[[np.ndarray], np.ndarray],
     return frame
 
 
+def permutation_importance_by_condition(predict_fn: Callable[[np.ndarray], np.ndarray],
+                                       X: np.ndarray, y_true: np.ndarray,
+                                       feature_columns: Sequence[str], lookback: int,
+                                       regimes: np.ndarray, level: np.ndarray,
+                                       n_repeats: int = 5, seed: int = 42,
+                                       min_samples: int = 400) -> pd.DataFrame:
+    """Permutation importance split by **generation level** as well as by regime.
+
+    The brief for an error analysis is that low output produces small absolute
+    errors, so attribution must also be read where the plant is actually
+    producing. Rows are tagged with a high/low generation label derived from the
+    observed power at the target interval as a fraction of capacity, and the
+    importance is computed inside each condition separately.
+
+    A condition with fewer than ``min_samples`` windows is skipped rather than
+    summarised.
+    """
+    regimes = np.asarray(regimes, dtype=object)
+    level = np.asarray(level, dtype=object)
+    rows: list[dict[str, Any]] = []
+    conditions = sorted({(str(r), str(g)) for r, g in zip(regimes, level)
+                         if str(r) != "Night"})
+    for regime, generation in conditions:
+        index = np.flatnonzero((regimes == regime) & (level == generation))
+        if index.size < int(min_samples):
+            continue
+        subset_X = X[index]
+        subset_y = np.asarray(y_true, dtype=float)[index]
+        baseline = float(np.abs(np.asarray(predict_fn(subset_X), dtype=float)
+                                - subset_y).mean())
+        for feature in range(len(feature_columns)):
+            deltas = []
+            for repeat in range(int(n_repeats)):
+                rng = np.random.default_rng(seed + 1000 * repeat + 131 * feature
+                                            + int(index[0]))
+                permuted = subset_X.copy()
+                permuted[:, :, feature] = subset_X[rng.permutation(index.size), :, feature]
+                score = float(np.abs(np.asarray(predict_fn(permuted), dtype=float)
+                                     - subset_y).mean())
+                deltas.append(score - baseline)
+            rows.append({
+                "regime": regime,
+                "generation_level": generation,
+                "feature": feature_columns[feature],
+                "baseline_mae_w": baseline,
+                "mean_mae_increase_w": float(np.mean(deltas)),
+                "std_mae_increase_w": float(np.std(deltas, ddof=1))
+                if len(deltas) > 1 else 0.0,
+                "n_windows": int(index.size),
+                "n_repeats": int(n_repeats),
+            })
+    frame = pd.DataFrame(rows)
+    if frame.empty:
+        return frame
+    return frame.sort_values(["regime", "generation_level", "mean_mae_increase_w"],
+                             ascending=[True, True, False]).reset_index(drop=True)
+
+
+def generation_level_labels(y_true: np.ndarray, rated_w: float | None,
+                            split: float = 0.35) -> np.ndarray:
+    """Label each sample high or low generation by its share of rated capacity.
+
+    The threshold is a fixed fraction of nameplate rather than a tuned value, and
+    it is applied to the *observed* target, so it is a property of the data
+    rather than of a model's performance.
+    """
+    values = np.asarray(y_true, dtype=float)
+    if not rated_w:
+        return np.array(["unknown"] * values.size, dtype=object)
+    share = values / float(rated_w)
+    return np.where(share >= float(split), "high_generation", "low_generation")
+
+
+def _quadrature(n_steps: int) -> tuple[np.ndarray, np.ndarray]:
+    """Nodes and weights for the path integral, from 0 to 1 inclusive.
+
+    Composite Simpson is used rather than a right-endpoint Riemann sum. The
+    completeness residual is only as good as this approximation, and on a trained
+    recurrent model the function along the path is sharply nonlinear: a
+    right-endpoint sum needs hundreds of steps before the residual becomes small
+    enough to be a meaningful check, while Simpson reaches the same accuracy in a
+    fraction of the forward and backward passes because it is exact for a cubic.
+
+    An odd number of subintervals gives an even number of points, so one
+    subinterval is dropped when the request is odd.
+    """
+    n = max(2, int(n_steps))
+    if n % 2 == 1:
+        n -= 1
+    if n == 2:
+        # Two points, which is Simpson's rule degenerating to the trapezoid.
+        return np.array([0.0, 1.0]), np.array([0.5, 0.5])
+    alphas = np.linspace(0.0, 1.0, n + 1)
+    weights = np.ones(n + 1, dtype=float)
+    weights[1:-1:2] = 4.0
+    weights[2:-1:2] = 2.0
+    # Simpson over a unit interval: h/3 with h = 1/n, so the 1, 4, 2, ..., 4, 1
+    # pattern is divided by 3n. The weights then sum to one and reproduce a cubic
+    # integral to machine precision.
+    weights /= 3.0 * n
+    return alphas, weights
+
+
+def integrated_gradients(forward, X: np.ndarray, feature_columns: Sequence[str],
+                         n_samples: int = 128, n_steps: int = 24,
+                         baseline: str = "mean", seed: int = 42) -> pd.DataFrame:
+    """Integrated gradients for the sequence model, collapsed per input variable.
+
+    Included because the brief asks for it where practical, and it is practical
+    here: the model maps a window tensor to a scalar, so the path integral from a
+    baseline window to the real window is well defined, and the attribution of an
+    input is the path average of the gradient scaled by the input's own change.
+
+    Three properties make it worth reporting next to permutation importance:
+
+    * it is **signed** and **local**: it explains how *this* prediction moved,
+      where permutation importance measures reliance in general;
+    * the attributions **sum** to the difference between the prediction and the
+      baseline prediction, so completeness can be checked numerically;
+    * it needs one forward and one backward pass per step per sample, so the
+      sample count is kept small and reported.
+
+    ``forward`` must be differentiable: it is called with a tensor that requires
+    gradients, so it must **not** wrap the model in ``torch.no_grad()``. The
+    permutation path uses a no-grad callable for speed, and the two are
+    deliberately separate rather than shared.
+
+    The baseline is the per-feature mean over the evaluation window (``mean``) or
+    a zero window (``zero``). The choice affects the values and is recorded in
+    the output.
+    """
+    import torch
+
+    rng = np.random.default_rng(seed)
+    n = min(int(n_samples), len(X))
+    index = rng.choice(len(X), size=n, replace=False) if n < len(X) else np.arange(len(X))
+    tensor = np.asarray(X[index], dtype=np.float32)
+    n_features = tensor.shape[2]
+    base = tensor.mean(axis=0, keepdims=True) if baseline == "mean" \
+        else np.zeros_like(tensor[:1])
+    alphas, weights = _quadrature(int(n_steps))
+
+    sums = np.zeros(n_features, dtype=float)
+    completeness: list[dict[str, float]] = []
+    for k in range(n):
+        target = torch.tensor(tensor[k:k + 1], dtype=torch.float32)
+        base_t = torch.tensor(base, dtype=torch.float32)
+        # The path-averaged gradient is kept per timestep, because the
+        # attribution is a sum over the lookback of (input change) x (gradient)
+        # *at the same timestep*. Collapsing the lookback before multiplying would
+        # give (sum of changes) x (sum of gradients), which is not an integral and
+        # breaks completeness.
+        accumulated = np.zeros_like(tensor[k], dtype=float)
+        for alpha, weight in zip(alphas, weights):
+            point = (base_t + float(alpha) * (target - base_t)).detach().requires_grad_(True)
+            output = forward(point)
+            gradient = torch.autograd.grad(output.sum(), point)[0]
+            accumulated += float(weight) * gradient.numpy()[0]
+        mean_gradient = accumulated / float(weights.sum())
+        delta = tensor[k] - base[0]
+        attribution = (delta * mean_gradient).sum(axis=0)
+        sums += attribution
+        # The completeness residual: the attribution total must equal the
+        # prediction change from the baseline. It is recorded per sample so the
+        # property is checkable rather than assumed.
+        with torch.no_grad():
+            actual = float(forward(target).sum() - forward(base_t).sum())
+        total = float(attribution.sum())
+        completeness.append({"sample": k, "attribution_sum": total,
+                             "prediction_change_w": actual,
+                             "residual_w": total - actual,
+                             "relative_error": (total - actual) / max(abs(actual), 1e-9)})
+
+    frame = pd.DataFrame({
+        "feature": list(feature_columns)[:n_features],
+        "mean_integrated_gradient": sums / max(n, 1),
+        "mean_absolute": np.abs(sums) / max(n, 1),
+    })
+    total = float(np.abs(frame["mean_integrated_gradient"]).sum()) or 1.0
+    frame["relative"] = frame["mean_absolute"] / total
+    frame.attrs["n_samples"] = n
+    frame.attrs["n_steps"] = int(n_steps)
+    frame.attrs["baseline"] = baseline
+    frame.attrs["completeness"] = completeness
+    return frame
+
+
 def import_feature_family(name: str) -> str:
     """Map a feature name to the input group used by the ablation study.
 

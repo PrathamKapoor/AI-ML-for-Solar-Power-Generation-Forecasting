@@ -136,7 +136,7 @@
       "best_epoch": 29,
       "best_val_mae_w": 1559.8049308428,
       "stopped_early": true,
-      "train_seconds": 213.779,
+      "train_seconds": 317.931,
       "n_parameters": 64225,
       "device": "cpu",
       "config": {
@@ -153,14 +153,14 @@
       }
     },
     "cost": {
-      "train_seconds": 213.77891069999896,
-      "inference_ms_per_window": 0.03484698791747895,
+      "train_seconds": 317.93125649998547,
+      "inference_ms_per_window": 0.04086024165243685,
       "n_parameters": 64225
     },
     "environment": {
-      "timestamp_utc": "2026-09-26T23:16:47+00:00",
+      "timestamp_utc": "2026-09-27T03:16:23+00:00",
       "seed": 123,
-      "git_revision": "c4d8931",
+      "git_revision": "e8959f7",
       "platform": {
         "python": "3.13.14",
         "implementation": "CPython",
@@ -219,7 +219,7 @@
         "Partly cloudy": 0.136376
       }
     },
-    "wall_seconds_including_setup": 220.80149620000157
+    "wall_seconds_including_setup": 321.2460752999759
   },
   "training_history": [
     {
@@ -487,5 +487,23 @@
       "val_mae_w": 1743.0963591351178
     }
   ],
-  "feature_importance": null
+  "feature_importance": null,
+  "provenance": {
+    "source_sha256": "610500cfda8309bcba85c4562a1406592882094638132c7ee478cd53e37e96ec",
+    "source_archive": "data\\raw\\hk_pv_dataset.zip",
+    "source_size_bytes": 296120326,
+    "source_url": "https://zenodo.org/api/records/10909062/files/dataset.zip/content",
+    "source_doi": "10.5061/dryad.m37pvmd99",
+    "source_zenodo_record": 10909062,
+    "source_licence": "CC0-1.0",
+    "checksum_verified": true,
+    "recorded_at": "2026-09-27T03:16:23+00:00",
+    "git_revision": "e8959f7",
+    "seed": 123,
+    "experiment_id": "M_multiseed__cnn_lstm__1h__seed123",
+    "experiment_group": "M_multiseed",
+    "model": "cnn_lstm",
+    "horizon": "1h",
+    "features": "full"
+  }
 }
