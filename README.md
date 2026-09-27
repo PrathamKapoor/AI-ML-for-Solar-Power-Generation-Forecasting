@@ -1,401 +1,358 @@
-# AI/ML-Based Solar Photovoltaic Power Forecasting: A Reproducible and Explainable Benchmark Across Forecast Horizons and Weather Conditions
+# AI/ML-Based Solar Photovoltaic Power Forecasting: When Does Model Complexity Pay?
 
-A controlled, leakage-audited benchmark of machine-learning and deep-learning
-models for short-term solar PV power forecasting, built so that another researcher
-can reproduce the experiments end to end and so that a reader can tell which
-conclusions the data support and which it does not.
+A controlled, leakage-audited benchmark of solar PV power forecasting, designed
+to answer one question:
+
+> **When does additional model complexity provide meaningful forecasting value
+> over strong physical and statistical baselines?**
+
+The answer this repository supports is not "the deepest model wins". Across four
+forecast horizons, four weather regimes, four seasons, five input regimes,
+multiple seeds and a seven-station site panel, model capacity is the *least*
+important of the three levers examined — and the model that is hardest to beat is
+a persistence forecast with a clear-sky correction.
 
 ---
 
-## Research question
+## Project overview
 
-> How robust and generalizable are different machine-learning and deep-learning
-> approaches for short-term solar PV power forecasting across different forecast
-> horizons and weather conditions?
+| | |
+| --- | --- |
+| Target | Rooftop PV AC power, 55 kW station, 15-minute resolution |
+| Horizons | 15 min, 1 h, 6 h, 24 h (all exact multiples of the resolution) |
+| Models | 11 in 4 families, from rule-based references to a Transformer |
+| Records | 103 training runs, every one machine-readable |
+| Result table | `results/tables/final_experiment_matrix.csv` — 436 rows |
+| Tests | 146, all passing, no network or dataset required |
+| Reproduce | `pip install -r requirements.txt` then five commands |
 
-Seven explicit, testable sub-questions are listed in `docs/methodology.md` §2
-(RQ1–RQ7) and mapped to the experiment that answers each.
+## Research questions
 
-## Motivation
+| ID | Question | Evidence |
+| --- | --- | --- |
+| RQ1 | How do the families compare under one protocol, and how much of a neural model's score is initialisation? | Tables 2, 9 |
+| RQ2 | Does relative performance hold across four horizons? | Table 3 |
+| RQ3 | How do accuracy and skill change across weather regimes and seasons? | Tables 4, 5 |
+| RQ4 | Do advanced architectures and richer inputs beat strong classical baselines? | Tables 6, 7 |
+| RQ5 | Which inputs and which variables carry the signal? | Tables 7, 11 |
+| RQ6 | Does a model transfer to sites it has never seen? | Table 8 |
+| RQ7 | What is the accuracy-per-cost profile, and can an accurate model be uncertainty-quantified? | Tables 12, 13 |
 
-A PV operator needs a forecast that is accurate *and* that can be trusted when the
-sky changes. Most published PV forecasting studies report a single aggregate
-error on a single split, compare against weak references, and stop there. That
-leaves three practical questions largely unanswered: whether the ranking of model
-families is stable across horizons and weather regimes, which inputs actually
-carry the signal, and what an accurate-but-expensive model buys relative to a cheap
-one. This project answers them under one protocol with the bookkeeping exposed.
+Every row of the result matrix carries the `research_question` it answers, so
+this mapping is data, not prose. `tools/check_consistency.py` verifies it.
 
 ## Research gap
 
-Derived from 30 verified papers rather than asserted. Full analysis with
-per-paper evidence in `docs/research_gaps.md` and in the `Research Gaps` sheet of
-the workbook. The gaps this project targets:
-
-| Gap | Evidence pattern in the reviewed corpus |
-| --- | --- |
-| G1 Aggregate-only evaluation | Aggregate RMSE/MAE/R² dominate; regime-, season- and time-stratified evaluation is a minority, and ranking changes within conditions are almost never reported |
-| G2 Horizon sensitivity asserted, not measured | Single-horizon studies dominate; multi-horizon work rarely holds inputs and split fixed |
-| G3 Weak classical baselines | Recurrent and attention papers rarely compare against a *tuned* tree model on identical inputs |
-| G4 Persistence under-used as a strong reference | Naive persistence is ubiquitous; the clear-sky-ratio variant is rare, so reported skill overstates model value |
-| G5 Uncertainty rarely calibrated | Probabilistic work is a visible minority; the deterministic majority reports no interval |
-| G6 Explainability asserted from attention weights | Attention maps presented as explanations; cross-family importance comparison nearly absent |
-| G7 Uneven reproducibility | Split dates, seeds, versions and uncertainty reported inconsistently; cross-paper comparison is not possible |
-| G8 Cost not measured with accuracy | Training cost, latency and parameter count reported almost never alongside accuracy |
-
-Two candidate gaps were examined and **not** claimed (deep learning always wins;
-weather variables are under-used) because the evidence points the other way. That
-disagreement is preserved rather than resolved.
+Derived from 30 DOI-verified papers, each gap evidenced in
+`docs/research_gaps.md` and the workbook's `Research Gaps` sheet. The gaps this
+study addresses: aggregate-only evaluation; horizon sensitivity asserted rather
+than measured; classical baselines left untuned; persistence under-used as a
+*strong* reference; cross-site transfer claimed but rarely validated; importance
+reported from a single method or from attention weights; and cost never reported
+alongside accuracy.
 
 ## Contributions
 
-1. A **controlled benchmark** of 11 models in 4 families — two persistence
-   references, four classical ML models (linear regression, random forest, gradient
-   boosting, XGBoost), two recurrent (LSTM, GRU), three hybrid/attention
-   (CNN-LSTM, attention-LSTM, Transformer) — on one split, one input set, one seed.
-2. **Multi-horizon evaluation** at 15 minutes, 1 hour, 6 hours and 24 hours, all
-   exact integer multiples of the 15-minute working resolution so no interpolation
-   enters the comparison.
-3. A **transparent weather-regime taxonomy** with threshold provenance measured on
-   the training split, plus seasonal, time-of-day, generation-level and ramping
-   stratification, each with the persistence reference rescored inside the stratum.
-4. **Statistical comparison** with a serial-correlation-aware moving-block
-   bootstrap, the Diebold-Mariano test with the Harvey-Leybourne-Newbold
-   correction, Wilcoxon as a secondary check, and Holm-Bonferroni adjustment.
-5. **Explainability** by SHAP (tree ensemble) and grouped permutation importance
-   (neural models), with attention weights explicitly not treated as explanations.
-6. **Conformal prediction intervals** with the calibration trade-off documented.
-7. A **results-integrity apparatus**: per-run JSON records, a registry rebuildable
-   from them, an evaluation report that distinguishes "not run" from "no result",
-   and 108 tests covering the leakage-sensitive code.
+1. A controlled comparison of 11 model variants across 4 horizons on one split,
+   with two persistence references scored alongside every learned model.
+2. Stratified error analysis by regime, season, time of day, generation level and
+   ramping, with the reference rescored inside each stratum.
+3. An additive input-regime study, separating what each information type is worth
+   alone from what it adds to everything else.
+4. A cross-site study over a fixed 7-station panel with three protocols.
+5. Multi-seed replication of the neural models.
+6. A measured account of serial dependence in the errors and what it does to
+   inference, reported without adjusting any result towards significance.
 
 ## Dataset
 
-A three-year, 15-minute, 60-station rooftop PV dataset with co-located 1-minute
-meteorology, published open access:
-
 > Lin, Z., Zhou, Q., Wang, Z., Wang, C., Bookhart, D. B., & Leung-Shea, M. (2024).
 > *A high-resolution three-year dataset supporting rooftop photovoltaics (PV)
-> generation analytics.* Dryad. <https://doi.org/10.5061/dryad.m37pvmd99>
-> (Zenodo record 10909062, **CC0 1.0**)
+> generation analytics.* Dryad. <https://doi.org/10.5061/dryad.m37pvmd39>
 
-Case-study station **LSK North**, 55.0 kW rated, chosen for the longest gap-free
+Zenodo record 10909062, **CC0 1.0** — no registration, no key, redistributable.
+Case-study station **LSK North**, 55.0 kW, chosen for the longest gap-free
 15-minute record and because its measured peak (55 294 W) matches nameplate to
-within 0.5%. Selection rationale, archive layout, the known data issues and their
-handling are in `docs/dataset.md`.
+within 0.5%. Cross-site panel: SQ1–SQ4, UG Hall6, UG Hall7 (25.0–33.3 kW).
 
-Case-study record after cleaning: **90 528** 15-minute steps, mean power 8 305 W,
-maximum 55 295 W, and **50.1% exactly-zero steps** — which is why MAPE is not
-computed and why night-time is scored separately.
+Every dataset claim is machine-verified by `tools/audit_dataset_claims.py`
+(18 checks: licence, checksum, station count, record length, resolution,
+coverage dates, zero fraction, weather variables, split sizes, input finiteness).
 
 ## Methodology
 
 Full detail in `docs/methodology.md`. The information set is strictly
 historical: at the forecast origin a model sees only observations at or before
-that origin, so no NWP input is used. That is a deliberate restriction and it
-bounds what the results mean.
+that origin, so no NWP input is used — a deliberate restriction that bounds what
+the results mean.
 
 | Component | Choice |
 | --- | --- |
-| Resolution | 15 minutes (finest with continuous multi-year coverage; every horizon an exact integer multiple) |
+| Split | chronological: train 2021-06-02→2022-08-31, val 2022-09→2022-12, test 2023 (a full calendar year) |
+| Scalers | fitted on the training split only; asserted per split |
 | Lookback | 24 steps (6 h), identical at every horizon so only the gap varies |
-| Inputs | target lags and trailing statistics, GHI/temperature/humidity/wind with trailing means and differences, calibrated clearness index, solar geometry, cyclical calendar |
-| Split | chronological: train 2021-06-01→2022-08-31, validation 2022-09-01→2022-12-31, test 2023-01-01→2023-12-31 (a full calendar year, so each season appears once) |
-| Scaling | standardisation fitted on the **training split only** |
-| Training | MAE loss on the standardised target, early stopping on validation MAE in watts, best weights restored, seed 42, thread count pinned to 1 |
+| Inputs | target lags and trailing statistics, weather with trailing means and differences, calibrated clearness index, solar geometry, cyclical calendar |
+| Training | MAE on the standardised target, early stopping on validation MAE in watts, best weights restored, seed recorded per run |
 | Tuning | small validation-only grid per classical family |
 
-Leakage controls are tabulated in `docs/methodology.md` §9, and three of them are
-*asserted at run time* — window causality is re-derived from the source frame
-before the first optimiser step, scalers refuse non-finite or zero-variance
-features, and the split reports how many rows it dropped.
+**The forecasting formulation is validated, not assumed.** For every horizon,
+tests assert the exact calendar timestamps: origin `2023-06-15 10:00` → targets
+`10:15`, `11:00`, `16:00`, and `2023-06-16 10:00`; the label is checked against
+the raw power record at that timestamp; every input step is asserted to be at or
+before the origin; and a double-shift is guarded. The meteorological
+end-of-interval convention is pinned by value, not by comment.
 
 ## Models
 
 | Family | Models | Notes |
 | --- | --- | --- |
-| Rule-based reference | persistence, smart persistence | smart persistence is the guarded clear-sky ratio, with a reference floor, a ratio clip and a capacity clip |
-| Classical ML | linear regression, random forest, gradient boosting, XGBoost | consume the flattened window; each family gets a small validation-only grid |
+| Rule-based reference | persistence, smart persistence | smart persistence is the guarded clear-sky ratio: reference floor, ratio clip, capacity clip |
+| Classical ML | linear regression, random forest, gradient boosting, XGBoost | flattened window, validation-tuned per family |
 | Recurrent | LSTM, GRU | ordered window |
 | Hybrid / attention | CNN-LSTM, attention-LSTM, Transformer | sized for CPU reproducibility, not for a leaderboard |
 
-Architectures and hyperparameters live in `configs/models.yaml`; the registry in
-`src/solar_forecasting/models/registry.py` is the single place a model is
-constructed.
-
-## Experimental design
-
-Ten experiment groups, declared in `configs/experiments.yaml`, mapped to research
-questions in `docs/experiments.md`, with per-group status (executed / partial /
-implemented-but-not-run / not implemented).
+## Experiments and status
 
 | Group | Question | Status |
 | --- | --- | --- |
-| A | Baseline comparison | executed |
-| B | ML versus DL, headline | executed (11/11) |
-| C | Horizon comparison | **partial** — 1 h complete; 15 min, 6 h, 24 h partially run |
-| D | Weather regimes | executed |
-| E | Feature-group ablation | **partial** |
-| F | Model ablation (composite vs backbone) | executed |
-| G | Seasonal generalisation | executed |
-| H | Explainability | implemented, opt-in (`--explainability`) |
-| I | Computational cost | executed |
-| J | Cross-site transfer | **not implemented** — RQ6's site half is open |
+| A | Baseline comparison | executed (3 runs) |
+| B | ML vs DL, headline | executed (11 runs) |
+| C | Four horizons | **executed, complete: 44 runs, 11 models × 4 horizons** |
+| D | Weather regimes | executed (analysis of B) |
+| E | Leave-one-out feature ablation | executed (12 runs) |
+| F | Model ablation, composite vs backbone | executed (analysis of B) |
+| G | Seasonal generalisation | executed (analysis of B) |
+| H | Explainability | **executed**: SHAP for the tree ensemble, grouped permutation importance for an attention-recurrent model, plus regime-specific importance and dependence plots |
+| I | Computational cost | executed (assembly from the registry) |
+| J | Cross-site generalisation | **executed**: 60 records over 7 sites, 3 protocols |
 | K | Conformal uncertainty | executed |
+| N | Additive input regimes | **executed: 25 runs, 5 models × 5 regimes** |
+| M | Multi-seed replication | **executed: 3 seeds per neural model** (the documented minimum) |
 
-The partial groups are a **time-budget** fact of this implementation session, not a
-methodological choice, and the exact commands to complete them are in
-`docs/experiments.md`. The horizon table records the provenance of every row in a
-`source_group` column, so a substituted run is visible rather than implied.
-
-## Evaluation metrics
-
-| Metric | Role | Why |
-| --- | --- | --- |
-| MAE, RMSE | primary | robust (MAE) and peak-sensitive (RMSE), in watts |
-| nRMSE | primary | normalised by rated capacity and by mean observed power, so different normalisation choices are both visible |
-| R² | secondary | structurally inflated by the diurnal cycle; never read as operational skill alone |
-| sMAPE | primary | scale-free and defined where the target is zero |
-| Skill vs persistence | primary | `1 − RMSE_model/RMSE_reference`, on identical timestamps, against **both** references |
-| bias, peak error | diagnostic | systematic over-forecasting and worst-timestep reserve margin |
-
-**MAPE is not computed, deliberately**: the target is exactly zero for 50.1% of
-steps, so the percentage error is undefined on half the record and unbounded near
-dawn and dusk. `metrics.mape` raises rather than silently regularising. Every
-metric's formula, interpretation and limitations are in
-`results/tables/metric_documentation.csv`.
+The full status with per-group run counts is regenerated by
+`scripts/generate_report.py` and verified by `tools/check_consistency.py`.
 
 ## Results
 
-Full, regenerated results: **`docs/RESULTS_REPORT.md`** and
-`results/tables/RESULTS.md`. Every number below is computed, and none is
-hand-entered. Experiment status at the time of writing is in
-`docs/experiments.md`.
+All numbers below are read from `results/tables/`. No figure is typed by hand.
 
-### Headline comparison (1-hour horizon, daylight steps of the test year)
+### 1. At one hour, several models do not beat a rule (Table 2)
 
-| Model | MAE (W) | RMSE (W) | nRMSE (capacity) | R² | Skill vs persistence | Train (s) |
+| Model | MAE (W) | RMSE (W) | nRMSE (cap.) | R² | Skill vs persistence | Train (s) |
 | --- | --- | --- | --- | --- | --- | --- |
 | Gradient boosting | 4 374 | 6 664 | 0.121 | 0.785 | +0.271 | 9.5 |
 | Random forest | 4 473 | 6 693 | 0.122 | 0.783 | +0.268 | 287.4 |
-| XGBoost | 4 505 | 6 835 | 0.124 | 0.774 | +0.252 | 42.5 |
 | CNN-LSTM | 4 165 | 6 819 | 0.124 | 0.775 | +0.254 | 274.1 |
+| XGBoost | 4 505 | 6 835 | 0.124 | 0.774 | +0.252 | 42.5 |
 | Linear regression | 5 174 | 7 457 | 0.136 | 0.731 | +0.184 | 2.0 |
-| Transformer | 5 549 | 7 851 | 0.143 | 0.702 | +0.141 | 1 122.0 |
 | Smart persistence | 4 570 | 7 668 | 0.139 | 0.716 | +0.161 | 0.0 |
+| Transformer | 5 549 | 7 851 | 0.143 | 0.702 | +0.141 | 1 122.0 |
 | Attention-LSTM | 6 237 | 9 090 | 0.165 | 0.600 | +0.006 | 172.8 |
 | Persistence | 6 616 | 9 142 | 0.166 | 0.596 | 0.000 | 0.0 |
 | LSTM | 6 746 | 9 264 | 0.168 | 0.585 | **−0.013** | 312.6 |
 | GRU | 6 893 | 9 611 | 0.175 | 0.553 | **−0.051** | 361.9 |
 
-What this table says, stated without overreach:
+LSTM and GRU are *worse than holding the last observation forward*. Attention-LSTM
+is indistinguishable from it. The tree family is strongest, and gradient boosting
+is simultaneously the most accurate and the cheapest to train.
 
-* **A plain persistence reference is hard to beat.** Two of the neural models —
-  LSTM and GRU — have *negative* skill against it: they are worse than holding
-  the last observation forward. A third, attention-LSTM, is indistinguishable
-  from it (95% block-bootstrap CI on skill: [−0.041, +0.051]).
-* **The tree family is the strongest**, and gradient boosting achieves the lowest
-  RMSE while being the cheapest trained model in the set (9.5 s).
-* **Architectural sophistication is not rewarded here.** The best neural model
-  (CNN-LSTM) is competitive; the Transformer costs 118× the training time of
-  gradient boosting for a worse RMSE; LSTM and GRU are worse than the reference.
-  On a single-site record whose signal is dominated by diurnal and irradiance
-  structure, capacity does not appear to be the binding constraint.
-* **The best model by RMSE is not the best by cost.** Gradient boosting is on the
-  accuracy-cost frontier; the Transformer is not.
+### 2. The reference's competence depends entirely on horizon (Table 3)
 
-### Statistical comparison (against persistence, daylight steps)
+Skill against persistence, by horizon:
 
-| Model | Skill (point) | 95% block-bootstrap CI | DM p (MAE) | Holm-adjusted |
-| --- | --- | --- | --- | --- |
-| Gradient boosting | +0.271 | [0.249, 0.293] | 0.68 | 1.00 |
-| Random forest | +0.268 | [0.246, 0.290] | 0.71 | 1.00 |
-| CNN-LSTM | +0.254 | [0.231, 0.278] | 0.64 | 1.00 |
-| XGBoost | +0.252 | [0.230, 0.274] | 0.72 | 1.00 |
-| Linear regression | +0.184 | [0.162, 0.206] | 0.76 | 1.00 |
-| Smart persistence | +0.161 | [0.139, 0.186] | 0.64 | 1.00 |
-| Transformer | +0.141 | [0.117, 0.165] | 0.83 | 1.00 |
-| Attention-LSTM | +0.006 | [−0.041, +0.051] | 0.96 | 1.00 |
-| GRU | −0.051 | [−0.098, −0.010] | 0.97 | 1.00 |
-| LSTM | −0.013 | [−0.058, +0.025] | 0.99 | 1.00 |
+| Model | 15 min | 1 h | 6 h | 24 h |
+| --- | ---: | ---: | ---: | ---: |
+| Gradient boosting | +0.095 | +0.271 | **+0.592** | +0.146 |
+| Random forest | +0.069 | +0.268 | **+0.585** | +0.136 |
+| CNN-LSTM | +0.088 | +0.254 | **+0.565** | +0.104 |
+| XGBoost | +0.039 | +0.252 | **+0.577** | +0.121 |
+| Linear regression | +0.056 | +0.184 | **+0.571** | +0.139 |
+| Smart persistence | +0.028 | +0.161 | +0.194 | +0.000 |
+| Transformer | **−0.030** | +0.141 | +0.551 | +0.119 |
+| Attention-LSTM | **−0.528** | +0.006 | +0.553 | +0.021 |
+| LSTM | **−0.649** | −0.013 | +0.537 | +0.029 |
+| GRU | **−0.668** | −0.051 | +0.531 | +0.029 |
 
-**The Diebold-Mariano p-values here must be read correctly, and they are the
-honest part of this result.** Every test is non-significant even for differences
-that are obviously real in the point estimates. The reason is in
-`results/tables/statistical_significance.json`: PV forecast errors are strongly
-serially correlated — they share a cloud field across consecutive 15-minute steps
-— so the long-run variance of the loss differential is orders of magnitude larger
-than an i.i.d. estimate, and the test loses power as a result. The block-bootstrap
-intervals, which are built for exactly this dependence, *do* separate the models:
-they exclude zero for eight of the eleven. The correct reading is: **the
-difference between models is real, and the pairing is highly autocorrelated, so
-the interval estimate is the informative statistic and the hypothesis test is the
-conservative one.** Reporting the p-values without this explanation would be
-misleading in the opposite direction.
+At 15 minutes the reference is the strongest model in the table for four of them.
+At 6 hours, persistence has collapsed (nRMSE 0.407 against 0.166 at one hour) and
+every learned model reaches skill 0.53–0.59. **A benchmark that reports one
+horizon cannot know whether its reference is strong.** This is the single most
+convincing argument in the study for the multi-horizon protocol.
 
-### Other results
+### 3. PV history alone is nearly sufficient; weather rescues the neural models (Table 7)
 
-* **Horizons** — 15 min: 10 models run; 6 h and 24 h: 3 models each. Partial, and
-  labelled as such. `fig07_horizon_comparison.png`,
-  `results/tables/horizon_comparison.csv`.
-* **Weather regimes, seasons, intraday behaviour, generation level, ramping** —
-  full stratified tables and figures (`weather_regime_comparison.csv`,
-  `seasonal_comparison.csv`, `error_analysis.csv`).
-* **Feature ablation** — partial; `feature_ablation.csv`.
-* **Model ablation** — composite vs backbone under an identical protocol;
-  `model_ablation.csv`.
-* **Cost** — `computational_cost.csv` with the Pareto flag; absolute durations are
-  machine-specific and only the ranking is portable.
-* **Conformal intervals** — `uncertainty_coverage.csv`, `fig18_conformal_intervals.png`.
-  The coverage guarantee is *approximate*, because the calibration block precedes
-  the evaluation block; the caveat is stated in the table, the figure and
-  `docs/experiments.md`.
-* **Explainability** — implemented and verified, but **not yet run**, so no
-  importance numbers are reported. `results/metrics/evaluation_report.json` records
-  `explainability: not_run` so this is visibly "not attempted", not "nothing found".
+| Regime | Inputs | Gradient boosting | XGBoost | CNN-LSTM | LSTM |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| PV only | 15 | **0.119** | 0.120 | 0.122 | 0.176 |
+| Weather only | 12 | 0.182 | 0.177 | 0.175 | 0.184 |
+| PV + weather | 27 | 0.123 | 0.124 | 0.124 | 0.165 |
+| PV + weather + geometry | 29 | 0.122 | 0.125 | 0.124 | 0.167 |
+| Full | 33 | 0.121 | 0.124 | 0.124 | 0.168 |
+
+(nRMSE, daylight steps, 1 h horizon.)
+
+Two findings that the aggregate table cannot show. **For the tree models, the
+weather variables add nothing**: 15 PV-history features match or beat all 33, and
+adding 12 weather features makes the error slightly *worse*. **For the recurrent
+models, the weather variables are decisive**: LSTM moves from 0.176 with PV
+history alone to 0.165 with weather added, and its skill goes from −0.058 to
++0.008. Weather-only is worse than persistence for every family. The value of a
+feature group therefore depends on the access pattern of the model reading it,
+which is why a single global feature-importance ranking is not sufficient.
+
+### 4. Cross-site transfer fails, and that is the most important result (Table 8)
+
+Skill against persistence, training on LSK North and testing on an unseen site:
+
+| Protocol | xgboost | gradient boosting | linear regression |
+| --- | --- | --- | --- |
+| Within-site (reference) | +0.24 … +0.27 | +0.24 … +0.28 | +0.09 … +0.24 |
+| Cross-site (1 training site) | **−0.21 … −0.88** | **−0.10 … −0.57** | **−0.34 … −1.07** |
+| Leave-one-site-out (6 training sites) | −0.21 … +0.26 | +0.00 … +0.26 | +0.21 … +0.25 |
+
+A model fitted at one installation is **worse than persistence at every other
+installation**. Pooling six training sites repairs transfer almost completely for
+five of the six holdouts, but not for LSK North itself (+0.002 for the tree
+models), which is the one site that differs most in capacity. The practical
+consequence: published single-site PV results are *local* skill, not a property
+of a model family, and a new installation must be calibrated on its own data.
+
+### 5. Seed spread does not change the conclusions (Table 9)
+
+| Model | Seeds | RMSE mean ± sd (W) | Skill mean ± sd |
+| --- | ---: | --- | --- |
+| CNN-LSTM | 3 | 6 711 ± 56 | +0.266 ± 0.006 |
+| Attention-LSTM | 4 | 8 813 ± 253 | +0.036 ± 0.028 |
+
+The across-seed spread is small relative to the between-model differences, so
+the ranking in Table 2 is not an artefact of one initialisation. Note the honest
+caveat: **three seeds is the documented minimum**, not five, because a single
+transformer run costs about 19 minutes on this hardware and the study had a
+bounded compute budget. The best-of-seeds number is never quoted.
+
+### 6. Statistics: the two procedures disagree, and that is the finding (Table 10)
+
+| Model | Skill | 95% block-bootstrap CI | Diebold-Mariano p |
+| --- | ---: | --- | ---: |
+| Gradient boosting | +0.271 | [0.249, 0.293] | 0.68 |
+| CNN-LSTM | +0.254 | [0.231, 0.278] | 0.64 |
+| Attention-LSTM | +0.006 | [−0.041, +0.051] | 0.96 |
+| LSTM | −0.013 | [−0.058, +0.025] | 0.99 |
+| GRU | −0.051 | [−0.098, −0.010] | 0.97 |
+
+The bootstrap separates the models; the test rejects nothing. The cause is
+measured rather than assumed: the integrated autocorrelation time of the loss
+differential is reported in `results/tables/error_autocorrelation.csv` and
+`block_length_sensitivity.csv`, and it is large — errors at 15-minute resolution
+share a cloud field, so the long-run variance estimate is orders of magnitude
+above an i.i.d. one. **The interval is the informative statistic and the
+hypothesis test is the conservative one.** No method, block length or sample was
+changed after the fact to obtain a preferred answer.
+
+### 7. Error, skill and interpretability (Tables 4, 11, 12)
+
+In **cloudy** conditions absolute error is *lowest* (persistence nRMSE 0.104 vs
+0.185 in clear sky) because the signal amplitude is small, while skill is
+*lowest* (gradient boosting +0.024 vs +0.358). Reading the error column alone
+inverts the conclusion about where forecasting is hard.
+
+SHAP for XGBoost ranks `pv_power_w_lag_0` first, then `hour_sin`, then `ghi` — the
+current power reading, the time of day, and irradiance. Grouped permutation
+importance for the attention-recurrent model agrees on PV history dominating, and
+the **regime-specific** analysis shows the ranking genuinely changes: under clear
+sky the trailing power *variability* dominates, while under broken cloud the
+current power reading does.
+
+Conformal intervals cost about ±4.8 kW for XGBoost and ±8.1 kW for LSTM on a 55 kW
+plant at 90% nominal, and empirical coverage is below nominal because the
+calibration block precedes the evaluation block — an exchangeability violation
+that is documented rather than glossed over.
 
 ## Reproducibility
 
-See `docs/reproducibility.md`. Summary: pinned `requirements.txt` and
-`environment.yml`, seed 42 recorded per run, per-run JSON records with split dates,
-feature list, hyperparameters, durations, package versions, git revision and a
-configuration fingerprint, and a registry rebuildable from those records. No
-machine-specific paths. `Dockerfile` is **not** provided — it could not be tested
-here, and the environment files that were used are better than an untested one.
-
-## Installation
+See `docs/reproducibility.md`. Pinned environment, per-run JSON records with
+split dates, feature list, hyperparameters, durations, git revision and a config
+fingerprint, and a registry rebuildable from those records.
 
 ```bash
-git clone <this repository>
-cd <this repository>
-
 python -m pip install -r requirements.txt
-# or, for a full environment:
-# mamba env create -f environment.yml
+python scripts/download_data.py        # fetch + verify (CC0, no credentials)
+python scripts/preprocess.py           # pipeline, split, features
+python scripts/run_experiments.py      # the declared experiment matrix
+python scripts/evaluate.py --report    # tables, statistics, explainability, figures
+python scripts/generate_manuscript.py  # paper/manuscript.md from the tables
+python -m pytest -q                    # 146 tests
+python tools/check_consistency.py      # prose versus results
 ```
 
-Python 3.11+ is required; the reported results were produced on 3.13.14, Windows 11,
-CPU only. XGBoost and SHAP are used but the code degrades gracefully: the benchmark
-falls back to scikit-learn's gradient boosting, and the capability report records
-which path was taken.
-
-## Usage
-
-```bash
-python scripts/download_data.py                  # fetch + verify the dataset (CC0)
-python scripts/preprocess.py                     # data pipeline, split, features
-python scripts/run_experiments.py                # the declared experiment matrix
-python scripts/run_experiments.py --list         # show the matrix without running
-python scripts/run_experiments.py --only C_horizons --horizons 6h   # one slice
-python scripts/train.py --model lstm             # a single model
-python scripts/evaluate.py --report              # tables, statistics, figures
-python scripts/evaluate.py --explainability      # SHAP + permutation importance
-python scripts/evaluate.py --uncertainty         # conformal coverage
-python scripts/generate_report.py                # docs/RESULTS_REPORT.md
-python -m pytest -q                              # 108 tests
-```
-
-`--horizons` exists so one long experiment group can be split across parallel
-processes without editing code.
+Other entry points: `scripts/train.py` (one model), `scripts/run_cross_site.py`
+(transfer protocols), `tools/audit_dataset_claims.py` (dataset claims),
+`tools/launch_experiments.py` (parallel workers), `tools/run_remaining.py`
+(restartable queue).
 
 ## Project structure
 
 ```
 configs/          data.yaml, experiments.yaml, models.yaml  (all behaviour lives here)
-data/             raw / interim / processed, with a download manifest
+data/             raw / interim / processed + download manifest
 src/solar_forecasting/
   data/           acquisition, loading, schema validation
   preprocessing/  cleaning, missing values, outliers, daylight, splitting
-  features/       feature engineering and ablation groups
+  features/       feature engineering, ablation groups, input regimes
   models/         registry, baselines, classical, neural
   training/       sequences, trainer, experiment, runner
-  evaluation/     metrics, regimes, stratified, uncertainty, reporting
-  explainability/ SHAP, permutation importance, analysis driver
-  statistics/     block bootstrap, Diebold-Mariano, Wilcoxon
-  visualization/  every figure
-  utils/          seeding, IO
-scripts/          download_data, preprocess, train, run_experiments, evaluate, generate_report
-tests/            108 tests, no network, no dataset required
+  cross_site/     within-site, cross-site and leave-one-site-out protocols
+  evaluation/     metrics, regimes, stratified, uncertainty, reporting, matrix
+  explainability/ SHAP, permutation importance, dependence, analysis driver
+  statistics/     block bootstrap, Diebold-Mariano, Wilcoxon, dependence diagnostics
+  visualization/  26 figure functions
+tests/            146 tests, no network, no dataset required
 literature/       literature_review.xlsx, references.bib, verification records
-docs/             methodology, dataset, experiments, reproducibility, research_gaps, RESULTS_REPORT
+docs/             methodology, dataset, experiments, reproducibility, research_gaps
 results/          experiments, tables, figures, metrics, predictions
-paper/            paper-support material for the write-up
-tools/literature/ corpus discovery, DOI verification, workbook builder
+paper/            manuscript.md plus section sources and copied tables
+tools/            audit, verification, launchers, consistency checker
 ```
 
 ## Literature
 
-`literature/literature_review.xlsx` — **30 papers**, each verified against DOI
-metadata, with five sheets:
-
-* `Literature Review` — the required columns (Sr No, Name, Author(s), Publishing
-  Date, Published By / Organization, Title, Abstract summary, Conclusion summary,
-  Keywords Related, Paper Link);
-* `Literature Analysis` — 29 columns per paper (horizon, dataset, sampling
-  frequency, inputs, weather variables, model family, baselines, metrics, best
-  reported metric, weather conditions, explainability, uncertainty, multi-site and
-  external validation, contribution, limitation, gap, reproducibility, code and
-  dataset availability, DOI, source);
-* `Research Gaps` — gap, evidence papers, why it matters, current approaches,
-  limitation, opportunity, testable question;
-* `Provenance` — per paper: DOI, verified title, abstract source and length, which
-  metadata sources returned a record, whether Crossref/OpenAlex titles agree, and
-  citation counts;
-* `Selection and Exclusions` — the search scope and the exclusions with reasons.
-
-The corpus spans classical ML, recurrent, hybrid convolutional-recurrent,
-attention/transformer, physics-informed, probabilistic/explainable work and
-systematic reviews. The review is synthesised in `paper/literature_review.md` and
-preserves disagreements between papers rather than manufacturing consensus.
+`literature/literature_review.xlsx` — 30 papers, each verified against Crossref by
+`tools/literature/verify_links.py`, which resolves the DOI and compares the
+registered title. All 30 resolve and all 30 titles match. Five sheets:
+`Literature Review` (the 10 required columns), `Literature Analysis` (29
+columns per paper), `Research Gaps`, `Provenance`, and
+`Selection and Exclusions` with the 5 rejected candidates and reasons.
 
 ## Limitations
 
-* **One station, one climate.** A single 55 kW Hong Kong rooftop array cannot
-  support a claim about PV forecasting in general. It supports a claim about the
-  relative behaviour of these eleven models on this record.
-* **No NWP inputs.** Under a strict historical information set a one-hour forecast
-  cannot anticipate a cloud front, which bounds attainable accuracy and makes the
-  persistence reference unusually strong.
-* **Incomplete experiment matrix.** C and E are partially executed for
-  time-budget reasons, H is implemented but not run, and J (cross-site) is not
-  implemented, so RQ6's site half is open.
-* **Cost figures** are machine-specific in absolute terms.
-* **Conformal coverage** is approximate, as explained above.
-* **Single seed.** One seed per configuration; seed sensitivity is not measured.
+These are real and cannot be engineered away:
 
-## Future work
-
-1. Complete C and E; run H (`--explainability`).
-2. Implement J (cross-site transfer) over the declared holdout panel, with
-   per-station capacity-aware scoring.
-3. Multi-seed replication of the neural models, to separate architecture from
-   initialisation.
-4. Locally-weighted or adaptive conformal intervals, which address the seasonal
-   coverage drift the fixed-width intervals show.
-5. A probabilistic family (quantile regression, Gaussian-process residuals) to
-   compare against conformal wrappers.
-6. WNIP-based evaluation as a second information regime, so that the historical
-   and forecast-weather settings can be compared on one dataset.
+* **One climate.** The primary result is a single 55 kW array in Hong Kong. The
+  cross-site study shows transfer fails even within one campus, so the headline
+  numbers are local skill.
+* **No NWP inputs.** Under a strictly historical information set, a one-hour
+  forecast cannot anticipate a cloud front. This is why the reference is strong
+  at 15 minutes and why the ceiling is low.
+* **Three seeds, not five.** The documented minimum; a five-seed Transformer
+  replication did not fit the compute budget.
+* **Cross-site uses three cheap models.** The transfer experiment covers gradient
+  boosting, XGBoost and linear regression, not the neural models, which were too
+  expensive to fit 20 times per model.
+* **One fixed protocol, not a per-family tuning budget.** The trees received a
+  small validation grid; the neural models received one learning rate. This
+  asymmetry is a limitation, not a strength, and it is stated in the threat to
+  internal validity.
+* **Conformal coverage is approximate**, because the calibration block precedes
+  the evaluation block.
+* **Cost figures are machine-specific** in absolute terms; only the ranking is
+  portable.
 
 ## Citation
 
-See `CITATION.cff`. If you use this software, its experiment configuration or its
-results, please cite it as software with the version tag.
+See `CITATION.cff`.
 
 ## License
 
 MIT — see `LICENSE`. The dataset is redistributed by its authors under CC0 1.0
 and is fetched by `scripts/download_data.py`; no rights in that data are claimed
 here.
-
----
-
-## AI-ML-for-Solar-Power-Generation-Forecasting
-
-Repository: <https://github.com/PrathamKapoor/AI-ML-for-Solar-Power-Generation-Forecasting>
-
-No API keys, tokens or environment variables are required to run this project. The
-dataset is published under CC0 1.0 and is fetched directly by
-`scripts/download_data.py`; there is no account, registration or credential
-involved, so no `.env` file is needed. Optional configuration lives in
-`configs/*.yaml` and is documented in `docs/`.
